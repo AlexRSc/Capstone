@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import static org.springframework.http.ResponseEntity.ok;
+
 @RestController
 @CrossOrigin
 public class AuthController {
@@ -25,15 +27,21 @@ public class AuthController {
     public ResponseEntity<User> registerNewUser(@RequestBody User user){
         UserEntity userEntity = map(user);
         UserEntity createdUserEntity = authService.create(userEntity);
-
+        User createdUser=map(createdUserEntity);
+        return ok(createdUser);
     }
 
     private UserEntity map(User user) {
-        UserEntity userEntity = new UserEntity();
-        UserEntity.builder()
+        return UserEntity.builder()
                 .userName(user.getUserName())
                 .email(user.getEmail())
                 .password(user.getPassword()).build();
-        return userEntity;
+    }
+
+    private User map(UserEntity userEntity) {
+        return User.builder()
+                .userName(userEntity.getUserName())
+                .email(userEntity.getEmail())
+                .password(userEntity.getPassword()).build();
     }
 }

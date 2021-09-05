@@ -1,6 +1,3 @@
-import Header from "./components/Header";
-import PageLayout from "./components/PageLayout";
-import Footer from "./components/Footer";
 import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
 import WelcomePage from "./pages/WelcomePage";
 import RegistrationPage from "./pages/RegistrationPage";
@@ -18,7 +15,6 @@ export default function App() {
           <Route path="/about-us"></Route>
           </Switch>
       </Router>
-
   )
 }
 

@@ -1,2 +1,4 @@
-package de.neuefische.CapStone.backend.repo;public class UserRepository {
+package de.neuefische.CapStone.backend.repo;
+
+public class UserRepository {
 }

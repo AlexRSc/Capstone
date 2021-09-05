@@ -1,4 +1,4 @@
-package de.neuefische.CapStone.backend.model;
+package de.neuefische.CapStone.backend.api;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;

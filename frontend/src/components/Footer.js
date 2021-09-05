@@ -5,9 +5,9 @@ export default function Footer() {
 
     return(
         <Wrapper>
-            <div>Info</div>
-            <div>About Us</div>
-            <div>Services</div>
+            <NavLink to="/">Info</NavLink>
+            <NavLink to="/">About Us</NavLink>
+            <NavLink to="/">Services</NavLink>
         </Wrapper>
     )
 }
@@ -15,11 +15,11 @@ export default function Footer() {
 const Wrapper = styled.footer`
   width:100%;
   text-align: center;
-  background: green;
+  background: #89ABE3FF;
   position:relative;
   display: flex;
   padding: var(--size-m);
-  div {
+  a {
     flex-grow: 1;
   }
 

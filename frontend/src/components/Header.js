@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import Button from "@material-ui/core/button"
+import {Link} from "react-router-dom";
 
 export default function Header({title}) {
 
@@ -7,7 +8,7 @@ export default function Header({title}) {
     <Wrapper>
         <img src="/public/logo192.png"/>
         <h3>{title}</h3>
-        <Button variant="contained" color="primary">Login</Button>
+        <Link to ="/login"><Button variant="contained" color="primary" >Login</Button></Link>
     </Wrapper>
 )
 }
@@ -15,7 +16,7 @@ export default function Header({title}) {
 const Wrapper = styled.header`
   width:100%;
   text-align: center;
-  background: green;
+  background: #89ABE3FF;
   position:relative;
   img {
     position: absolute;

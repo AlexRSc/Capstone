@@ -3,6 +3,8 @@ import PageLayout from "./components/PageLayout";
 import Footer from "./components/Footer";
 import {Route, BrowserRouter as Router, Switch} from "react-router-dom";
 import WelcomePage from "./pages/WelcomePage";
+import RegistrationPage from "./pages/RegistrationPage";
+import LoginPage from "./pages/LoginPage";
 
 
 export default function App() {
@@ -10,10 +12,10 @@ export default function App() {
       <Router>
           <Switch>
           <Route exact path="/"><WelcomePage/></Route>
-          <Route path="/login"><WelcomePage/></Route>
-          <Route path="/registration"><WelcomePage/></Route>
-          <Route path="/Info"><WelcomePage/></Route>
-          <Route path="/about-us"><WelcomePage/></Route>
+          <Route path="/login"><LoginPage/></Route>
+          <Route path="/registration"><RegistrationPage/></Route>
+          <Route path="/Info"></Route>
+          <Route path="/about-us"></Route>
           </Switch>
       </Router>
 

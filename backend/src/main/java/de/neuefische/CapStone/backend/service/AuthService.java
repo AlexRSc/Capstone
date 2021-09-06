@@ -1,14 +1,13 @@
 package de.neuefische.CapStone.backend.service;
 
-import de.neuefische.CapStone.backend.api.User;
 import de.neuefische.CapStone.backend.model.UserEntity;
 import de.neuefische.CapStone.backend.repo.UserRepository;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
+
 import java.util.Optional;
 
 import static org.springframework.util.StringUtils.hasText;
@@ -16,10 +15,12 @@ import static org.springframework.util.StringUtils.hasText;
 @Service
 public class AuthService {
 
+    private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
 
     @Autowired
-    public AuthService(UserRepository userRepository){
+    public AuthService(PasswordEncoder passwordEncoder, UserRepository userRepository){
+        this.passwordEncoder = passwordEncoder;
         this.userRepository=userRepository;
     }
 
@@ -34,6 +35,8 @@ public class AuthService {
             throw new IllegalArgumentException("Email must not be blank");
         }
         checkIfEmailExists(email);
+        userEntity.setRole("user");
+        userEntity.setPassword(passwordEncoder.encode(userEntity.getPassword()));
         return userRepository.save(userEntity);
     }
 
@@ -49,5 +52,9 @@ public class AuthService {
         if(userNameAlreadyExists){
             throw new EntityExistsException(String.format("User with name %s already exists!", userName));
         }
+    }
+
+    public Optional<UserEntity> find(String userName) {
+        return userRepository.findByUserName(userName);
     }
 }

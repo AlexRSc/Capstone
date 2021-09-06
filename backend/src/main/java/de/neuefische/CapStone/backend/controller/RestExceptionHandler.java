@@ -44,7 +44,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler({
             HttpClientErrorException.Unauthorized.class
     })
-    @ResponseStatus(HttpStatus.CONFLICT)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<RestException> handle401(Throwable e) {
         return createRestException(e, HttpStatus.UNAUTHORIZED);
     }

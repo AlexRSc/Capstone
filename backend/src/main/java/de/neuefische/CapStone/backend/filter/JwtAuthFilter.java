@@ -9,6 +9,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -18,7 +19,7 @@ import java.io.IOException;
 import java.util.List;
 
 @Component
-public class JwtAuthFilter {
+public class JwtAuthFilter extends OncePerRequestFilter {
 
     private final JwtService jwtService;
 

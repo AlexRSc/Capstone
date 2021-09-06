@@ -16,7 +16,9 @@ import java.util.Map;
 
 @Service
 public class JwtService {
+
     private final JwtConfig jwtConfig;
+
     @Autowired
     public JwtService(JwtConfig jwtConfig) {
         this.jwtConfig = jwtConfig;
@@ -28,7 +30,6 @@ public class JwtService {
         Date exp = Date.from(now.plus(Duration.ofMinutes(jwtConfig.getExpiresAfterMinutes())));
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", user.getEmail());
-        claims.put("userName", user.getUserName());
         return Jwts.builder()
                 .setClaims(claims)
                 .setSubject(user.getUserName())

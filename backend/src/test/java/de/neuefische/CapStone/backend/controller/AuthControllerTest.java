@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -132,10 +133,10 @@ class AuthControllerTest {
         String newUrl = url() + "/user/login";
 
         //WHEN
-      //  HttpEntity<Credentials> httpEntity = new HttpEntity<>(credentials);
         ResponseEntity<AccessToken> response = testRestTemplate.postForEntity(newUrl, credentials, AccessToken.class);
 
         //THEN
+        assertThat(response.getBody(), notNullValue());
         assertThat(response.getStatusCode(), is(HttpStatus.OK));
         String token = response.getBody().getToken();
         Claims claims = Jwts.parser().setSigningKey(jwtConfig.getSecret()).parseClaimsJws(token).getBody();

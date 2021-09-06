@@ -1,0 +1,9 @@
+profile:
+  datasource:
+    url: postgresql://ProfBeluga-postgres:5432/ProfBeluga
+    user: admin
+    pass: 12345
+
+ProfBeluga:
+  user-service:
+    avatar-url: "http://docker.de"

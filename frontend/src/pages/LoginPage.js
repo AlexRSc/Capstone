@@ -7,7 +7,10 @@ import {Link} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components"
 
-
+const initialState = {
+    username: '',
+    password: '',
+}
 export default function LoginPage () {
     return (
         <PageLayout>

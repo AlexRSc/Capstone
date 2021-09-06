@@ -3,6 +3,7 @@ import WelcomePage from "./pages/WelcomePage";
 import RegistrationPage from "./pages/RegistrationPage";
 import LoginPage from "./pages/LoginPage";
 import AuthProvider from "./auth/AuthProvider";
+import HomePage from "./pages/HomePage";
 
 
 export default function App() {
@@ -13,6 +14,7 @@ export default function App() {
           <Route exact path="/"><WelcomePage/></Route>
           <Route path="/login"><LoginPage/></Route>
           <Route path="/registration"><RegistrationPage/></Route>
+          <Route path="/Home"><HomePage/></Route>
           <Route path="/Info"></Route>
           <Route path="/about-us"></Route>
           </Switch>

@@ -2,8 +2,8 @@ import Header from "../components/Header";
 import PageLayout from "../components/PageLayout";
 import Footer from "../components/Footer";
 import TextField from "@material-ui/core/TextField";
-import {ButtonGroup} from "@material-ui/core";
-import {Link} from "react-router-dom";
+import {ButtonGroup, CircularProgress} from "@material-ui/core";
+import {Link, Redirect} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components"
 import {useAuth} from "../auth/AuthProvider";
@@ -31,20 +31,32 @@ export default function LoginPage() {
             setLoading(false)
         })
     }
+    const handleClear = event => {
+        setCredentials({
+            userName: "",
+            password: "",
+        })
+    }
+
+    if(user) {
+        return <Redirect to="Home"/>
+    }
     return (
         <PageLayout>
             <Header title="Login Form"/>
-            <Wrapper as="form">
+            {loading && <CircularProgress/>}
+            {!loading &&(
+            <Wrapper>
                 <TextField required id="standard required" label="Username"
                            name="userName" value={credentials.userName} onChange={handleCredentialsChange}/>
                 <TextField required id="standard required" label="Password" type="password"
                             name="password" value={credentials.password} onChange={handleCredentialsChange}/>
                 <ButtonGroup>
                     <Link to="/"><Button color="primary" variant="contained">Back</Button></Link>
-                    <Button color="secondary">Clear</Button>
+                    <Button color="secondary" onClick={handleClear}>Clear</Button>
                     <Button color="primary" variant="contained" onClick={handleSubmit} >Submit</Button>
                 </ButtonGroup>
-            </Wrapper>
+            </Wrapper>)}
             <Footer/>
         </PageLayout>
     )

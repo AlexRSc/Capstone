@@ -24,7 +24,7 @@ public class AuthService {
         this.userRepository=userRepository;
     }
 
-    public UserEntity create(UserEntity userEntity) {
+    public UserEntity createUser(UserEntity userEntity) {
         String name = userEntity.getUserName();
         if(!hasText(name)) {
             throw new IllegalArgumentException("Name must not be blank");

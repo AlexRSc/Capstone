@@ -25,4 +25,7 @@ public class UserEntity {
 
     @Column(name="password", nullable = false)
     private String password;
+
+    @Column(name="role")
+    private String role;
 }

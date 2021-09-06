@@ -34,6 +34,7 @@ public class AuthService {
             throw new IllegalArgumentException("Email must not be blank");
         }
         checkIfEmailExists(email);
+        userEntity.setRole("user");
         return userRepository.save(userEntity);
     }
 

@@ -6,8 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="smart_user")
-@Getter
-@Setter
+@Data
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor

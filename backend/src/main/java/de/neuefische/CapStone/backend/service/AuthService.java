@@ -1,5 +1,6 @@
 package de.neuefische.CapStone.backend.service;
 
+import de.neuefische.CapStone.backend.api.User;
 import de.neuefische.CapStone.backend.model.UserEntity;
 import de.neuefische.CapStone.backend.repo.UserRepository;
 import lombok.Getter;
@@ -13,11 +14,9 @@ import java.util.Optional;
 import static org.springframework.util.StringUtils.hasText;
 
 @Service
-@Getter
-@Setter
 public class AuthService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public AuthService(UserRepository userRepository){
@@ -35,22 +34,20 @@ public class AuthService {
             throw new IllegalArgumentException("Email must not be blank");
         }
         checkIfEmailExists(email);
-        userRepository.save(userEntity);
-        return userEntity;
-
+        return userRepository.save(userEntity);
     }
 
     private void checkIfEmailExists(String email) {
-        Optional<UserEntity> existingEmail = userRepository.findByEmail(email);
-        if(existingEmail.isPresent()){
+        Boolean emailAlreadyExists = userRepository.existsByEmail(email);
+        if(emailAlreadyExists){
             throw new EntityExistsException(String.format("Email with name %s already exists!", email));
         }
     }
 
-    private void checkIfUserExists(String name) {
-        Optional<UserEntity> existingUser = userRepository.findByUserName(name);
-        if(existingUser.isPresent()){
-            throw new EntityExistsException(String.format("User with name %s already exists!", name));
+    private void checkIfUserExists(String userName) {
+        Boolean userNameAlreadyExists = userRepository.existsByUserName(userName);
+        if(userNameAlreadyExists){
+            throw new EntityExistsException(String.format("User with name %s already exists!", userName));
         }
     }
 }

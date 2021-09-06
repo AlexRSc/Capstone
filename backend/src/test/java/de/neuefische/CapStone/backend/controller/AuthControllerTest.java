@@ -61,5 +61,57 @@ class AuthControllerTest {
         assertThat(response.getBody().getUserName(), is(checkIfUserIsInDB.get().getUserName()));
         assertThat(response.getBody().getEmail(), is(checkIfUserIsInDB.get().getEmail()));
     }
+    @Test
+    public void RegisterUserThatAlreadyExists() {
+        //GIVEN
+        UserEntity user = UserEntity.builder()
+                .userName("Bowser")
+                .email("Bowser@com")
+                .password("ImInLoveWithMario").build();
+        userRepository.saveAndFlush(user);
+        User userToAdd = User.builder()
+                .userName("Bowser")
+                .email("Bowser@supermario.com")
+                .password("ImInLoveWithMario").build();
+        String newUrl = url() + "/user/registration";
+        //WHEN
+        HttpEntity<User> httpEntity = new HttpEntity<>(userToAdd);
+        ResponseEntity<User> response = testRestTemplate.exchange(newUrl, HttpMethod.POST, httpEntity, User.class);
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.CONFLICT));
+    }
+    @Test
+    public void registerEmailThatAlreadyExists() {
+        //GIVEN
+        UserEntity user = UserEntity.builder()
+                .userName("Mario")
+                .email("Bowser@supermario.com")
+                .password("ImInLoveWithMario").build();
+        userRepository.saveAndFlush(user);
+        User userToAdd = User.builder()
+                .userName("Bowser")
+                .email("Bowser@supermario.com")
+                .password("ImInLoveWithMario").build();
+        String newUrl = url() + "/user/registration";
+        //WHEN
+        HttpEntity<User> httpEntity = new HttpEntity<>(userToAdd);
+        ResponseEntity<User> response = testRestTemplate.exchange(newUrl, HttpMethod.POST, httpEntity, User.class);
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.CONFLICT));
+    }
+    @Test
+    public void userNameI() {
+        //GIVEN
+        User userToAdd = User.builder()
+                .userName("")
+                .email("Bowser@supermario.com")
+                .password("ImInLoveWithMario").build();
+        String newUrl = url() + "/user/registration";
+        //WHEN
+        HttpEntity<User> httpEntity = new HttpEntity<>(userToAdd);
+        ResponseEntity<User> response = testRestTemplate.exchange(newUrl, HttpMethod.POST, httpEntity, User.class);
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+    }
 
 }

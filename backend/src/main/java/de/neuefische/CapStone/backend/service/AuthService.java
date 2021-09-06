@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityExistsException;
 
+import java.util.Optional;
+
 import static org.springframework.util.StringUtils.hasText;
 
 @Service
@@ -50,5 +52,9 @@ public class AuthService {
         if(userNameAlreadyExists){
             throw new EntityExistsException(String.format("User with name %s already exists!", userName));
         }
+    }
+
+    public Optional<UserEntity> find(String userName) {
+        return userRepository.findByUserName(userName);
     }
 }

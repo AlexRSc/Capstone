@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import javax.persistence.EntityExistsException;
@@ -38,6 +39,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.CONFLICT)
     public ResponseEntity<RestException> handle409(Throwable e) {
         return createRestException(e, HttpStatus.CONFLICT);
+    }
+
+    @ExceptionHandler({
+            HttpClientErrorException.Unauthorized.class
+    })
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<RestException> handle401(Throwable e) {
+        return createRestException(e, HttpStatus.UNAUTHORIZED);
     }
     
     private ResponseEntity<RestException> createRestException(Throwable e, HttpStatus httpStatus) {

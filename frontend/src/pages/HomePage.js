@@ -70,7 +70,7 @@ const IconList = styled.div`
 `
 
 const Icon = styled.div`
-    padding: 20px 20px 20px 20px;
+    padding: 20px;
     display:flex;
     flex-direction: column;
     align-items: center;

@@ -29,6 +29,7 @@ public class JwtService {
         Date iat = Date.from(now);
         Date exp = Date.from(now.plus(Duration.ofMinutes(jwtConfig.getExpiresAfterMinutes())));
         Map<String, Object> claims = new HashMap<>();
+        claims.put("role", user.getRole());
         claims.put("email", user.getEmail());
         return Jwts.builder()
                 .setClaims(claims)

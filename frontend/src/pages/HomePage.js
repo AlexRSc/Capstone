@@ -3,9 +3,12 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import styled from "styled-components"
 import Button from "@material-ui/core/button";
-import {CloudUpload, WbIncandescent, } from "@material-ui/icons";
-import AlarmIcon from "@material-ui/icons/Alarm"
-import ConnectMyHub from "./ConnectMyHub";
+import {CloudUpload, WbIncandescent} from "@material-ui/icons";
+import LocalCafeIcon from "@material-ui/icons/LocalCafe"
+import AlarmIcon from "@material-ui/icons/Alarm";
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew"
+import AllInclusiveIcon from "@material-ui/icons/AllInclusive"
+import MusicNoteIcon from "@material-ui/icons/MusicNote"
 import {Link, Redirect} from "react-router-dom";
 
 
@@ -38,32 +41,22 @@ export default function HomePage() {
                     </Link>
                     </Icon>
                     <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
+                    <Link to="/lights">
+                    <div>On/Off</div>
+                    <PowerSettingsNewIcon fontSize="large">Lights</PowerSettingsNewIcon>
+                    </Link>
                     </Icon>
                     <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
+                    <div>Coffee</div>
+                    <LocalCafeIcon fontSize="large">Lights</LocalCafeIcon>
                     </Icon>
                     <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
+                    <div>Music</div>
+                    <MusicNoteIcon fontSize="large">Lights</MusicNoteIcon>
                     </Icon>
                     <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
-                    </Icon>
-                    <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
-                    </Icon>
-                    <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
-                    </Icon>
-                    <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
+                    <div>Overview</div>
+                    <AllInclusiveIcon fontSize="large">Lights</AllInclusiveIcon>
                     </Icon>
                 </IconList>
             </Wrapper>

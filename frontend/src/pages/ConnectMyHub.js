@@ -41,7 +41,7 @@ export default function ConnectMyHub() {
 const Wrapper = styled.div`
   display: grid;
   place-items: center;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-rows: 2fr 1fr 1fr;
   Buttongroup {
     align-self: center;
   }

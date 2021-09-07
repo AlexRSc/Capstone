@@ -39,7 +39,7 @@ export default function LoginPage() {
     }
 
     if(user) {
-        return <Redirect to="Home"/>
+        return <Redirect to="/home"/>
     }
     return (
         <PageLayout>

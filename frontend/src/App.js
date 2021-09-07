@@ -14,8 +14,8 @@ export default function App() {
           <Route exact path="/"><WelcomePage/></Route>
           <Route path="/login"><LoginPage/></Route>
           <Route path="/registration"><RegistrationPage/></Route>
-          <Route path="/Home"><HomePage/></Route>
-          <Route path="/Info"></Route>
+          <Route path="/home"><HomePage/></Route>
+          <Route path="/info"></Route>
           <Route path="/about-us"></Route>
           </Switch>
       </Router>

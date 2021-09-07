@@ -10,3 +10,7 @@ const headers = token => ({
         Authorization: `Bearer ${token}`,
     },
 })
+
+export const registerUser = newUser =>
+    axios.post('api/ProfBeluga/user/registration', newUser)
+        .then(response => response.data)

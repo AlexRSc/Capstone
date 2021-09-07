@@ -32,6 +32,13 @@ export default function RegistrationPage() {
                         setLoading(false)
                 })
         }
+        const handleClear = event => {
+                setCredentials({
+                        userName: "",
+                        email: "",
+                        password: "",
+                })
+        }
 
         if(registeredUser) {
                 return <Redirect to ="/login"/>
@@ -49,7 +56,7 @@ return(
         name="password" value={credentials.password} onChange={handleCredentialsChange}/>
         <ButtonGroup>
                 <Link to ="/"><Button color="primary" variant="contained">Back</Button></Link>
-                <Button color="secondary" >Clear</Button>
+                <Button color="secondary" onClick={handleClear} >Clear</Button>
                 <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
         </ButtonGroup>
         </Wrapper>

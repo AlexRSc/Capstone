@@ -4,6 +4,9 @@ import RegistrationPage from "./pages/RegistrationPage";
 import LoginPage from "./pages/LoginPage";
 import AuthProvider from "./auth/AuthProvider";
 import HomePage from "./pages/HomePage";
+import ProtectedRoute from "./auth/ProtectedRoute";
+import ConnectMyHub from "./pages/ConnectMyHub";
+import LightsPage from "./pages/LightsPage";
 
 
 export default function App() {
@@ -14,7 +17,9 @@ export default function App() {
           <Route exact path="/"><WelcomePage/></Route>
           <Route path="/login"><LoginPage/></Route>
           <Route path="/registration"><RegistrationPage/></Route>
-          <Route path="/home"><HomePage/></Route>
+          <ProtectedRoute path="/home" component={HomePage} />
+          <ProtectedRoute path="/connectmyhub" component={ConnectMyHub} />
+          <ProtectedRoute path="/lights" component={LightsPage} />
           <Route path="/info"></Route>
           <Route path="/about-us"></Route>
           </Switch>

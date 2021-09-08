@@ -3,52 +3,60 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import styled from "styled-components"
 import Button from "@material-ui/core/button";
-import {CloudUpload, WbIncandescent, } from "@material-ui/icons";
-import AlarmIcon from "@material-ui/icons/Alarm"
+import {CloudUpload, WbIncandescent} from "@material-ui/icons";
+import LocalCafeIcon from "@material-ui/icons/LocalCafe"
+import AlarmIcon from "@material-ui/icons/Alarm";
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew"
+import AllInclusiveIcon from "@material-ui/icons/AllInclusive"
+import MusicNoteIcon from "@material-ui/icons/MusicNote"
+import {Link, Redirect} from "react-router-dom";
 
 
 export default function HomePage() {
+
+    const handleSubmit = event => {
+        event.preventDefault()
+        return <Redirect to="/connectmyhub"/>
+    }
+
     return (
         <PageLayout>
             <Header title="Home"/>
             <Wrapper>
-                <Button variant="contained" color="primary" size="large" startIcon={<CloudUpload/>}> Add your Hub! </Button>
+                <Button variant="contained" color="primary" onClick={handleSubmit}
+                size="large" startIcon={<CloudUpload/>} >
+                    <Link class="Links" to="/connectmyhub" >Connect my Hub!</Link>
+                </Button>
                 <IconList>
                     <Icon>
+                    <Link to="/lights">
                     <div>Lights</div>
                     <WbIncandescent fontSize="large">Lights</WbIncandescent>
+                    </Link>
                     </Icon>
                     <Icon>
+                    <Link to="/lights">
                     <div>Alarm</div>
                     <AlarmIcon fontSize="large">Lights</AlarmIcon>
+                    </Link>
                     </Icon>
                     <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
+                    <Link to="/lights">
+                    <div>On/Off</div>
+                    <PowerSettingsNewIcon fontSize="large">Lights</PowerSettingsNewIcon>
+                    </Link>
                     </Icon>
                     <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
+                    <div>Coffee</div>
+                    <LocalCafeIcon fontSize="large">Lights</LocalCafeIcon>
                     </Icon>
                     <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
+                    <div>Music</div>
+                    <MusicNoteIcon fontSize="large">Lights</MusicNoteIcon>
                     </Icon>
                     <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
-                    </Icon>
-                    <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
-                    </Icon>
-                    <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
-                    </Icon>
-                    <Icon>
-                    <div>Alarm</div>
-                    <AlarmIcon fontSize="large">Lights</AlarmIcon>
+                    <div>Overview</div>
+                    <AllInclusiveIcon fontSize="large">Lights</AllInclusiveIcon>
                     </Icon>
                 </IconList>
             </Wrapper>
@@ -62,6 +70,10 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: center;
     flex-direction: column;
+.Links {
+  text-decoration: none;
+  color:white;
+}
   
 `
 const IconList = styled.div`
@@ -74,4 +86,11 @@ const Icon = styled.div`
     display:flex;
     flex-direction: column;
     align-items: center;
+  a {
+    text-decoration: none;
+    color:black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 `

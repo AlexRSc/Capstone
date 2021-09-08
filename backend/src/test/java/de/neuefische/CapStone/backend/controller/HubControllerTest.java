@@ -36,6 +36,12 @@ public class HubControllerTest {
     @LocalServerPort
     private int port;
 
+    private final HubRepository hubRepository;
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final TestRestTemplate testRestTemplate;
+    private final JwtConfig jwtConfig;
+
     @Autowired
     public HubControllerTest(HubRepository hubRepository, UserRepository userRepository, PasswordEncoder passwordEncoder, TestRestTemplate testRestTemplate, JwtConfig jwtConfig) {
         this.hubRepository = hubRepository;
@@ -45,15 +51,9 @@ public class HubControllerTest {
         this.jwtConfig = jwtConfig;
     }
 
-
     private String url() {
         return "http://localhost:" + port;
     }
-    private final HubRepository hubRepository;
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
-    private final TestRestTemplate testRestTemplate;
-    private final JwtConfig jwtConfig;
 
     @AfterEach
     public void clearUserRepo() {
@@ -112,6 +112,20 @@ public class HubControllerTest {
         //GIVEN
         HubEntity hubToAdd = HubEntity.builder()
                 .hubEmail("")
+                .hubPassword("hubPassword").build();
+        String url = url() + "/hub/newHub";
+        //WHEN
+        HttpEntity<HubEntity> httpEntity = new HttpEntity<>(hubToAdd, authorizedHeader("test", "user", "test@test.com")) ;
+        ResponseEntity<Hub> response = testRestTemplate.exchange(url, HttpMethod.POST, httpEntity, Hub.class);
+
+        //THEN
+        assertThat(response.getStatusCode(), is(HttpStatus.BAD_REQUEST));
+    }
+    @Test
+    public void hubDoesntAcceptNULLInput() {
+        //GIVEN
+        HubEntity hubToAdd = HubEntity.builder()
+                .hubEmail(null)
                 .hubPassword("hubPassword").build();
         String url = url() + "/hub/newHub";
         //WHEN

@@ -7,7 +7,6 @@ import {Link} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 
 export default function LightsPage() {
-    const {user, token} = useAuth()
     return (
         <PageLayout>
             <Header title="Connect My Hub"/>

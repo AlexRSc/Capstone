@@ -6,7 +6,7 @@ import Footer from "../components/Footer";
 import styled from "styled-components";
 import {useAuth} from "../auth/AuthProvider";
 import TextField from "@material-ui/core/TextField";
-import {ButtonGroup} from "@material-ui/core";
+import {ButtonGroup, CircularProgress} from "@material-ui/core";
 import {useState} from "react";
 import {connectHub} from "../services/hub-api-service";
 
@@ -28,7 +28,7 @@ export default function ConnectMyHub() {
     const handleSubmit = event => {
         event.preventDefault()
         setError()
-        setLoading(false)
+        setLoading(true)
         connectHub(token, credentials).then(hub => setRedirect(hub.hubEmail))
             .catch(error => {
                 setError(error)
@@ -42,6 +42,8 @@ export default function ConnectMyHub() {
     return (
         <PageLayout>
             <Header title="Connect My Hub"/>
+            {loading && <CircularProgress/>}
+            {!loading &&(
             <Wrapper>
                 <ExplanationWrapper>
                     <h3>How does this work?</h3>
@@ -59,7 +61,7 @@ export default function ConnectMyHub() {
                     <Button color="secondary" >Clear</Button>
                     <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
                 </ButtonGroup>
-            </Wrapper>
+            </Wrapper>)}
             <Footer/>
         </PageLayout>
     )

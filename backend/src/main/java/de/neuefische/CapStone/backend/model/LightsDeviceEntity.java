@@ -16,7 +16,7 @@ import javax.persistence.*;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class LightsDevice {
+public class LightsDeviceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

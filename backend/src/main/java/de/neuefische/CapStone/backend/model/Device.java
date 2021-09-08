@@ -1,9 +1,17 @@
 package de.neuefische.CapStone.backend.model;
 
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Data
 @Embeddable
 public class Device {
     @Column(name= "user_name")

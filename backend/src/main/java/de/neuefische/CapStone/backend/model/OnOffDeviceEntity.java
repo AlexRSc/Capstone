@@ -15,7 +15,7 @@ import javax.persistence.*;
 @Builder(toBuilder = true)
 @AllArgsConstructor
 @NoArgsConstructor
-public class OnOffDevice {
+public class OnOffDeviceEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -15,6 +15,6 @@ public class LightDevice {
     private String uid;
     private String itemName;
     private boolean onOff;
-    private String brightness;
+    private boolean brightness;
 
 }

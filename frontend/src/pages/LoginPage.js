@@ -31,7 +31,7 @@ export default function LoginPage() {
             setLoading(false)
         })
     }
-    const handleClear = event => {
+    const handleClear = () => {
         setCredentials({
             userName: "",
             password: "",

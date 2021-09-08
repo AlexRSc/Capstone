@@ -4,7 +4,6 @@ import Footer from "../components/Footer";
 import styled from "styled-components"
 import Button from "@material-ui/core/button";
 import {Link} from "react-router-dom";
-import RegistrationPage from "./RegistrationPage";
 
 
 export default function WelcomePage() {

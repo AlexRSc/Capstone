@@ -8,13 +8,14 @@ import SaveIcon from "@material-ui/icons/Save";
 import {FormControlLabel, Slider, Switch} from "@material-ui/core";
 
 export default function LightsPage() {
+    //just a basic Layout, it has 0 functionality besides looking ok
     return (
         <PageLayout>
             <Header title="Connect My Hub"/>
             <Wrapper>
                 <Button variant="contained" color="primary"
                         size="large" startIcon={<SaveIcon/>}>
-                    <Link class="Links" to="/lights">Add Lights Device</Link>
+                    <Link class="Links" to="/addlights">Add Lights Device</Link>
                 </Button>
                 <LightsWrapper>
                     <Light>

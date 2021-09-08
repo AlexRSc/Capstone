@@ -7,24 +7,26 @@ import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import ConnectMyHub from "./pages/ConnectMyHub";
 import LightsPage from "./pages/LightsPage";
+import AddLightsPage from "./pages/AddLightsPage";
 
 
 export default function App() {
-  return (
-      <AuthProvider>
-      <Router>
-          <Switch>
-          <Route exact path="/"><WelcomePage/></Route>
-          <Route path="/login"><LoginPage/></Route>
-          <Route path="/registration"><RegistrationPage/></Route>
-          <ProtectedRoute path="/home" component={HomePage} />
-          <ProtectedRoute path="/connectmyhub" component={ConnectMyHub} />
-          <ProtectedRoute path="/lights" component={LightsPage} />
-          <Route path="/info"></Route>
-          <Route path="/about-us"></Route>
-          </Switch>
-      </Router>
-      </AuthProvider>
-  )
+    return (
+        <AuthProvider>
+            <Router>
+                <Switch>
+                    <Route exact path="/"><WelcomePage/></Route>
+                    <Route path="/login"><LoginPage/></Route>
+                    <Route path="/registration"><RegistrationPage/></Route>
+                    <ProtectedRoute path="/home" component={HomePage}/>
+                    <ProtectedRoute path="/connectmyhub" component={ConnectMyHub}/>
+                    <ProtectedRoute path="/lights" component={LightsPage}/>
+                    <ProtectedRoute path="/addlights" component={AddLightsPage}/>
+                    <Route path="/info"></Route>
+                    <Route path="/about-us"></Route>
+                </Switch>
+            </Router>
+        </AuthProvider>
+    )
 }
 

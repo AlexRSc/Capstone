@@ -9,8 +9,6 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="on_off_device")
-@SecondaryTable(name="device_states", pkJoinColumns = @PrimaryKeyJoinColumn(name= "on_off_id"))
-@SecondaryTable(name="device", pkJoinColumns = @PrimaryKeyJoinColumn(name= "on_off_id"))
 @Data
 @Builder(toBuilder = true)
 @AllArgsConstructor
@@ -24,7 +22,7 @@ public class OnOffDeviceEntity {
 
     @Embedded
     @AttributeOverrides(value={
-            @AttributeOverride(name="userName", column=@Column(name="userName")),
+            @AttributeOverride(name="userName", column=@Column(name="user_name")),
             @AttributeOverride(name="uid", column = @Column(name="uid")),
             @AttributeOverride(name="itemName", column=@Column(name="item_name")),
             @AttributeOverride(name="deviceName", column = @Column(name="device_name")),

@@ -25,7 +25,7 @@ export default function HomePage() {
             <Wrapper>
                 <Button variant="contained" color="primary" onClick={handleSubmit}
                 size="large" startIcon={<CloudUpload/>} >
-                    <Link class="Links" to="/connectmyhub" >Connect my Hub!</Link>
+                    <Link className="Links" to="/connectmyhub" >Connect my Hub!</Link>
                 </Button>
                 <IconList>
                     <Icon>

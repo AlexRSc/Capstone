@@ -23,5 +23,5 @@ public class Device {
     @Column(name="device_name")
     private String deviceName;
     @Column(name="hub_id")
-    private String hubId;
+    private Long hubId;
 }

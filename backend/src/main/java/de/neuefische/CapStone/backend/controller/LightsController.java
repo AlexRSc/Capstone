@@ -1,12 +1,14 @@
 package de.neuefische.CapStone.backend.controller;
 
-import de.neuefische.CapStone.backend.api.Hub;
 import de.neuefische.CapStone.backend.api.LightDevice;
 import de.neuefische.CapStone.backend.model.*;
+import de.neuefische.CapStone.backend.rest.openHab.OpenHabOnOffDto;
 import de.neuefische.CapStone.backend.service.LightsService;
+import de.neuefische.CapStone.backend.service.OpenHabService;
+import feign.Response;
 import lombok.Getter;
 import lombok.Setter;
-import org.hibernate.event.internal.DefaultEvictEventListener;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +23,12 @@ import static org.springframework.util.StringUtils.hasText;
 public class LightsController {
 
     private final LightsService lightsService;
+    private final OpenHabService openHabService;
 
-    public LightsController(LightsService lightsService) {
+    @Autowired
+    public LightsController(LightsService lightsService, OpenHabService openHabService) {
         this.lightsService = lightsService;
+        this.openHabService = openHabService;
     }
 
     @PostMapping("/add")
@@ -43,6 +48,15 @@ public class LightsController {
         LightsDeviceEntity createdLightsDeviceEntity = lightsService.create(lightsDeviceEntity);
         LightDevice newLightDevice = map(createdLightsDeviceEntity);
         return ResponseEntity.ok(newLightDevice);
+
+    }
+
+    @PostMapping("/turnon")
+    public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOn(@AuthenticationPrincipal UserEntity authUser,
+                                                              @RequestBody LightDevice lightDevice) {
+
+        LightsDeviceEntity lightsDeviceEntity= lightsService.find(lightDevice);
+        return openHabService.turnLightOn(lightsDeviceEntity);
 
     }
 

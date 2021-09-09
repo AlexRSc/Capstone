@@ -1,22 +1,23 @@
 package de.neuefische.CapStone.backend.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+
+@Setter
+@Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
-@Data
 @Embeddable
+@AllArgsConstructor
+@NoArgsConstructor
 public class DeviceStates {
     @Column(name="brightness")
     boolean brightness;
+
     @Column(name="on_off")
     boolean onOff;
+
     @Column(name="timer")
     Long timer;
 }

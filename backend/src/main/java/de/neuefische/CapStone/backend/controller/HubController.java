@@ -6,6 +6,7 @@ import de.neuefische.CapStone.backend.model.UserEntity;
 import de.neuefische.CapStone.backend.service.HubService;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class HubController {
 
     private final HubService hubService;
 
+    @Autowired
     public HubController(HubService hubService) {
         this.hubService = hubService;
     }
@@ -36,7 +38,7 @@ public class HubController {
             throw new IllegalArgumentException("HubPassword can't be blank!");
         }
         HubEntity hubEntity = map(authUser.getUserName(), hub);
-        HubEntity newHubEntity = hubService.createHub(hubEntity);
+        HubEntity newHubEntity = hubService.createHub(hubEntity, authUser.getUserName());
         Hub newHub = map(newHubEntity);
         return ok(newHub);
     }

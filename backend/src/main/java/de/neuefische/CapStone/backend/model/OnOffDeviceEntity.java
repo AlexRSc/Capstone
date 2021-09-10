@@ -35,5 +35,5 @@ public class OnOffDeviceEntity {
     @AttributeOverrides(value={
             @AttributeOverride(name="onOff", column = @Column(name="on_off"))
     })
-    private DeviceStates deviceStates;
+    private OnOffDeviceStates onOffDeviceStates;
 }

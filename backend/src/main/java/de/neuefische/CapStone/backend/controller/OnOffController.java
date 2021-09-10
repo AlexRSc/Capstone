@@ -1,6 +1,4 @@
 package de.neuefische.CapStone.backend.controller;
-
-import de.neuefische.CapStone.backend.api.LightDevice;
 import de.neuefische.CapStone.backend.api.OnOffDevice;
 import de.neuefische.CapStone.backend.model.*;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabOnOffDto;
@@ -12,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.StringUtils.hasText;
@@ -31,6 +32,17 @@ public class OnOffController {
         this.onOffService = onOffService;
         this.openHabService = openHabService;
     }
+
+    @GetMapping("/myonoffdevices")
+    public ResponseEntity<List<OnOffDevice>> getMyOnOffDevices (@AuthenticationPrincipal UserEntity authUser){
+        List<OnOffDeviceEntity> onOffDeviceEntityList = onOffService.getMyOnOffDevices(authUser.getUserName());
+        if(onOffDeviceEntityList.isEmpty()){
+            return ok(null);
+        }
+        List<OnOffDevice> onOffDeviceList = map(onOffDeviceEntityList);
+        return ok(onOffDeviceList);
+    }
+
 
     @PostMapping("/add")
     public ResponseEntity<OnOffDevice> addNewOnOffDevice(@AuthenticationPrincipal UserEntity authUser,
@@ -64,9 +76,24 @@ public class OnOffController {
 
     @PostMapping("/turnoff")
     public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOff(@AuthenticationPrincipal UserEntity authUser,
-                                                               @RequestBody LightDevice lightDevice) {
-        return null;
+                                                               @RequestBody OnOffDevice onOffDevice) {
 
+        OnOffDeviceEntity onOffDeviceEntity = onOffService.find(onOffDevice);
+        return openHabService.turnOff(onOffDeviceEntity.getDevice());
+    }
+
+
+    private List<OnOffDevice> map(List<OnOffDeviceEntity> onOffDeviceEntityList) {
+        List<OnOffDevice> onOffDeviceList = new LinkedList<>();
+        for(OnOffDeviceEntity onOffDeviceEntity:onOffDeviceEntityList){
+            OnOffDevice onOffDevice = OnOffDevice.builder()
+                    .deviceName(onOffDeviceEntity.getDevice().getDeviceName())
+                    .uid(onOffDeviceEntity.getDevice().getUid())
+                    .itemName(onOffDeviceEntity.getDevice().getItemName())
+                    .onOff(onOffDeviceEntity.getOnOffDeviceStates().isOnOff()).build();
+            onOffDeviceList.add(onOffDevice);
+        }
+        return onOffDeviceList;
     }
 
 

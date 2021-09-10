@@ -1,19 +1,22 @@
 package de.neuefische.CapStone.backend.controller;
 
 import de.neuefische.CapStone.backend.api.LightDevice;
+import de.neuefische.CapStone.backend.api.LightsDeviceAPIDto;
 import de.neuefische.CapStone.backend.model.*;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabLightsBrightnessDto;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabOnOffDto;
 import de.neuefische.CapStone.backend.service.LightsService;
 import de.neuefische.CapStone.backend.service.OpenHabService;
-import feign.Response;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import java.util.LinkedList;
+import java.util.List;
 
+import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.StringUtils.hasText;
 
 @CrossOrigin
@@ -32,6 +35,17 @@ public class LightsController {
         this.openHabService = openHabService;
     }
 
+    @GetMapping("/mylightdevices")
+    public ResponseEntity<List<LightsDeviceAPIDto>> getMyLightDevices (@AuthenticationPrincipal UserEntity authUser) {
+        List<LightsDeviceEntity> lightsDeviceEntityList = lightsService.getMyLightDevices(authUser.getUserName());
+        if(lightsDeviceEntityList.isEmpty()){
+            return ok(null);
+        }
+        List<LightsDeviceAPIDto> lightsDeviceAPIDtoList = map(lightsDeviceEntityList);
+        return ok(lightsDeviceAPIDtoList);
+    }
+
+
     @PostMapping("/add")
     public ResponseEntity<LightDevice> addLightsDevice(@AuthenticationPrincipal UserEntity authUser,
                                                        @RequestBody LightDevice lightDevice) {
@@ -48,7 +62,7 @@ public class LightsController {
         LightsDeviceEntity lightsDeviceEntity = map(lightDevice, authUser);
         LightsDeviceEntity createdLightsDeviceEntity = lightsService.create(lightsDeviceEntity);
         LightDevice newLightDevice = map(createdLightsDeviceEntity);
-        return ResponseEntity.ok(newLightDevice);
+        return ok(newLightDevice);
 
     }
 
@@ -76,12 +90,26 @@ public class LightsController {
         return openHabService.changeBrightness(lightsDeviceEntity.getDevice(), brightness);
     }
 
+    private List<LightsDeviceAPIDto> map(List<LightsDeviceEntity> lightsDeviceEntityList) {
+        List<LightsDeviceAPIDto> lightsDeviceAPIDtoList = new LinkedList<>();
+        for(LightsDeviceEntity lightsDeviceEntity : lightsDeviceEntityList){
+            LightsDeviceAPIDto lightsDeviceAPIDto = LightsDeviceAPIDto.builder()
+                    .deviceName(lightsDeviceEntity.getDevice().getDeviceName())
+                    .itemName(lightsDeviceEntity.getDevice().getItemName())
+                    .uid(lightsDeviceEntity.getDevice().getUid())
+                    .brightness(lightsDeviceEntity.getLightsDeviceStates().isBrightness())
+                    .onOff(lightsDeviceEntity.getLightsDeviceStates().isOnOff()).build();
+            lightsDeviceAPIDtoList.add(lightsDeviceAPIDto);
+        }
+        return lightsDeviceAPIDtoList;
+    }
+
     private LightDevice map(LightsDeviceEntity createdLightsDeviceEntity) {
         return LightDevice.builder()
                 .deviceName(createdLightsDeviceEntity.getDevice().getDeviceName())
                 .uid(createdLightsDeviceEntity.getDevice().getUid())
                 .itemName(createdLightsDeviceEntity.getDevice().getItemName())
-                .onOff(createdLightsDeviceEntity.getDeviceStates().isOnOff()).build();
+                .onOff(createdLightsDeviceEntity.getLightsDeviceStates().isOnOff()).build();
     }
 
     private LightsDeviceEntity map(LightDevice lightDevice, UserEntity authUser) {
@@ -90,11 +118,11 @@ public class LightsController {
                 .uid(lightDevice.getUid())
                 .itemName(lightDevice.getItemName())
                 .deviceName(lightDevice.getDeviceName()).build();
-        DeviceStates deviceStates = DeviceStates.builder()
+        LightsDeviceStates lightsDeviceStates = LightsDeviceStates.builder()
                 .brightness(true)
                 .onOff(true).build();
         return LightsDeviceEntity.builder()
                 .device(device)
-                .deviceStates(deviceStates).build();
+                .lightsDeviceStates(lightsDeviceStates).build();
     }
 }

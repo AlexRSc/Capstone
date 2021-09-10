@@ -9,11 +9,10 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class LightsDeviceAPIDto {
+public class OnOffDevice {
 
     private String deviceName;
     private String uid;
     private String itemName;
     private boolean onOff;
-    private boolean brightness;
 }

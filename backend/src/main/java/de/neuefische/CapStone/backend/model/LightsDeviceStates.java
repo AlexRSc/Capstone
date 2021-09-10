@@ -11,13 +11,11 @@ import javax.persistence.Embeddable;
 @Embeddable
 @AllArgsConstructor
 @NoArgsConstructor
-public class DeviceStates {
+public class LightsDeviceStates {
     @Column(name="brightness")
     boolean brightness;
 
     @Column(name="on_off")
     boolean onOff;
 
-    @Column(name="timer")
-    Long timer;
 }

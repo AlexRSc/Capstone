@@ -1,10 +1,12 @@
 package de.neuefische.CapStone.backend.service;
 
 import de.neuefische.CapStone.backend.config.OpenhabClientConfigProperties;
+import de.neuefische.CapStone.backend.model.Device;
 import de.neuefische.CapStone.backend.model.HubEntity;
 import de.neuefische.CapStone.backend.model.LightsDeviceEntity;
 import de.neuefische.CapStone.backend.repo.HubRepository;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabClient;
+import de.neuefische.CapStone.backend.rest.openHab.OpenHabLightsBrightnessDto;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabOnOffDto;
 import feign.Response;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -31,15 +33,37 @@ public class OpenHabService {
     }
 
 
-    public ResponseEntity<OpenHabOnOffDto> turnLightOn (LightsDeviceEntity lightsDeviceEntity){
-        OpenhabClientConfigProperties clientRawCredentials = setOpenHabAccess(lightsDeviceEntity.getDevice().getHubId());
+    public ResponseEntity<OpenHabOnOffDto> turnOn (Device device){
+        OpenhabClientConfigProperties clientRawCredentials = setOpenHabAccess(device.getHubId());
         String httpHeaders = createHeaders(clientRawCredentials.getUsername(), clientRawCredentials.getPassword());
         OpenHabOnOffDto openHabOnOffDto = OpenHabOnOffDto.builder()
-                .itemName(lightsDeviceEntity.getDevice().getItemName())
+                .itemName(device.getItemName())
                 .onOff("ON").build();
-        return openHabClient.turnLightsOn(httpHeaders, openHabOnOffDto);
+        return openHabClient.turnDeviceOn(httpHeaders, openHabOnOffDto);
     }
 
+
+
+    public ResponseEntity<OpenHabOnOffDto> turnOff(Device device) {
+        OpenhabClientConfigProperties clientRawCredentials = setOpenHabAccess(device.getHubId());
+        String httpHeaders = createHeaders(clientRawCredentials.getUsername(), clientRawCredentials.getPassword());
+        OpenHabOnOffDto openHabOnOffDto = OpenHabOnOffDto.builder()
+                .itemName(device.getItemName())
+                .onOff("OFF").build();
+        return openHabClient.turnDeviceOff(httpHeaders, openHabOnOffDto);
+    }
+
+    public ResponseEntity<OpenHabLightsBrightnessDto> changeBrightness(Device device, String brightness) {
+
+        OpenhabClientConfigProperties clientRawCredentials = setOpenHabAccess(device.getHubId());
+        String httpHeaders = createHeaders(clientRawCredentials.getUsername(), clientRawCredentials.getPassword());
+        OpenHabLightsBrightnessDto openHabLightsBrightnessDto = OpenHabLightsBrightnessDto.builder()
+                .itemName(device.getItemName())
+                .brightnessLevel(brightness)
+                .build();
+
+        return openHabClient.changeDeviceBrightness(httpHeaders, openHabLightsBrightnessDto);
+    }
 
     public OpenhabClientConfigProperties setOpenHabAccess(long hubId) {
         Optional<HubEntity> optionalHubEntity = hubRepository.findHubEntitiesById(hubId);
@@ -60,4 +84,7 @@ public class OpenHabService {
 
         return "Basic " + new String( encodedAuth );
     }
+
+
+
 }

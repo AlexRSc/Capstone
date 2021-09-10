@@ -20,7 +20,15 @@ public class OpenHabClient {
 
 
 
-    public ResponseEntity<OpenHabOnOffDto> turnLightsOn(String httpHeaders, OpenHabOnOffDto openHabOnOffDto) {
+    public ResponseEntity<OpenHabOnOffDto> turnDeviceOn(String httpHeaders, OpenHabOnOffDto openHabOnOffDto) {
         return openHabAPI.turnLightOn(httpHeaders, openHabOnOffDto.getItemName(), openHabOnOffDto.getOnOff());
+    }
+
+    public ResponseEntity<OpenHabOnOffDto> turnDeviceOff(String httpHeaders, OpenHabOnOffDto openHabOnOffDto) {
+        return openHabAPI.turnLightsOff(httpHeaders, openHabOnOffDto.getItemName(), openHabOnOffDto.getOnOff());
+    }
+
+    public ResponseEntity<OpenHabLightsBrightnessDto> changeDeviceBrightness(String httpHeaders, OpenHabLightsBrightnessDto openHabLightsBrightnessDto) {
+        return openHabAPI.changeBrightness(httpHeaders, openHabLightsBrightnessDto.getItemName(), openHabLightsBrightnessDto.getBrightnessLevel());
     }
 }

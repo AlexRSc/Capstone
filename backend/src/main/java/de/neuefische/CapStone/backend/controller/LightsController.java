@@ -2,6 +2,7 @@ package de.neuefische.CapStone.backend.controller;
 
 import de.neuefische.CapStone.backend.api.LightDevice;
 import de.neuefische.CapStone.backend.model.*;
+import de.neuefische.CapStone.backend.rest.openHab.OpenHabLightsBrightnessDto;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabOnOffDto;
 import de.neuefische.CapStone.backend.service.LightsService;
 import de.neuefische.CapStone.backend.service.OpenHabService;
@@ -56,8 +57,23 @@ public class LightsController {
                                                               @RequestBody LightDevice lightDevice) {
 
         LightsDeviceEntity lightsDeviceEntity= lightsService.find(lightDevice);
-        return openHabService.turnLightOn(lightsDeviceEntity);
+        return openHabService.turnOn(lightsDeviceEntity.getDevice());
 
+    }
+
+    @PostMapping("/turnoff")
+    public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOff(@AuthenticationPrincipal UserEntity authUser,
+                                                              @RequestBody LightDevice lightDevice) {
+        LightsDeviceEntity lightsDeviceEntity = lightsService.find(lightDevice);
+        return openHabService.turnOff(lightsDeviceEntity.getDevice());
+
+    }
+    @PostMapping("/brightness")
+    public ResponseEntity<OpenHabLightsBrightnessDto> changeLightsDeviceBrightness(@AuthenticationPrincipal UserEntity authUser,
+                                                                                   @RequestBody LightDevice lightDevice) {
+        LightsDeviceEntity lightsDeviceEntity = lightsService.find(lightDevice);
+        String brightness = lightDevice.getBrightness();
+        return openHabService.changeBrightness(lightsDeviceEntity.getDevice(), brightness);
     }
 
     private LightDevice map(LightsDeviceEntity createdLightsDeviceEntity) {
@@ -65,7 +81,6 @@ public class LightsController {
                 .deviceName(createdLightsDeviceEntity.getDevice().getDeviceName())
                 .uid(createdLightsDeviceEntity.getDevice().getUid())
                 .itemName(createdLightsDeviceEntity.getDevice().getItemName())
-                .brightness(createdLightsDeviceEntity.getDeviceStates().isBrightness())
                 .onOff(createdLightsDeviceEntity.getDeviceStates().isOnOff()).build();
     }
 

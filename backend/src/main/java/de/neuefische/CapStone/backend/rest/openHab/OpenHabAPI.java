@@ -15,4 +15,12 @@ public interface OpenHabAPI {
     @RequestLine(value = "POST /rest/items/{item}")
     @Headers({"Content-Type: text/plain", "Authorization: {"+ACCESS_PARAM+"}"})
     ResponseEntity<OpenHabOnOffDto> turnLightOn(@Param(ACCESS_PARAM) String httpHeaders, @Param("item") String item, String onOff);
+
+    @RequestLine(value = "POST /rest/items/{item}")
+    @Headers({"Content-Type: text/plain", "Authorization: {"+ACCESS_PARAM+"}"})
+    ResponseEntity<OpenHabOnOffDto> turnLightsOff(@Param(ACCESS_PARAM) String httpHeaders, @Param("item") String item, String onOff);
+
+    @RequestLine(value = "POST /rest/items/{item}")
+    @Headers({"Content-Type: text/plain", "Authorization: {"+ACCESS_PARAM+"}"})
+    ResponseEntity<OpenHabLightsBrightnessDto> changeBrightness(@Param(ACCESS_PARAM) String httpHeaders, @Param("item") String item, String brightnessLevel);
 }

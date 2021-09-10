@@ -8,12 +8,51 @@ import {useAuth} from "../auth/AuthProvider";
 import TextField from "@material-ui/core/TextField";
 import {ButtonGroup, CircularProgress} from "@material-ui/core";
 import {useState} from "react";
-import {connectHub} from "../services/hub-api-service";
+import {addLights} from "../services/lights-api-service";
+
+const initialState = {
+    deviceName: '',
+    uid: '',
+    itemName: ''
+}
 
 export default function AddLightsPage() {
+    const {token} = useAuth()
+    const [error, setError] = useState()
+    const [loading, setLoading] = useState(false)
+    const [credentials, setCredentials] = useState(initialState)
+    const [redirect ,setRedirect] = useState()
+
+    const handleCredentialsChange = event =>
+        setCredentials({...credentials,[event.target.name]: event.target.value})
+
+    const handleSubmit = event => {
+        event.preventDefault()
+        setError()
+        setLoading(true)
+        addLights(token, credentials).then(light => setRedirect(light.deviceName))
+            .catch( error => {
+                setError(error)
+                setLoading(false)
+                })
+    }
+
+    const handleClear = () => {
+        setCredentials({
+            deviceName: '',
+            uid: '',
+            itemName: ''
+        })
+    }
+
+    if(redirect) {
+        return <Redirect to ="/lights"/>
+    }
        return (
         <PageLayout>
             <Header title="Connect My Hub"/>
+            {loading && <CircularProgress/>}
+            {!loading &&(
                 <Wrapper>
                     <ExplanationWrapper>
                         <h3>How does this work?</h3>
@@ -21,18 +60,18 @@ export default function AddLightsPage() {
                     </ExplanationWrapper>
                     <TextWrapper>
                         <TextField required id="standard required" label="Name (for this App)"
-                                   name="lightName" />
+                                   name="deviceName" value={credentials.deviceName} onChange={handleCredentialsChange}/>
                         <TextField required id="standard required" label="UUID"
-                                   name="lightUUID"  />
+                                   name="uid" value={credentials.uid} onChange={handleCredentialsChange}/>
                         <TextField required id="standard required" label="ItemName"
-                                   name="lightItem"  />
+                                   name="itemName" value={credentials.itemName} onChange={handleCredentialsChange}/>
                     </TextWrapper>
                     <ButtonGroup>
                         <Link to ="/lights"><Button color="primary" variant="contained">Back</Button></Link>
-                        <Button color="secondary" >Clear</Button>
-                        <Button color="primary" variant="contained">Submit</Button>
+                        <Button color="secondary" onClick={handleClear}>Clear</Button>
+                        <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
                     </ButtonGroup>
-                </Wrapper>
+                </Wrapper>)}
             <Footer/>
         </PageLayout>
     )

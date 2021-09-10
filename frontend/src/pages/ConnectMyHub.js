@@ -36,6 +36,13 @@ export default function ConnectMyHub() {
             })
     }
 
+    const handleClear = () => {
+        setCredentials({
+            hubEmail: '',
+            hubPassword: '',
+        })
+    }
+
     if(redirect){
         return <Redirect to ="/home"/>
     }
@@ -58,7 +65,7 @@ export default function ConnectMyHub() {
                 </TextWrapper>
                 <ButtonGroup>
                     <Link to ="/home"><Button color="primary" variant="contained">Back</Button></Link>
-                    <Button color="secondary" >Clear</Button>
+                    <Button color="secondary" onClick={handleClear}>Clear</Button>
                     <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
                 </ButtonGroup>
             </Wrapper>)}

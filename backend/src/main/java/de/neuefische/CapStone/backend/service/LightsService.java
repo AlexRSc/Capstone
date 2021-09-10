@@ -6,6 +6,7 @@ import de.neuefische.CapStone.backend.repo.LightsRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,5 +31,11 @@ public class LightsService {
             return lightsDeviceEntity.get();
         }
         throw new IllegalArgumentException("LightsDevice not found");
+    }
+
+    public List<LightsDeviceEntity> getMyLightDevices(String userName) {
+
+        return lightsRepository.findAllByDevice_UserName(userName);
+
     }
 }

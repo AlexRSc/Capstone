@@ -37,5 +37,5 @@ public class LightsDeviceEntity {
             @AttributeOverride(name="brightness", column=@Column(name="brightness")),
             @AttributeOverride(name="onOff", column = @Column(name="on_off"))
     })
-    private DeviceStates deviceStates;
+    private LightsDeviceStates lightsDeviceStates;
 }

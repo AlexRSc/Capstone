@@ -4,9 +4,12 @@ import de.neuefische.CapStone.backend.model.HubEntity;
 import de.neuefische.CapStone.backend.model.LightsDeviceEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface LightsRepository extends JpaRepository<LightsDeviceEntity, Long> {
 
     Optional<LightsDeviceEntity> findByDevice_Uid(String uid);
+
+    List<LightsDeviceEntity> findAllByDevice_UserName(String userName);
 }

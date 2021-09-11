@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import PageLayout from "../components/PageLayout";
 import Footer from "../components/Footer";
 import TextField from "@material-ui/core/TextField";
-import {ButtonGroup, CircularProgress, makeStyles, Snackbar} from "@material-ui/core";
+import {ButtonGroup, CircularProgress, Snackbar} from "@material-ui/core";
 import {Link, Redirect} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components"
@@ -13,15 +13,6 @@ import MuiAlert from "@material-ui/lab/Alert"
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
-
-const useStyles = makeStyles((theme) => ({
-    root: {
-        width: '100%',
-        '& > * + *': {
-            marginTop: theme.spacing(2),
-        },
-    },
-}));
 
 const initialState = {
     userName: '',
@@ -34,9 +25,6 @@ export default function LoginPage() {
     const [error, setError] = useState()
     const [open, setOpen]=useState(false);
 
-    const handleClick = () => {
-        setOpen(true);
-    }
 
     const handleClose = (event, reason) => {
         if (reason=== 'clickaway') {

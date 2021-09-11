@@ -2,12 +2,26 @@ import Header from "../components/Header";
 import PageLayout from "../components/PageLayout";
 import Footer from "../components/Footer";
 import TextField from "@material-ui/core/TextField";
-import {ButtonGroup, CircularProgress} from "@material-ui/core";
+import {ButtonGroup, CircularProgress, makeStyles, Snackbar} from "@material-ui/core";
 import {Link, Redirect} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components"
 import {useAuth} from "../auth/AuthProvider";
 import {useState} from "react";
+import MuiAlert from "@material-ui/lab/Alert"
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        width: '100%',
+        '& > * + *': {
+            marginTop: theme.spacing(2),
+        },
+    },
+}));
 
 const initialState = {
     userName: '',
@@ -18,6 +32,18 @@ export default function LoginPage() {
     const [credentials, setCredentials] = useState(initialState)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState()
+    const [open, setOpen]=useState(false);
+
+    const handleClick = () => {
+        setOpen(true);
+    }
+
+    const handleClose = (event, reason) => {
+        if (reason=== 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    }
 
     const handleCredentialsChange = event =>
         setCredentials({...credentials, [event.target.name]: event.target.value})
@@ -30,6 +56,7 @@ export default function LoginPage() {
             setError(error)
             setLoading(false)
         })
+        setOpen(true)
     }
     const handleClear = () => {
         setCredentials({
@@ -57,6 +84,17 @@ export default function LoginPage() {
                     <Button color="primary" variant="contained" onClick={handleSubmit} >Submit</Button>
                 </ButtonGroup>
             </Wrapper>)}
+
+            {!error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    Login SuccessFull!
+                </Alert>
+            </Snackbar>}
+            {error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+                <Alert onClose={handleClose} severity="error">
+                    Wrong credentials!
+                </Alert>
+            </Snackbar>}
             <Footer/>
         </PageLayout>
     )

@@ -14,4 +14,6 @@ public interface HubRepository extends JpaRepository<HubEntity, Long> {
 
     Boolean existsByUserName(String username);
 
+    Optional<HubEntity> findHubEntityByUserName(String userName);
+
 }

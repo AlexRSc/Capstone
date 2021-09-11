@@ -5,50 +5,35 @@ import styled from "styled-components";
 import {Link} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
-import {FormControlLabel, Slider, Switch} from "@material-ui/core";
+import {useAuth} from "../auth/AuthProvider";
+import {useEffect, useState} from "react";
+import {getMyLights} from "../services/lights-api-service";
+import LightsDevice from "../components/LightDevice";
 
 export default function LightsPage() {
-    //just a basic Layout, it has 0 functionality besides looking ok
+
+    const {token} = useAuth()
+    const [error, setError] = useState()
+    const [lights, setLights] = useState([])
+
+    useEffect(() => {
+        setError()
+        getMyLights(token).then(setLights)
+            .catch(setError)
+            .finally(() => setLoading(false))
+    }, [token])
+
+
+
     return (
         <PageLayout>
-            <Header title="Connect My Hub"/>
+            <Header title="Lights"/>
             <Wrapper>
                 <Button variant="contained" color="primary"
                         size="large" startIcon={<SaveIcon/>}>
                     <Link class="Links" to="/addlights">Add Lights Device</Link>
                 </Button>
-                <LightsWrapper>
-                    <Light>
-                        <FormControlLabel control={<Switch color="primary"/>} label={"Device 1"}
-                                          labelPlacement="top"/>
-                        <Slider size="small" orientation="vertical"/>
-                    </Light>
-                    <Light>
-                        <FormControlLabel control={<Switch color="primary"/>} label={"Device 2"}
-                                          labelPlacement="top"/>
-                        <Slider size="small" orientation="vertical"/>
-                    </Light>
-                    <Light>
-                        <FormControlLabel control={<Switch color="primary"/>} label={"Device 3"}
-                                          labelPlacement="top"/>
-                        <Slider size="small" orientation="vertical"/>
-                    </Light>
-                    <Light>
-                        <FormControlLabel control={<Switch color="primary"/>} label={"Device 4"}
-                                          labelPlacement="top"/>
-                        <Slider size="small" orientation="vertical"/>
-                    </Light>
-                    <Light>
-                        <FormControlLabel control={<Switch color="primary"/>} label={"Device 3"}
-                                          labelPlacement="top"/>
-                        <Slider size="small" orientation="vertical"/>
-                    </Light>
-                    <Light>
-                        <FormControlLabel control={<Switch color="primary"/>} label={"Device 4"}
-                                          labelPlacement="top"/>
-                        <Slider size="small" orientation="vertical"/>
-                    </Light>
-                </LightsWrapper>
+                <LightsDevice lights={lights} token={token}/>
                 <Link to="/home"><Button color="primary" variant="contained">Back</Button></Link>
             </Wrapper>
             <Footer/>
@@ -68,18 +53,3 @@ const Wrapper = styled.div`
   }
 `
 
-const LightsWrapper = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-`
-
-const Light = styled.div`
-  justify-content: space-between;
-  margin-right: 10px;
-  margin-bottom: 20px;
-  margin-top: 20px;
-  display: inline-flex;
-  flex-direction: row;
-  align-items: center;
-  
-`

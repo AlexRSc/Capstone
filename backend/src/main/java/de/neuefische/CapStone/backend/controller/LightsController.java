@@ -96,9 +96,7 @@ public class LightsController {
             LightsDeviceAPIDto lightsDeviceAPIDto = LightsDeviceAPIDto.builder()
                     .deviceName(lightsDeviceEntity.getDevice().getDeviceName())
                     .itemName(lightsDeviceEntity.getDevice().getItemName())
-                    .uid(lightsDeviceEntity.getDevice().getUid())
-                    .brightness(lightsDeviceEntity.getLightsDeviceStates().isBrightness())
-                    .onOff(lightsDeviceEntity.getLightsDeviceStates().isOnOff()).build();
+                    .uid(lightsDeviceEntity.getDevice().getUid()).build();
             lightsDeviceAPIDtoList.add(lightsDeviceAPIDto);
         }
         return lightsDeviceAPIDtoList;

@@ -50,7 +50,7 @@ export default function AddLightsPage() {
     }
        return (
         <PageLayout>
-            <Header title="Connect My Hub"/>
+            <Header title="Add Lights"/>
             {loading && <CircularProgress/>}
             {!loading &&(
                 <Wrapper>

@@ -1,9 +1,13 @@
-import {FormControlLabel, Switch} from "@material-ui/core";
+import {FormControlLabel, Snackbar, Switch} from "@material-ui/core";
 import {useState} from "react";
 import {turnLightOff, turnLightOn} from "../services/lights-api-service";
 import styled from "styled-components";
 import LightsSlider from "./LightsSlider";
+import MuiAlert from "@material-ui/lab/Alert";
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default function SingleLightComponent({light, token}) {
     const [checked, setChecked] = useState(false)
@@ -11,6 +15,8 @@ export default function SingleLightComponent({light, token}) {
     const lightsData = {uid: light.uid,
                 deviceName: light.deviceName,
                 itemName: light.itemName}
+    const [open, setOpen]=useState(false);
+
     const toggleChecked = () => {
         if (checked === false) {
             turnLightOn(token, lightsData).catch( error =>
@@ -22,9 +28,15 @@ export default function SingleLightComponent({light, token}) {
             )
         }
         setChecked((prev) => !prev)
+        setOpen(true)
     }
 
-
+    const handleClose = (event, reason) => {
+        if (reason=== 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    }
 
     return(
         <Wrapper>
@@ -33,6 +45,16 @@ export default function SingleLightComponent({light, token}) {
                               value={light}
             />
             <LightsSlider light={light} token={token}/>
+            {!error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    {lightsData.itemName} turned on/off successfully!
+                </Alert>
+            </Snackbar>}
+            {error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+                <Alert onClose={handleClose} severity="error">
+                    Something went wrong with {lightsData.itemName} !
+                </Alert>
+            </Snackbar>}
         </Wrapper>
     )
 }

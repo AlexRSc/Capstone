@@ -23,7 +23,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtAuthFilter jwtAuthFilter;
     private final UserEntityDetailsService detailsService;
-    private final String[] SWAGGER_URLS = {"/v/api-docs/**", "/swagger-ui/**", "/swagger-resources/**"};
+    private final String[] SWAGGER_URLS = {"/v2/api-docs/**", "/swagger-ui/**", "/swagger-resources/**"};
 
     @Autowired
     public SecurityConfig(JwtAuthFilter jwtAuthFilter, UserEntityDetailsService detailsService) {

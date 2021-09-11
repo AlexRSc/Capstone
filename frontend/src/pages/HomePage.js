@@ -41,7 +41,7 @@ export default function HomePage() {
                     </Link>
                     </Icon>
                     <Icon>
-                    <Link to="/lights">
+                    <Link to="/onOff">
                     <div>On/Off</div>
                     <PowerSettingsNewIcon fontSize="large">Lights</PowerSettingsNewIcon>
                     </Link>

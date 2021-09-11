@@ -1,6 +1,7 @@
 package de.neuefische.CapStone.backend.service;
 
 import de.neuefische.CapStone.backend.api.OnOffDevice;
+import de.neuefische.CapStone.backend.model.HubEntity;
 import de.neuefische.CapStone.backend.model.OnOffDeviceEntity;
 import de.neuefische.CapStone.backend.repo.OnOffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +13,20 @@ import java.util.Optional;
 public class OnOffService {
 
     private final OnOffRepository onOffRepository;
+    private final HubService hubService;
 
     @Autowired
-    public OnOffService(OnOffRepository onOffRepository) {
+    public OnOffService(OnOffRepository onOffRepository, HubService hubService) {
         this.onOffRepository = onOffRepository;
+        this.hubService = hubService;
     }
 
     public OnOffDeviceEntity createOnOffDevice(OnOffDeviceEntity onOffDeviceEntity) {
         if (onOffRepository.existsOnOffDeviceEntitiesByDevice_Uid(onOffDeviceEntity.getDevice().getUid())) {
             throw new IllegalArgumentException("This Device already exists in our Database!");
         }
-
+        HubEntity hubEntity = hubService.findHubByUserName(onOffDeviceEntity.getDevice().getUserName());
+        onOffDeviceEntity.getDevice().setHubId(hubEntity.getId());
         return onOffRepository.save(onOffDeviceEntity);
     }
 

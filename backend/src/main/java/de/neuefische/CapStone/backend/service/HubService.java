@@ -5,6 +5,8 @@ import de.neuefische.CapStone.backend.repo.HubRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class HubService {
 
@@ -24,6 +26,13 @@ public class HubService {
         }
         hubEntity.setHubState("active");
         return hubRepository.save(hubEntity);
+    }
 
+    public HubEntity findHubByUserName(String userName) {
+        Optional<HubEntity> hubEntityOptional= hubRepository.findHubEntityByUserName(userName);
+        if(hubEntityOptional.isEmpty()){
+            throw new IllegalArgumentException("You haven´t setup a Hub yet!");
+        }
+        return hubEntityOptional.get();
     }
 }

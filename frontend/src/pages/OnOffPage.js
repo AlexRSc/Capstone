@@ -35,7 +35,7 @@ export default function OnOffPage() {
                     <Link class="Links" to="/addOnOff">Add On Off Device</Link>
                 </Button>
                 <OnOffWrapper>
-                {onOffs.map(onOff => {
+                {onOffs&&onOffs.map(onOff => {
                     return(
                 <OnOffDevice onOff={onOff} token={token}/>)
                 })}

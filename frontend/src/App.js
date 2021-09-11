@@ -8,6 +8,8 @@ import ProtectedRoute from "./auth/ProtectedRoute";
 import ConnectMyHub from "./pages/ConnectMyHub";
 import LightsPage from "./pages/LightsPage";
 import AddLightsPage from "./pages/AddLightsPage";
+import OnOffPage from "./pages/OnOffPage";
+import AddOnOffPage from "./pages/AddOnOffPage";
 
 
 export default function App() {
@@ -22,6 +24,8 @@ export default function App() {
                     <ProtectedRoute path="/connectmyhub" component={ConnectMyHub}/>
                     <ProtectedRoute path="/lights" component={LightsPage}/>
                     <ProtectedRoute path="/addlights" component={AddLightsPage}/>
+                    <ProtectedRoute path="/onOff" component={OnOffPage}/>
+                    <ProtectedRoute path="/addOnOff" component={AddOnOffPage}/>
                     <Route path="/info"></Route>
                     <Route path="/about-us"></Route>
                 </Switch>

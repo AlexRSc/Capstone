@@ -7,19 +7,19 @@ import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
 import {useAuth} from "../auth/AuthProvider";
 import {useEffect, useState} from "react";
-import {getMyLights} from "../services/lights-api-service";
-import LightsDevice from "../components/LightDevice";
+import {getMyOnOff} from "../services/onOff-api-service";
+import OnOffDevice from "../components/OnOffDevice";
 
-export default function LightsPage() {
 
+export default function OnOffPage() {
     const {token} = useAuth()
     const [error, setError] = useState()
-    const [lights, setLights] = useState([])
+    const [onOffs, setOnOffs] = useState([])
     const [loading, setLoading] = useState()
 
     useEffect(() => {
         setError()
-        getMyLights(token).then(setLights)
+        getMyOnOff(token).then(setOnOffs)
             .catch(setError)
             .finally(() => setLoading(false))
     }, [token])
@@ -28,13 +28,18 @@ export default function LightsPage() {
 
     return (
         <PageLayout>
-            <Header title="Lights"/>
+            <Header title="On Off"/>
             <Wrapper>
                 <Button variant="contained" color="primary"
                         size="large" startIcon={<SaveIcon/>}>
-                    <Link class="Links" to="/addlights">Add Lights Device</Link>
+                    <Link class="Links" to="/addOnOff">Add On Off Device</Link>
                 </Button>
-                <LightsDevice lights={lights} token={token}/>
+                <OnOffWrapper>
+                {onOffs.map(onOff => {
+                    return(
+                <OnOffDevice onOff={onOff} token={token}/>)
+                })}
+                </OnOffWrapper>
                 <Link to="/home"><Button color="primary" variant="contained">Back</Button></Link>
             </Wrapper>
             <Footer/>
@@ -47,10 +52,13 @@ const Wrapper = styled.div`
   place-items: center;
   flex-direction: column;
   grid-template-rows: 1fr 2fr 1fr;
-
   .Links {
     text-decoration: none;
     color: white;
   }
+`
+const OnOffWrapper = styled.div `
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
 `
 

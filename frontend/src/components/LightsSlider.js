@@ -19,6 +19,6 @@ export default function LightsSlider({light, token}) {
     }
     return (
     <Slider size="small" orientation="vertical" value={value}
-            onChange={handleBrightness} /> )
+            onChange={handleBrightness} step={5} min={0} max={100}/> )
 
 }

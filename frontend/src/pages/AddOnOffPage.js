@@ -6,14 +6,18 @@ import Footer from "../components/Footer";
 import styled from "styled-components";
 import {useAuth} from "../auth/AuthProvider";
 import TextField from "@material-ui/core/TextField";
-import {ButtonGroup, CircularProgress} from "@material-ui/core";
+import {ButtonGroup, CircularProgress, Snackbar} from "@material-ui/core";
 import {useState} from "react";
 import {addOnOff} from "../services/onOff-api-service";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const initialState = {
     deviceName: '',
     uid: '',
     itemName: ''
+}
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
 export default function AddOnOffPage() {
@@ -21,20 +25,29 @@ export default function AddOnOffPage() {
     const [error, setError] = useState()
     const [loading, setLoading] = useState(false)
     const [credentials, setCredentials] = useState(initialState)
-    const [redirect ,setRedirect] = useState()
+    const [redirect, setRedirect] = useState()
+    const [open, setOpen] = useState(false)
 
     const handleCredentialsChange = event =>
-        setCredentials({...credentials,[event.target.name]: event.target.value})
+        setCredentials({...credentials, [event.target.name]: event.target.value})
+
+    const handleClose = (event, reason) => {
+        if (reason=== 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    }
 
     const handleSubmit = event => {
         event.preventDefault()
         setError()
         setLoading(true)
         addOnOff(token, credentials).then(onOff => setRedirect(onOff.deviceName))
-            .catch( error => {
+            .catch(error => {
                 setError(error)
                 setLoading(false)
             })
+        setOpen(true)
     }
 
     const handleClear = () => {
@@ -45,14 +58,14 @@ export default function AddOnOffPage() {
         })
     }
 
-    if(redirect) {
-        return <Redirect to ="/onOff"/>
+    if (redirect) {
+        return <Redirect to="/onOff"/>
     }
     return (
         <PageLayout>
             <Header title="Add On Off"/>
             {loading && <CircularProgress/>}
-            {!loading &&(
+            {!loading && (
                 <Wrapper>
                     <ExplanationWrapper>
                         <h3>How does this work?</h3>
@@ -67,11 +80,21 @@ export default function AddOnOffPage() {
                                    name="itemName" value={credentials.itemName} onChange={handleCredentialsChange}/>
                     </TextWrapper>
                     <ButtonGroup>
-                        <Link to ="/onOff"><Button color="primary" variant="contained">Back</Button></Link>
+                        <Link to="/onOff"><Button color="primary" variant="contained">Back</Button></Link>
                         <Button color="secondary" onClick={handleClear}>Clear</Button>
                         <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
                     </ButtonGroup>
                 </Wrapper>)}
+            {!error && <Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    {credentials.deviceName} added successfully!
+                </Alert>
+            </Snackbar>}
+            {error && <Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+                <Alert onClose={handleClose} severity="error">
+                    Wrong credentials!
+                </Alert>
+            </Snackbar>}
             <Footer/>
         </PageLayout>
     )
@@ -81,6 +104,7 @@ const Wrapper = styled.div`
   display: grid;
   place-items: center;
   grid-template-rows: 2fr 1fr 1fr;
+
   .Buttongroup {
     align-self: center;
   }

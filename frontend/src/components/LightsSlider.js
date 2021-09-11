@@ -2,7 +2,7 @@ import {useState} from "react";
 import {setBrightness} from "../services/lights-api-service";
 import {Slider} from "@material-ui/core";
 
-export default function LightsSlider({light, token}) {
+export default function LightsSlider({light, token, handleError, handleOpen}) {
     const [value, setValue] = useState(50)
     const [error, setError] = useState()
     const [open, setOpen]=useState(false);
@@ -16,7 +16,8 @@ export default function LightsSlider({light, token}) {
             itemName: light.itemName,
             brightness: newValue.toString()}
         setBrightness(token,newLightsData ).catch(error=>
-            setError(error))
+            handleError(error))
+        handleOpen()
     }
     return (
     <Slider size="small" orientation="vertical" value={value}

@@ -17,6 +17,14 @@ export default function SingleLightComponent({light, token}) {
                 itemName: light.itemName}
     const [open, setOpen]=useState(false);
 
+    const handleError = (error) => {
+        setError(error)
+        setOpen(true)
+    }
+
+    const handleOpen = () => {
+        setOpen(true)
+    }
     const toggleChecked = () => {
         if (checked === false) {
             turnLightOn(token, lightsData).catch( error =>
@@ -44,15 +52,15 @@ export default function SingleLightComponent({light, token}) {
                               labelPlacement="top" checked={checked} onChange={toggleChecked}
                               value={light}
             />
-            <LightsSlider light={light} token={token}/>
+            <LightsSlider light={light} token={token} handleError={handleError} handleOpen={handleOpen}/>
             {!error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
                 <Alert onClose={handleClose} severity="success">
-                    {lightsData.itemName} turned on/off successfully!
+                    {lightsData.deviceName} turned on/off successfully!
                 </Alert>
             </Snackbar>}
             {error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
                 <Alert onClose={handleClose} severity="error">
-                    Something went wrong with {lightsData.itemName} !
+                    Something went wrong with {lightsData.deviceName} !
                 </Alert>
             </Snackbar>}
         </Wrapper>

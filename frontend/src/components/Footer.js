@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import {NavLink} from "react-router-dom";
+import SwipeableTemporaryDrawer from "./SwipableTemporaryDrawer";
 
 export default function Footer() {
 
@@ -7,7 +8,7 @@ export default function Footer() {
         <Wrapper>
             <NavLink to="/">Info</NavLink>
             <NavLink to="/">About Us</NavLink>
-            <NavLink to="/">Services</NavLink>
+            <SwipeableTemporaryDrawer className />
         </Wrapper>
     )
 }
@@ -19,8 +20,13 @@ const Wrapper = styled.footer`
   position:relative;
   display: flex;
   padding: var(--size-m);
+  justify-content: space-around;
   a {
+    text-decoration: none;
+    color: black;
     flex-grow: 1;
+    margin: 5px;
+    margin-right:70px;
   }
-
+  
   `

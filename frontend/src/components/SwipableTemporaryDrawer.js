@@ -10,6 +10,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import {NavLink} from "react-router-dom";
+import styled from "styled-components"
 
 const useStyles = makeStyles({
     list: {
@@ -35,7 +36,7 @@ export default function SwipeableTemporaryDrawer() {
     };
 
     const list = (anchor) => (
-            <div
+            <Wrapper
                 className={clsx(classes.list, {
                     [classes.fullList]: anchor === 'top' || anchor === 'bottom',
                 })}
@@ -88,7 +89,7 @@ export default function SwipeableTemporaryDrawer() {
                     </ListItem>
                     </NavLink>
                 </List>
-            </div>
+            </Wrapper>
         )
     ;
 
@@ -111,3 +112,11 @@ export default function SwipeableTemporaryDrawer() {
     );
 }
 
+const Wrapper = styled.div`
+
+    
+    a {
+      text-decoration: none;
+      color: black;
+    }
+`

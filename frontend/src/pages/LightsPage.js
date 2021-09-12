@@ -49,7 +49,7 @@ export default function LightsPage() {
                 <LightsDevice lights={lights} token={token}/>
                 <Link to="/home"><Button color="primary" variant="contained">Back</Button></Link>
             </Wrapper>
-            {error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+            {error &&<Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error">
                     An error fetching your lights happened!
                 </Alert>

@@ -73,12 +73,12 @@ export default function LoginPage() {
                 </ButtonGroup>
             </Wrapper>)}
 
-            {!error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+            {!error &&<Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success">
                     Login SuccessFull!
                 </Alert>
             </Snackbar>}
-            {error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+            {error &&<Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error">
                     Wrong credentials!
                 </Alert>

@@ -17,7 +17,7 @@ export default function Header({title}) {
 }
 
 const Wrapper = styled.header`
-  width:100%;
+  width: 100%;
   text-align: center;
   background: #89ABE3FF;
   position:relative;

@@ -9,19 +9,31 @@ import {useAuth} from "../auth/AuthProvider";
 import {useEffect, useState} from "react";
 import {getMyLights} from "../services/lights-api-service";
 import LightsDevice from "../components/LightDevice";
+import {Snackbar} from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default function LightsPage() {
 
     const {token} = useAuth()
     const [error, setError] = useState()
     const [lights, setLights] = useState([])
-    const [loading, setLoading] = useState()
+    const [open, setOpen] = useState(false)
 
+    const handleClose = (event, reason) => {
+        if (reason=== 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    }
     useEffect(() => {
         setError()
         getMyLights(token).then(setLights)
             .catch(setError)
-            .finally(() => setLoading(false))
+        setOpen(true)
     }, [token])
 
 
@@ -32,11 +44,16 @@ export default function LightsPage() {
             <Wrapper>
                 <Button variant="contained" color="primary"
                         size="large" startIcon={<SaveIcon/>}>
-                    <Link class="Links" to="/addlights">Add Lights Device</Link>
+                    <Link className="Links" to="/addlights">Add Lights Device</Link>
                 </Button>
                 <LightsDevice lights={lights} token={token}/>
                 <Link to="/home"><Button color="primary" variant="contained">Back</Button></Link>
             </Wrapper>
+            {error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+                <Alert onClose={handleClose} severity="error">
+                    An error fetching your lights happened!
+                </Alert>
+            </Snackbar>}
             <Footer/>
         </PageLayout>
     )

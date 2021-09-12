@@ -11,7 +11,7 @@ export default function WelcomePage() {
         <PageLayout>
             <Header title="Welcome"/>
             <Wrapper>
-                <h1>Welcome to our Smart App</h1>
+                <h1>Welcome to Prof Beluga</h1>
                 <p>If you are new here, please consider registering! </p>
                 <Button variant="contained" color="primary" component={Link} to="/registration">Register here</Button>
                 </Wrapper>

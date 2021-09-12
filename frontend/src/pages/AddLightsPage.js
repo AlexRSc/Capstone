@@ -6,9 +6,10 @@ import Footer from "../components/Footer";
 import styled from "styled-components";
 import {useAuth} from "../auth/AuthProvider";
 import TextField from "@material-ui/core/TextField";
-import {ButtonGroup, CircularProgress} from "@material-ui/core";
+import {ButtonGroup, CircularProgress, Snackbar} from "@material-ui/core";
 import {useState} from "react";
 import {addLights} from "../services/lights-api-service";
+import MuiAlert from "@material-ui/lab/Alert";
 
 const initialState = {
     deviceName: '',
@@ -16,25 +17,38 @@ const initialState = {
     itemName: ''
 }
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
+
 export default function AddLightsPage() {
     const {token} = useAuth()
     const [error, setError] = useState()
     const [loading, setLoading] = useState(false)
     const [credentials, setCredentials] = useState(initialState)
-    const [redirect ,setRedirect] = useState()
+    const [redirect, setRedirect] = useState()
+    const [open, setOpen] = useState(false)
 
     const handleCredentialsChange = event =>
-        setCredentials({...credentials,[event.target.name]: event.target.value})
+        setCredentials({...credentials, [event.target.name]: event.target.value})
 
     const handleSubmit = event => {
         event.preventDefault()
         setError()
         setLoading(true)
         addLights(token, credentials).then(light => setRedirect(light.deviceName))
-            .catch( error => {
+            .catch(error => {
                 setError(error)
                 setLoading(false)
-                })
+            })
+        setOpen(true)
+    }
+
+    const handleClose = (event, reason) => {
+        if (reason === 'clickaway') {
+            return;
+        }
+        setOpen(false);
     }
 
     const handleClear = () => {
@@ -45,14 +59,14 @@ export default function AddLightsPage() {
         })
     }
 
-    if(redirect) {
-        return <Redirect to ="/lights"/>
+    if (redirect) {
+        return <Redirect to="/lights"/>
     }
-       return (
+    return (
         <PageLayout>
             <Header title="Add Lights"/>
             {loading && <CircularProgress/>}
-            {!loading &&(
+            {!loading && (
                 <Wrapper>
                     <ExplanationWrapper>
                         <h3>How does this work?</h3>
@@ -67,11 +81,21 @@ export default function AddLightsPage() {
                                    name="itemName" value={credentials.itemName} onChange={handleCredentialsChange}/>
                     </TextWrapper>
                     <ButtonGroup>
-                        <Link to ="/lights"><Button color="primary" variant="contained">Back</Button></Link>
+                        <Link to="/lights"><Button color="primary" variant="contained">Back</Button></Link>
                         <Button color="secondary" onClick={handleClear}>Clear</Button>
                         <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
                     </ButtonGroup>
                 </Wrapper>)}
+            {!error && <Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    Lightsdevice added!
+                </Alert>
+            </Snackbar>}
+            {error && <Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+                <Alert onClose={handleClose} severity="error">
+                    Wrong credentials!
+                </Alert>
+            </Snackbar>}
             <Footer/>
         </PageLayout>
     )
@@ -81,6 +105,7 @@ const Wrapper = styled.div`
   display: grid;
   place-items: center;
   grid-template-rows: 2fr 1fr 1fr;
+
   .Buttongroup {
     align-self: center;
   }

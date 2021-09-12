@@ -6,9 +6,14 @@ import Footer from "../components/Footer";
 import styled from "styled-components";
 import {useAuth} from "../auth/AuthProvider";
 import TextField from "@material-ui/core/TextField";
-import {ButtonGroup, CircularProgress} from "@material-ui/core";
+import {ButtonGroup, CircularProgress, Snackbar} from "@material-ui/core";
 import {useState} from "react";
 import {connectHub} from "../services/hub-api-service";
+import MuiAlert from "@material-ui/lab/Alert";
+
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 const initialState = {
     hubEmail: '',
@@ -21,6 +26,7 @@ export default function ConnectMyHub() {
     const [loading, setLoading] = useState(false)
     const [credentials, setCredentials] =useState(initialState)
     const [redirect, setRedirect] = useState()
+    const [open, setOpen]=useState(false)
 
     const handleCredentialsChange = event =>
         setCredentials({...credentials, [event.target.name]: event.target.value})
@@ -34,6 +40,14 @@ export default function ConnectMyHub() {
                 setError(error)
                 setLoading(false)
             })
+        setOpen(true)
+    }
+
+    const handleClose = (event, reason) => {
+        if (reason=== 'clickaway') {
+            return;
+        }
+        setOpen(false);
     }
 
     const handleClear = () => {
@@ -69,6 +83,16 @@ export default function ConnectMyHub() {
                     <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
                 </ButtonGroup>
             </Wrapper>)}
+            {!error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    Login SuccessFull!
+                </Alert>
+            </Snackbar>}
+            {error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+                <Alert onClose={handleClose} severity="error">
+                    Wrong credentials!
+                </Alert>
+            </Snackbar>}
             <Footer/>
         </PageLayout>
     )

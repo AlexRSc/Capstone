@@ -44,7 +44,7 @@ export default function LightsPage() {
             <Wrapper>
                 <Button variant="contained" color="primary"
                         size="large" startIcon={<SaveIcon/>}>
-                    <Link class="Links" to="/addlights">Add Lights Device</Link>
+                    <Link className="Links" to="/addlights">Add Lights Device</Link>
                 </Button>
                 <LightsDevice lights={lights} token={token}/>
                 <Link to="/home"><Button color="primary" variant="contained">Back</Button></Link>

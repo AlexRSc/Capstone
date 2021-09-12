@@ -4,13 +4,10 @@ import {Slider} from "@material-ui/core";
 
 export default function LightsSlider({light, token, handleError, handleOpen}) {
     const [value, setValue] = useState(50)
-    const [error, setError] = useState()
-    const [open, setOpen]=useState(false);
 
     const handleBrightness = (event, newValue) => {
         event.preventDefault()
         setValue(newValue)
-        setError()
         const newLightsData = {uid: light.uid,
             deviceName: light.deviceName,
             itemName: light.itemName,

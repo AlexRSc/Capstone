@@ -9,21 +9,34 @@ import {useAuth} from "../auth/AuthProvider";
 import {useEffect, useState} from "react";
 import {getMyOnOff} from "../services/onOff-api-service";
 import OnOffDevice from "../components/OnOffDevice";
+import {Snackbar} from "@material-ui/core";
+import MuiAlert from "@material-ui/lab/Alert";
 
+function Alert(props) {
+    return <MuiAlert elevation={6} variant="filled" {...props} />;
+}
 
 export default function OnOffPage() {
     const {token} = useAuth()
     const [error, setError] = useState()
     const [onOffs, setOnOffs] = useState([])
     const [loading, setLoading] = useState()
+    const [open, setOpen] = useState()
 
     useEffect(() => {
         setError()
         getMyOnOff(token).then(setOnOffs)
             .catch(setError)
             .finally(() => setLoading(false))
+        setOpen(true)
     }, [token])
 
+    const handleClose = (event, reason) => {
+        if (reason=== 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    }
 
 
     return (
@@ -32,7 +45,7 @@ export default function OnOffPage() {
             <Wrapper>
                 <Button variant="contained" color="primary"
                         size="large" startIcon={<SaveIcon/>}>
-                    <Link class="Links" to="/addOnOff">Add On Off Device</Link>
+                    <Link className="Links" to="/addOnOff">Add On Off Device</Link>
                 </Button>
                 <OnOffWrapper>
                 {onOffs&&onOffs.map(onOff => {
@@ -42,6 +55,11 @@ export default function OnOffPage() {
                 </OnOffWrapper>
                 <Link to="/home"><Button color="primary" variant="contained">Back</Button></Link>
             </Wrapper>
+            {error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+                <Alert onClose={handleClose} severity="error">
+                    An error fetching your lights happened!
+                </Alert>
+            </Snackbar>}
             <Footer/>
         </PageLayout>
     )

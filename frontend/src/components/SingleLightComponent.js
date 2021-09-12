@@ -55,7 +55,7 @@ export default function SingleLightComponent({light, token}) {
             <LightsSlider light={light} token={token} handleError={handleError} handleOpen={handleOpen}/>
             {!error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
                 <Alert onClose={handleClose} severity="success">
-                    {lightsData.deviceName} turned on/off successfully!
+                    {lightsData.deviceName} worked successfully!
                 </Alert>
             </Snackbar>}
             {error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>

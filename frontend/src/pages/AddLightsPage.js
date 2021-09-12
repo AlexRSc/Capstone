@@ -86,12 +86,12 @@ export default function AddLightsPage() {
                         <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
                     </ButtonGroup>
                 </Wrapper>)}
-            {!error && <Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+            {!error && <Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success">
                     Lightsdevice added!
                 </Alert>
             </Snackbar>}
-            {error && <Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+            {error && <Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error">
                     Wrong credentials!
                 </Alert>

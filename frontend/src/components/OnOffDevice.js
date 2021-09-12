@@ -43,12 +43,12 @@ export default function OnOffDevice({onOff, token}) {
                               labelPlacement="top" checked={checked} onChange={toggleChecked}
                               value={onOff}
             />
-            {!error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+            {!error &&<Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success">
                     {onOff.deviceName} succesfully switched states!
                 </Alert>
             </Snackbar>}
-            {error &&<Snackbar open={open} autoHideDuration={1000} onclose={handleClose}>
+            {error &&<Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="error">
                     Something went wrong with {onOff.deviceName} !
                 </Alert>

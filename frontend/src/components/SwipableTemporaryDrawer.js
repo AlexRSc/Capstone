@@ -11,6 +11,12 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import {NavLink} from "react-router-dom";
 import styled from "styled-components"
+import {CloudUpload, WbIncandescent} from "@material-ui/icons";
+import PowerSettingsNewIcon from "@material-ui/icons/PowerSettingsNew";
+import HomeIcon from '@material-ui/icons/Home'
+import AccountBoxIcon from '@material-ui/icons/AccountBox'
+import VpnKeyIcon from '@material-ui/icons/VpnKey'
+import HomeWorkIcon from '@material-ui/icons/HomeWork'
 
 const useStyles = makeStyles({
     list: {
@@ -47,44 +53,44 @@ export default function SwipeableTemporaryDrawer() {
                 <List>
                     <NavLink to="/">
                         <ListItem>
-                            <ListItemIcon><InboxIcon/></ListItemIcon>
+                            <ListItemIcon><HomeWorkIcon/></ListItemIcon>
                             <ListItemText>Welcome</ListItemText>
                         </ListItem>
                     </NavLink>
                     <NavLink to="/login">
                         <ListItem>
-                            <ListItemIcon><InboxIcon/></ListItemIcon>
+                            <ListItemIcon><VpnKeyIcon/></ListItemIcon>
                             <ListItemText>Login</ListItemText>
                         </ListItem>
                     </NavLink>
                     <NavLink to="/registration">
                         <ListItem>
-                            <ListItemIcon><InboxIcon/></ListItemIcon>
+                            <ListItemIcon><AccountBoxIcon/></ListItemIcon>
                             <ListItemText>Registration</ListItemText>
                         </ListItem>
                     </NavLink>
                     <Divider/>
                     <NavLink to="/home">
                         <ListItem>
-                            <ListItemIcon><InboxIcon/></ListItemIcon>
+                            <ListItemIcon><HomeIcon/></ListItemIcon>
                             <ListItemText>Home</ListItemText>
                         </ListItem>
                     </NavLink>
                     <NavLink to="/connectmyhub">
                         <ListItem>
-                            <ListItemIcon><InboxIcon/></ListItemIcon>
+                            <ListItemIcon><CloudUpload/></ListItemIcon>
                             <ListItemText>SetUp Hub</ListItemText>
                         </ListItem>
                     </NavLink>
                     <NavLink to="/lights">
                     <ListItem>
-                        <ListItemIcon><InboxIcon/></ListItemIcon>
+                        <ListItemIcon><WbIncandescent/></ListItemIcon>
                         <ListItemText>Lights</ListItemText>
                     </ListItem>
                     </NavLink>
                     <NavLink to="/onOff">
                     <ListItem>
-                        <ListItemIcon><InboxIcon/></ListItemIcon>
+                        <ListItemIcon><PowerSettingsNewIcon/></ListItemIcon>
                         <ListItemText>OnOff-Devices</ListItemText>
                     </ListItem>
                     </NavLink>

@@ -10,6 +10,8 @@ import LightsPage from "./pages/LightsPage";
 import AddLightsPage from "./pages/AddLightsPage";
 import OnOffPage from "./pages/OnOffPage";
 import AddOnOffPage from "./pages/AddOnOffPage";
+import CoffeePage from "./pages/CoffeePage";
+import AddCoffeePage from "./pages/AddCoffeePage";
 
 
 export default function App() {
@@ -26,6 +28,8 @@ export default function App() {
                     <ProtectedRoute path="/addlights" component={AddLightsPage}/>
                     <ProtectedRoute path="/onOff" component={OnOffPage}/>
                     <ProtectedRoute path="/addOnOff" component={AddOnOffPage}/>
+                    <ProtectedRoute path="/coffee" component={CoffeePage}/>
+                    <ProtectedRoute path="/addcoffee" component={AddCoffeePage}/>
                     <Route path="/info"></Route>
                     <Route path="/about-us"></Route>
                 </Switch>

@@ -30,13 +30,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         this.jwtAuthFilter = jwtAuthFilter;
         this.detailsService = detailsService;
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(detailsService);
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder() { return new BCryptPasswordEncoder();    }
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     @Bean
@@ -48,6 +51,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .antMatchers(GET, SWAGGER_URLS).permitAll()
+                .antMatchers(POST, "/schedule/taskdef").permitAll()
                 .antMatchers(POST, "/user/login").permitAll()
                 .antMatchers(POST, "/user/registration").permitAll()
                 .antMatchers("/**").authenticated()
@@ -55,6 +59,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
+
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()

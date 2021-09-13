@@ -42,6 +42,9 @@ public class CoffeeController {
         if(!hasText(coffeeDevice.getItemName())){
             throw new IllegalArgumentException("ItemName can't be blank!");
         }
+        if(coffeeDevice.getDate()==null){
+            throw new IllegalArgumentException("Date can't be blank!");
+        }
         CoffeeEntity coffeeEntity = map(coffeeDevice, authUser);
         CoffeeEntity newCoffeeEntity = coffeeService.create(coffeeEntity);
         CoffeeDevice createdCoffeeDevice = map(newCoffeeEntity);

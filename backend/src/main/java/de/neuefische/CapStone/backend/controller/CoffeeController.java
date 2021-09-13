@@ -12,10 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.LinkedList;
+import java.util.List;
+
 import static org.springframework.http.ResponseEntity.ok;
 
 import static org.springframework.util.StringUtils.hasText;
@@ -30,6 +31,15 @@ public class CoffeeController {
     public CoffeeController(CoffeeService coffeeService) {
         this.coffeeService = coffeeService;
     }
+
+    @GetMapping("/getMyCoffee")
+    public ResponseEntity<List<CoffeeDevice>> getMyCoffeeDevices(@AuthenticationPrincipal UserEntity authUser) {
+        List<CoffeeEntity> coffeeEntityList = coffeeService.getCoffeeList(authUser.getUserName());
+        List<CoffeeDevice> myCoffeeDevices = map(coffeeEntityList);
+        return ok(myCoffeeDevices);
+    }
+
+
 
     @PostMapping("/add")
     public ResponseEntity<CoffeeDevice> addCoffeeDevice(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
@@ -49,6 +59,14 @@ public class CoffeeController {
         CoffeeEntity newCoffeeEntity = coffeeService.create(coffeeEntity);
         CoffeeDevice createdCoffeeDevice = map(newCoffeeEntity);
         return ok(createdCoffeeDevice);
+    }
+    private List<CoffeeDevice> map(List<CoffeeEntity> coffeeEntityList) {
+        List<CoffeeDevice> coffeeDeviceList= new LinkedList<>();
+        for(CoffeeEntity coffeeEntity : coffeeEntityList) {
+            CoffeeDevice coffeeDevice = map(coffeeEntity);
+            coffeeDeviceList.add(coffeeDevice);
+        }
+        return coffeeDeviceList;
     }
 
     private CoffeeDevice map(CoffeeEntity newCoffeeEntity) {

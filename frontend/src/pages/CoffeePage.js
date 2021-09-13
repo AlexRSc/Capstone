@@ -50,6 +50,7 @@ export default function CoffeePage() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <Link to="/home"><Button color="primary" variant="contained">Back</Button></Link>
             </Wrapper>
             <Footer/>
         </PageLayout>

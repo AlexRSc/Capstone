@@ -9,6 +9,7 @@ import de.neuefische.CapStone.backend.schedulingTask.TaskDefinitionTest;
 import de.neuefische.CapStone.backend.schedulingTask.TaskSchedulingService;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -58,5 +59,9 @@ public class CoffeeService {
         scheduleService.setTaskDefinition(taskDefinitionTest);
         taskSchedulingService.scheduleATask(coffeeEntity.getId().toString(), scheduleService, cronService.convertDateToCron(taskDefinitionTest.getDate()));
 
+    }
+
+    public List<CoffeeEntity> getCoffeeList(String userName) {
+        return coffeeRepository.findAllByDevice_UserName(userName);
     }
 }

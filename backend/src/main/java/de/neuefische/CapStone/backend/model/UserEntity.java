@@ -3,6 +3,8 @@ package de.neuefische.CapStone.backend.model;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="smart_user")
@@ -11,6 +13,9 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserEntity {
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch =FetchType.EAGER, mappedBy = "id")
+    private final Set<HubEntity> hubEntitySet = new HashSet<>();
 
     @Id
     @GeneratedValue

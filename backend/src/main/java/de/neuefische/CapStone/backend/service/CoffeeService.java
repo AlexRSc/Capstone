@@ -9,6 +9,7 @@ import de.neuefische.CapStone.backend.schedulingTask.TaskDefinitionTest;
 import de.neuefische.CapStone.backend.schedulingTask.TaskSchedulingService;
 import org.springframework.stereotype.Service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
@@ -43,8 +44,7 @@ public class CoffeeService {
         Optional<CoffeeEntity> createdCoffeeEntityOptional=coffeeRepository.findByDevice_Uid(coffeeEntity.getDevice().getUid());
         if(createdCoffeeEntityOptional.isPresent()){
             setCoffeeTimer(createdCoffeeEntityOptional.get());
-        }
-        else{
+        } else{
             throw new IllegalArgumentException("Oops, something went wrong!");
         }
         return coffeeEntity;
@@ -58,7 +58,6 @@ public class CoffeeService {
                 .date(coffeeEntity.getCoffeeStates().getDate()).build();
         scheduleService.setTaskDefinition(taskDefinitionTest);
         taskSchedulingService.scheduleATask(coffeeEntity.getId().toString(), scheduleService, cronService.convertDateToCron(taskDefinitionTest.getDate()));
-
     }
 
     public List<CoffeeEntity> getCoffeeList(String userName) {

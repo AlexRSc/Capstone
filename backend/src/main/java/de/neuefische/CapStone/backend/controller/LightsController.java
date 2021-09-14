@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -36,9 +37,9 @@ public class LightsController {
     }
 
     @GetMapping("/mylightdevices")
-    public ResponseEntity<List<LightsDeviceAPIDto>> getMyLightDevices (@AuthenticationPrincipal UserEntity authUser) {
+    public ResponseEntity<List<LightsDeviceAPIDto>> getMyLightDevices(@AuthenticationPrincipal UserEntity authUser) {
         List<LightsDeviceEntity> lightsDeviceEntityList = lightsService.getMyLightDevices(authUser.getUserName());
-        if(lightsDeviceEntityList.isEmpty()){
+        if (lightsDeviceEntityList.isEmpty()) {
             return ok(null);
         }
         List<LightsDeviceAPIDto> lightsDeviceAPIDtoList = map(lightsDeviceEntityList);
@@ -50,13 +51,13 @@ public class LightsController {
     public ResponseEntity<LightDevice> addLightsDevice(@AuthenticationPrincipal UserEntity authUser,
                                                        @RequestBody LightDevice lightDevice) {
 
-        if(!hasText(lightDevice.getUid())){
+        if (!hasText(lightDevice.getUid())) {
             throw new IllegalArgumentException("UID cant be blank!");
         }
-        if(!hasText(lightDevice.getItemName())){
+        if (!hasText(lightDevice.getItemName())) {
             throw new IllegalArgumentException("ItemName cant be blank!");
         }
-        if(!hasText(lightDevice.getDeviceName())){
+        if (!hasText(lightDevice.getDeviceName())) {
             throw new IllegalArgumentException("DeviceName cant be blank!");
         }
         LightsDeviceEntity lightsDeviceEntity = map(lightDevice, authUser);
@@ -70,18 +71,19 @@ public class LightsController {
     public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOn(@AuthenticationPrincipal UserEntity authUser,
                                                               @RequestBody LightDevice lightDevice) {
 
-        LightsDeviceEntity lightsDeviceEntity= lightsService.find(lightDevice);
+        LightsDeviceEntity lightsDeviceEntity = lightsService.find(lightDevice);
         return openHabService.turnOn(lightsDeviceEntity.getDevice());
 
     }
 
     @PostMapping("/turnoff")
     public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOff(@AuthenticationPrincipal UserEntity authUser,
-                                                              @RequestBody LightDevice lightDevice) {
+                                                               @RequestBody LightDevice lightDevice) {
         LightsDeviceEntity lightsDeviceEntity = lightsService.find(lightDevice);
         return openHabService.turnOff(lightsDeviceEntity.getDevice());
 
     }
+
     @PostMapping("/brightness")
     public ResponseEntity<OpenHabLightsBrightnessDto> changeLightsDeviceBrightness(@AuthenticationPrincipal UserEntity authUser,
                                                                                    @RequestBody LightDevice lightDevice) {
@@ -92,11 +94,13 @@ public class LightsController {
 
     private List<LightsDeviceAPIDto> map(List<LightsDeviceEntity> lightsDeviceEntityList) {
         List<LightsDeviceAPIDto> lightsDeviceAPIDtoList = new LinkedList<>();
-        for(LightsDeviceEntity lightsDeviceEntity : lightsDeviceEntityList){
+        for (LightsDeviceEntity lightsDeviceEntity : lightsDeviceEntityList) {
             LightsDeviceAPIDto lightsDeviceAPIDto = LightsDeviceAPIDto.builder()
                     .deviceName(lightsDeviceEntity.getDevice().getDeviceName())
                     .itemName(lightsDeviceEntity.getDevice().getItemName())
-                    .uid(lightsDeviceEntity.getDevice().getUid()).build();
+                    .uid(lightsDeviceEntity.getDevice().getUid())
+                    .onOff(lightsDeviceEntity.getLightsDeviceStates().isOnOff())
+                    .brightness(lightsDeviceEntity.getLightsDeviceStates().getBrightness()).build();
             lightsDeviceAPIDtoList.add(lightsDeviceAPIDto);
         }
         return lightsDeviceAPIDtoList;
@@ -117,7 +121,7 @@ public class LightsController {
                 .itemName(lightDevice.getItemName())
                 .deviceName(lightDevice.getDeviceName()).build();
         LightsDeviceStates lightsDeviceStates = LightsDeviceStates.builder()
-                .brightness(true)
+                .brightness("0")
                 .onOff(true).build();
         return LightsDeviceEntity.builder()
                 .device(device)

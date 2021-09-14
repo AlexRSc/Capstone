@@ -2,18 +2,18 @@ package de.neuefische.CapStone.backend.controller;
 
 
 import de.neuefische.CapStone.backend.api.CoffeeDevice;
-import de.neuefische.CapStone.backend.api.User;
 import de.neuefische.CapStone.backend.model.CoffeeEntity;
 import de.neuefische.CapStone.backend.model.CoffeeStates;
 import de.neuefische.CapStone.backend.model.Device;
 import de.neuefische.CapStone.backend.model.UserEntity;
 import de.neuefische.CapStone.backend.service.CoffeeService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,7 +24,6 @@ import static org.springframework.util.StringUtils.hasText;
 @RestController
 @RequestMapping("/coffee")
 public class CoffeeController {
-
     private final CoffeeService coffeeService;
 
     @Autowired
@@ -71,7 +70,7 @@ public class CoffeeController {
 
     private CoffeeDevice map(CoffeeEntity newCoffeeEntity) {
         return CoffeeDevice.builder()
-                .date(newCoffeeEntity.getCoffeeStates().getDate())
+                .date(Date.from(newCoffeeEntity.getCoffeeStates().getDate()))
                 .itemName(newCoffeeEntity.getDevice().getItemName())
                 .deviceName(newCoffeeEntity.getDevice().getDeviceName())
                 .uid(newCoffeeEntity.getDevice().getUid())
@@ -87,7 +86,7 @@ public class CoffeeController {
                 .userName(user.getUserName()).build();
         CoffeeStates coffeeStates = CoffeeStates.builder()
                 .onOff(false)
-                .date(coffeeDevice.getDate()).build();
+                .date(coffeeDevice.getDate().toInstant()).build();
         return CoffeeEntity.builder()
                 .device(device)
                 .coffeeStates(coffeeStates).build();

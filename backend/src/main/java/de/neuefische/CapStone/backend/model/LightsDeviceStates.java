@@ -13,7 +13,7 @@ import javax.persistence.Embeddable;
 @NoArgsConstructor
 public class LightsDeviceStates {
     @Column(name="brightness")
-    boolean brightness;
+    String brightness;
 
     @Column(name="on_off")
     boolean onOff;

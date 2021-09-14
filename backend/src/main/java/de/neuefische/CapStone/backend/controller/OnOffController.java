@@ -70,7 +70,7 @@ public class OnOffController {
                                                           @RequestBody OnOffDevice onOffDevice) {
 
         OnOffDeviceEntity onOffDeviceEntity = onOffService.find(onOffDevice);
-        return openHabService.turnOn(onOffDeviceEntity.getDevice());
+        return openHabService.turnOnOnOffDevice(onOffDeviceEntity);
 
     }
 
@@ -79,7 +79,7 @@ public class OnOffController {
                                                                @RequestBody OnOffDevice onOffDevice) {
 
         OnOffDeviceEntity onOffDeviceEntity = onOffService.find(onOffDevice);
-        return openHabService.turnOff(onOffDeviceEntity.getDevice());
+        return openHabService.turnOFFOnOffDevice(onOffDeviceEntity);
     }
 
 

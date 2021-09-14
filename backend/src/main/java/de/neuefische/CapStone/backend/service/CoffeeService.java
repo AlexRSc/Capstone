@@ -39,7 +39,8 @@ public class CoffeeService {
         if (coffeeEntityOptional.isPresent()) {
             throw new IllegalArgumentException("You already have that Coffee Maker!");
         }
-        coffeeEntity.getDevice().setHubId(hubEntityOptional.get().getId());
+        HubEntity hubEntity = hubEntityOptional.get();
+        coffeeEntity.setHubEntity(hubEntity);
         coffeeRepository.saveAndFlush(coffeeEntity);
         Optional<CoffeeEntity> createdCoffeeEntityOptional=coffeeRepository.findByDevice_Uid(coffeeEntity.getDevice().getUid());
         if(createdCoffeeEntityOptional.isPresent()){

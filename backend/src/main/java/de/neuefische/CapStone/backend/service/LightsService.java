@@ -30,7 +30,7 @@ public class LightsService {
         if (hubEntityOptional.isEmpty()){
             throw new IllegalArgumentException("You don´t have a Hub");
         }
-        lightsDeviceEntity.getDevice().setHubId(hubEntityOptional.get().getId());
+        lightsDeviceEntity.setHubEntity(hubEntityOptional.get());
         return lightsRepository.save(lightsDeviceEntity);
     }
 

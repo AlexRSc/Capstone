@@ -20,13 +20,16 @@ public class OnOffDeviceEntity {
     @Column(name="id")
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name="hub_id", nullable = false)
+    private HubEntity hubEntity;
+
     @Embedded
     @AttributeOverrides(value={
             @AttributeOverride(name="userName", column=@Column(name="user_name")),
             @AttributeOverride(name="uid", column = @Column(name="uid")),
             @AttributeOverride(name="itemName", column=@Column(name="item_name")),
             @AttributeOverride(name="deviceName", column = @Column(name="device_name")),
-            @AttributeOverride(name="hubId", column=@Column(name="hub_id")),
     })
     private Device device;
 

@@ -28,7 +28,7 @@ public class OnOffService {
             throw new IllegalArgumentException("This Device already exists in our Database!");
         }
         HubEntity hubEntity = hubService.findHubByUserName(onOffDeviceEntity.getDevice().getUserName());
-        onOffDeviceEntity.getDevice().setHubId(hubEntity.getId());
+        onOffDeviceEntity.setHubEntity(hubEntity);
         return onOffRepository.save(onOffDeviceEntity);
     }
 

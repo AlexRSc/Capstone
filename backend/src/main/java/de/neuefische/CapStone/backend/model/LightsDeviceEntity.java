@@ -21,13 +21,16 @@ public class LightsDeviceEntity {
     @Column(name="id")
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name="hub_id", nullable = false)
+    private HubEntity hubEntity;
+
     @Embedded
     @AttributeOverrides(value={
             @AttributeOverride(name="userName", column=@Column(name="lights_user_name")),
             @AttributeOverride(name="uid", column = @Column(name="lights_uid")),
             @AttributeOverride(name="itemName", column=@Column(name="lights_item_name")),
             @AttributeOverride(name="deviceName", column = @Column(name="device_name")),
-            @AttributeOverride(name="hubId", column=@Column(name="hub_id")),
     })
     private Device device;
 

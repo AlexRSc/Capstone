@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name="smart_hub")
@@ -15,6 +17,19 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class HubEntity {
+
+    @ManyToOne
+    @JoinColumn(name="user_id", nullable = false)
+    private UserEntity userEntity;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch =FetchType.EAGER, mappedBy = "id")
+    private final Set<LightsDeviceEntity> lightsDeviceEntities = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch =FetchType.EAGER, mappedBy = "id")
+    private final Set<CoffeeEntity> coffeeEntitySet = new HashSet<>();
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch =FetchType.EAGER, mappedBy = "id")
+    private final Set<OnOffDeviceEntity> onOffDeviceEntities = new HashSet<>();
 
     @Id
     @GeneratedValue

@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import java.time.Instant;
 import java.util.Date;
 
 @Setter
@@ -18,6 +19,6 @@ public class CoffeeStates {
     boolean onOff;
 
     @Column(name="date")
-    Date date;
+    Instant date;
 
 }

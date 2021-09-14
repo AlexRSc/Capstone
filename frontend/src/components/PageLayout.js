@@ -10,4 +10,5 @@ export default styled.div`
   place-items: center;
   grid-template-rows: min-content 1fr min-content;
   background-color: White;
+  overflow-x: scroll;
     `

@@ -7,6 +7,9 @@ import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
 import {Link} from "react-router-dom";
+import {useAuth} from "../auth/AuthProvider";
+import {useEffect, useState} from "react";
+import {getMyCoffees} from "../services/coffee-api-service";
 
 
 const useStyles = makeStyles({
@@ -17,7 +20,17 @@ const useStyles = makeStyles({
 
 export default function CoffeePage() {
     const classes = useStyles();
+    const {token} = useAuth()
+    const [coffees, setCoffees] = useState([])
+    const [open, setOpen] = useState(false)
+    const [error, setError]=useState()
 
+    useEffect( () => {
+        setError()
+        getMyCoffees(token).then(setCoffees)
+            .catch(setError)
+        setOpen(true)
+    }, [token])
 
     return (
         <PageLayout>
@@ -37,16 +50,13 @@ export default function CoffeePage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            <TableRow>
-                                <TableCell>DeviceName</TableCell>
-                                <TableCell align="right">active</TableCell>
-                                <TableCell align="right">Still no!</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell>DeviceName</TableCell>
-                                <TableCell align="right">active</TableCell>
-                                <TableCell align="right">Still no!</TableCell>
-                            </TableRow>
+                            {coffees.map((coffee) => (
+                                <TableRow key = {coffee.deviceName}>
+                                    <TableCell align="right">{coffee.deviceName}</TableCell>
+                                    <TableCell align="right">{coffee.status}</TableCell>
+                                    <TableCell align="right">Options</TableCell>
+                                </TableRow>
+                            ))}
                         </TableBody>
                     </Table>
                 </TableContainer>

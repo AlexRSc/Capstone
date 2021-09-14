@@ -3,7 +3,7 @@ import {setBrightness} from "../services/lights-api-service";
 import {Slider} from "@material-ui/core";
 
 export default function LightsSlider({light, token, handleError, handleOpen}) {
-    const [value, setValue] = useState(50)
+    const [value, setValue] = useState(parseInt(light.brightness))
 
     const handleBrightness = (event, newValue) => {
         event.preventDefault()

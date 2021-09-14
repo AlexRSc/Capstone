@@ -117,7 +117,7 @@ public class LightsController {
                 .itemName(lightDevice.getItemName())
                 .deviceName(lightDevice.getDeviceName()).build();
         LightsDeviceStates lightsDeviceStates = LightsDeviceStates.builder()
-                .brightness(true)
+                .brightness("0")
                 .onOff(true).build();
         return LightsDeviceEntity.builder()
                 .device(device)

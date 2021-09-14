@@ -1,6 +1,7 @@
 package de.neuefische.CapStone.backend.service;
 
 import de.neuefische.CapStone.backend.api.LightDevice;
+import de.neuefische.CapStone.backend.model.Device;
 import de.neuefische.CapStone.backend.model.HubEntity;
 import de.neuefische.CapStone.backend.model.LightsDeviceEntity;
 import de.neuefische.CapStone.backend.repo.HubRepository;
@@ -39,6 +40,24 @@ public class LightsService {
             return lightsDeviceEntity.get();
         }
         throw new IllegalArgumentException("LightsDevice not found");
+    }
+
+    public void findAndTurnOnOff(Device device, boolean onOff) {
+        Optional<LightsDeviceEntity> lightsDeviceEntityOptional = lightsRepository.findByDevice_Uid(device.getUid());
+        if(lightsDeviceEntityOptional.isPresent()){
+            LightsDeviceEntity lightsDeviceEntity = lightsDeviceEntityOptional.get();
+            lightsDeviceEntity.getLightsDeviceStates().setOnOff(onOff);
+            lightsRepository.save(lightsDeviceEntity);
+        }
+    }
+
+    public void findAndChangeBrightness(Device device, String brightness) {
+        Optional<LightsDeviceEntity> lightsDeviceEntityOptional = lightsRepository.findByDevice_Uid(device.getUid());
+        if(lightsDeviceEntityOptional.isPresent()){
+            LightsDeviceEntity lightsDeviceEntity = lightsDeviceEntityOptional.get();
+            lightsDeviceEntity.getLightsDeviceStates().setBrightness(brightness);
+            lightsRepository.save(lightsDeviceEntity);
+        }
     }
 
     public List<LightsDeviceEntity> getMyLightDevices(String userName) {

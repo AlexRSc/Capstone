@@ -72,7 +72,7 @@ public class LightsController {
                                                               @RequestBody LightDevice lightDevice) {
 
         LightsDeviceEntity lightsDeviceEntity = lightsService.find(lightDevice);
-        return openHabService.turnOn(lightsDeviceEntity.getDevice());
+        return openHabService.turnLightsOn(lightsDeviceEntity);
 
     }
 
@@ -80,7 +80,7 @@ public class LightsController {
     public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOff(@AuthenticationPrincipal UserEntity authUser,
                                                                @RequestBody LightDevice lightDevice) {
         LightsDeviceEntity lightsDeviceEntity = lightsService.find(lightDevice);
-        return openHabService.turnOff(lightsDeviceEntity.getDevice());
+        return openHabService.turnLightsOff(lightsDeviceEntity);
 
     }
 
@@ -89,7 +89,7 @@ public class LightsController {
                                                                                    @RequestBody LightDevice lightDevice) {
         LightsDeviceEntity lightsDeviceEntity = lightsService.find(lightDevice);
         String brightness = lightDevice.getBrightness();
-        return openHabService.changeBrightness(lightsDeviceEntity.getDevice(), brightness);
+        return openHabService.changeBrightness(lightsDeviceEntity, brightness);
     }
 
     private List<LightsDeviceAPIDto> map(List<LightsDeviceEntity> lightsDeviceEntityList) {

@@ -9,7 +9,7 @@ function Alert(props) {
 }
 
 export default function OnOffDevice({onOff, token}) {
-    const [checked, setChecked] = useState(false)
+    const [checked, setChecked] = useState(onOff.onOff)
     const [error, setError] = useState()
     const [open, setOpen] = useState(false)
     const onOffData = {uid: onOff.uid,

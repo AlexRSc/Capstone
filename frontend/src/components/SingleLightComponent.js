@@ -10,7 +10,7 @@ function Alert(props) {
 }
 
 export default function SingleLightComponent({light, token}) {
-    const [checked, setChecked] = useState(false)
+    const [checked, setChecked] = useState(light.onOff)
     const [error, setError] = useState()
     const lightsData = {uid: light.uid,
                 deviceName: light.deviceName,

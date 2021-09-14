@@ -47,8 +47,10 @@ export default function HomePage() {
                     </Link>
                     </Icon>
                     <Icon>
+                    <Link to="/coffee">
                     <div>Coffee</div>
                     <LocalCafeIcon fontSize="large">Lights</LocalCafeIcon>
+                    </Link>
                     </Icon>
                     <Icon>
                     <div>Music</div>

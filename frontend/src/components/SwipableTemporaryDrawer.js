@@ -17,6 +17,7 @@ import HomeIcon from '@material-ui/icons/Home'
 import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import HomeWorkIcon from '@material-ui/icons/HomeWork'
+import LocalCafeIcon from "@material-ui/icons/LocalCafe";
 
 const useStyles = makeStyles({
     list: {
@@ -83,16 +84,22 @@ export default function SwipeableTemporaryDrawer() {
                         </ListItem>
                     </NavLink>
                     <NavLink to="/lights">
-                    <ListItem>
-                        <ListItemIcon><WbIncandescent/></ListItemIcon>
-                        <ListItemText>Lights</ListItemText>
-                    </ListItem>
+                        <ListItem>
+                            <ListItemIcon><WbIncandescent/></ListItemIcon>
+                            <ListItemText>Lights</ListItemText>
+                        </ListItem>
                     </NavLink>
                     <NavLink to="/onOff">
-                    <ListItem>
-                        <ListItemIcon><PowerSettingsNewIcon/></ListItemIcon>
-                        <ListItemText>OnOff-Devices</ListItemText>
-                    </ListItem>
+                        <ListItem>
+                            <ListItemIcon><PowerSettingsNewIcon/></ListItemIcon>
+                            <ListItemText>OnOff-Devices</ListItemText>
+                        </ListItem>
+                    </NavLink>
+                    <NavLink to ="/coffee">
+                        <ListItem>
+                            <ListItemIcon><LocalCafeIcon/></ListItemIcon>
+                            <ListItemText>Coffee</ListItemText>
+                        </ListItem>
                     </NavLink>
                 </List>
             </Wrapper>
@@ -120,9 +127,9 @@ export default function SwipeableTemporaryDrawer() {
 
 const Wrapper = styled.div`
 
-    
-    a {
-      text-decoration: none;
-      color: black;
-    }
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `

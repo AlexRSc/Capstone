@@ -116,6 +116,10 @@
             <artifactId>feign-slf4j</artifactId>
             <version>10.11</version>
         </dependency>
+        <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest</artifactId>
+        </dependency>
 
     </dependencies>
     <profiles>

@@ -23,9 +23,12 @@ import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
+
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 @SpringBootTest(
         properties = "spring.profiles.active:h2",
@@ -91,10 +94,16 @@ public class HubControllerTest {
     @Test
     public void hubAlreadyExists() {
         //GIVEN
+        Optional<UserEntity> userEntityOptional = userRepository.findByUserName("test");
+        if(userEntityOptional.isEmpty()){
+            fail();
+        }
+        UserEntity userEntity = userEntityOptional.get();
         HubEntity hubInDB = HubEntity.builder()
                 .userName("test")
                 .hubEmail("hubEmail@email.com")
-                .hubPassword("hubPassword").build();
+                .hubPassword("hubPassword")
+                .userEntity(userEntity).build();
         hubRepository.saveAndFlush(hubInDB);
         HubEntity hubToAdd = HubEntity.builder()
                 .hubEmail("hubEmail@email.com")

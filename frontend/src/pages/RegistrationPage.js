@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 import TextField from "@material-ui/core/TextField";
 import styled from "styled-components"
 import {ButtonGroup, CircularProgress, Snackbar} from "@material-ui/core";
-import Button from "@material-ui/core/button";
+import Button from "@material-ui/core/Button";
 import {Link, Redirect} from "react-router-dom";
 import {useState} from "react";
 import {registerUser} from "../services/user-api-service";

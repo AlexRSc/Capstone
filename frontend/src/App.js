@@ -30,6 +30,7 @@ export default function App() {
                     <ProtectedRoute path="/addOnOff" component={AddOnOffPage}/>
                     <ProtectedRoute path="/coffee" component={CoffeePage}/>
                     <ProtectedRoute path="/addcoffee" component={AddCoffeePage}/>
+                    <ProtectedRoute path="/coffeeOptions" component={AddCoffeePage}/>
                     <Route path="/info"></Route>
                     <Route path="/about-us"></Route>
                 </Switch>

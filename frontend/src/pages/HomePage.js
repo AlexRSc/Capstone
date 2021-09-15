@@ -2,7 +2,7 @@ import PageLayout from "../components/PageLayout";
 import Header from "../components/Header";
 import Footer from "../components/Footer";
 import styled from "styled-components"
-import Button from "@material-ui/core/button";
+import Button from "@material-ui/core/Button";
 import {CloudUpload, WbIncandescent} from "@material-ui/icons";
 import LocalCafeIcon from "@material-ui/icons/LocalCafe"
 import AlarmIcon from "@material-ui/icons/Alarm";

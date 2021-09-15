@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import Button from "@material-ui/core/button"
+import Button from "@material-ui/core/Button"
 import {Link} from "react-router-dom";
 import {useAuth} from "../auth/AuthProvider";
 
@@ -15,6 +15,8 @@ export default function Header({title}) {
     </Wrapper>
 )
 }
+
+
 
 const Wrapper = styled.header`
   width: 100%;

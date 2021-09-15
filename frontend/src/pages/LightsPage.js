@@ -29,14 +29,13 @@ export default function LightsPage() {
         }
         setOpen(false);
     }
+
     useEffect(() => {
         setError()
         getMyLights(token).then(setLights)
             .catch(setError)
         setOpen(true)
     }, [token])
-
-
 
     return (
         <PageLayout>

@@ -20,14 +20,12 @@ export default function OnOffPage() {
     const {token} = useAuth()
     const [error, setError] = useState()
     const [onOffs, setOnOffs] = useState([])
-    const [loading, setLoading] = useState()
     const [open, setOpen] = useState()
 
     useEffect(() => {
         setError()
         getMyOnOff(token).then(setOnOffs)
             .catch(setError)
-            .finally(() => setLoading(false))
         setOpen(true)
     }, [token])
 

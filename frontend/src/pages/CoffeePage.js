@@ -16,7 +16,7 @@ import Header from "../components/Header";
 import styled from "styled-components";
 import Button from "@material-ui/core/Button";
 import SaveIcon from "@material-ui/icons/Save";
-import {Link, Redirect} from "react-router-dom";
+import {Link} from "react-router-dom";
 import {useAuth} from "../auth/AuthProvider";
 import {useEffect, useState} from "react";
 import {getMyCoffees} from "../services/coffee-api-service";
@@ -36,7 +36,6 @@ export default function CoffeePage() {
     const {token} = useAuth()
     const [coffees, setCoffees] = useState([])
     const [open, setOpen] = useState(false)
-    const [error, setError] = useState()
     const [anchorEl, setAnchorEl] = useState(null);
 
     const handleClick = (event) => {
@@ -52,9 +51,8 @@ export default function CoffeePage() {
     const id = open ? 'simple-popover' : undefined;
 
     useEffect(() => {
-        setError()
         getMyCoffees(token).then(setCoffees)
-            .catch(setError)
+            .catch()
         setOpen(true)
     }, [token])
 

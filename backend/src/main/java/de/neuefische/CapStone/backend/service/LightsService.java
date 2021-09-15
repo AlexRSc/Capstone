@@ -27,8 +27,12 @@ public class LightsService {
 
     public LightsDeviceEntity create(LightsDeviceEntity lightsDeviceEntity) {
         Optional<HubEntity> hubEntityOptional= hubRepository.findHubEntityByUserName(lightsDeviceEntity.getDevice().getUserName());
+        Optional<LightsDeviceEntity> lightsDeviceEntityOptional = lightsRepository.findByDevice_Uid(lightsDeviceEntity.getDevice().getUid());
         if (hubEntityOptional.isEmpty()){
             throw new IllegalArgumentException("You don´t have a Hub");
+        }
+        if (lightsDeviceEntityOptional.isPresent()){
+            throw new IllegalArgumentException("That lightdevice was already added!");
         }
         lightsDeviceEntity.setHubEntity(hubEntityOptional.get());
         return lightsRepository.save(lightsDeviceEntity);

@@ -74,7 +74,8 @@ public class CoffeeController {
                 .itemName(newCoffeeEntity.getDevice().getItemName())
                 .deviceName(newCoffeeEntity.getDevice().getDeviceName())
                 .uid(newCoffeeEntity.getDevice().getUid())
-                .onOff(newCoffeeEntity.getCoffeeStates().isOnOff()).build();
+                .onOff(newCoffeeEntity.getCoffeeStates().isOnOff())
+                .dailyAction(newCoffeeEntity.getCoffeeStates().isDailyAction()).build();
     }
 
 
@@ -86,7 +87,8 @@ public class CoffeeController {
                 .userName(user.getUserName()).build();
         CoffeeStates coffeeStates = CoffeeStates.builder()
                 .onOff(false)
-                .date(coffeeDevice.getDate().toInstant()).build();
+                .date(coffeeDevice.getDate().toInstant())
+                .dailyAction(coffeeDevice.isDailyAction()).build();
         return CoffeeEntity.builder()
                 .device(device)
                 .coffeeStates(coffeeStates).build();

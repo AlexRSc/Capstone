@@ -21,4 +21,7 @@ public class CoffeeStates {
     @Column(name="date")
     Instant date;
 
+    @Column(name="daily_action")
+    boolean dailyAction;
+
 }

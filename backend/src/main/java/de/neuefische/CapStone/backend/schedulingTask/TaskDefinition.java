@@ -1,5 +1,7 @@
 package de.neuefische.CapStone.backend.schedulingTask;
 
+import de.neuefische.CapStone.backend.api.CoffeeDevice;
+import de.neuefische.CapStone.backend.model.CoffeeEntity;
 import de.neuefische.CapStone.backend.model.Device;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,9 +15,9 @@ import java.util.Date;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class TaskDefinitionTest {
+public class TaskDefinition {
     private String cronExpression;
     private String actionType;
-    private Device device;
+    private CoffeeEntity coffeeEntity;
     private Instant date;
 }

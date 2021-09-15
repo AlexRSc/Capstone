@@ -1,21 +1,21 @@
 package de.neuefische.CapStone.backend.service;
 
-import de.neuefische.CapStone.backend.config.OpenhabClientConfigProperties;
+import de.neuefische.CapStone.backend.model.CoffeeEntity;
 import de.neuefische.CapStone.backend.model.Device;
-import de.neuefische.CapStone.backend.model.HubEntity;
 import de.neuefische.CapStone.backend.model.LightsDeviceEntity;
 import de.neuefische.CapStone.backend.model.OnOffDeviceEntity;
-import de.neuefische.CapStone.backend.repo.HubRepository;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabClient;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabLightsBrightnessDto;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabOnOffDto;
+import de.neuefische.CapStone.backend.schedulingTask.TaskSchedulingService;
+import de.neuefische.CapStone.backend.schedulingTask.TurnOffScheduleService;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-
+import static org.hamcrest.Matchers.is;
 import java.nio.charset.StandardCharsets;
-import java.util.Optional;
 
 import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
@@ -23,17 +23,18 @@ import static java.lang.Boolean.TRUE;
 @Service
 public class OpenHabService {
 
-    private final HubRepository hubRepository;
+
     private final OpenHabClient openHabClient;
     private final LightsService lightsService;
     private final OnOffService onOffService;
 
+
     @Autowired
-    public OpenHabService(HubRepository hubRepository, OpenHabClient openHabClient, LightsService lightsService, OnOffService onOffService) {
-        this.hubRepository = hubRepository;
+    public OpenHabService(OpenHabClient openHabClient, LightsService lightsService, OnOffService onOffService) {
         this.openHabClient = openHabClient;
         this.lightsService = lightsService;
         this.onOffService = onOffService;
+
     }
 
     //this is a workaround because I'm using only one turnOn/turnOff method for lights and onOff Devices, we might have to
@@ -41,6 +42,20 @@ public class OpenHabService {
     public void findDeviceToTurnOnOff(Device device, boolean onOff) {
         lightsService.findAndTurnOnOff(device, onOff);
         onOffService.findAndTurnOnOff(device, onOff);
+    }
+    public void turnCoffeeMachineOn (CoffeeEntity coffeeEntity) {
+        String httpHeaders = createHeaders(coffeeEntity.getHubEntity().getHubEmail(), coffeeEntity.getHubEntity().getHubPassword());
+        OpenHabOnOffDto openHabOnOffDto = OpenHabOnOffDto.builder()
+                .itemName(coffeeEntity.getDevice().getItemName())
+                .onOff("ON").build();
+        openHabClient.turnDeviceOn(httpHeaders, openHabOnOffDto);
+    }
+    public void turnCoffeeMachineOFF(CoffeeEntity coffeeEntity) {
+        String httpHeaders = createHeaders(coffeeEntity.getHubEntity().getHubEmail(), coffeeEntity.getHubEntity().getHubPassword());
+        OpenHabOnOffDto openHabOnOffDto = OpenHabOnOffDto.builder()
+                .itemName(coffeeEntity.getDevice().getItemName())
+                .onOff("ON").build();
+        openHabClient.turnDeviceOff(httpHeaders, openHabOnOffDto);
     }
 
     public ResponseEntity<OpenHabOnOffDto> turnLightsOn(LightsDeviceEntity lightsDeviceEntity) {
@@ -105,4 +120,6 @@ public class OpenHabService {
 
         return "Basic " + new String(encodedAuth);
     }
+
+
 }

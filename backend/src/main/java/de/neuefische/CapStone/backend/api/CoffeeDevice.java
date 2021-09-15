@@ -19,4 +19,5 @@ public class CoffeeDevice {
     private String uid;
     private String itemName;
     private boolean onOff;
+    private boolean dailyAction;
 }

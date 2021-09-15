@@ -18,8 +18,6 @@ public class TaskSchedulingService {
 
     private final TaskScheduler taskScheduler;
     private static final Logger log = LoggerFactory.getLogger(ScheduledTask.class);
-
-
     Map<String, ScheduledFuture<?>> jobsMap = new HashMap<>();
 
     @Autowired

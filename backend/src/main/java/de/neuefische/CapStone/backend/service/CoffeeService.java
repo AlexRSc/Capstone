@@ -79,15 +79,22 @@ public class CoffeeService {
     }
 
     public void setCoffeeTimer(CoffeeEntity coffeeEntity, String cronCommand, String actionCommand) {
-        TaskDefinition taskDefinition = TaskDefinition.builder()
-                .actionType(actionCommand)
-                .cronExpression(cronCommand)
-                .coffeeEntity(coffeeEntity)
-                .date(coffeeEntity.getCoffeeStates().getDate()).build();
-        scheduleService.setTaskDefinition(taskDefinition);
+
         if (actionCommand.equals("turnCoffeeOn")) {
+            TaskDefinition taskDefinition = TaskDefinition.builder()
+                    .actionType(actionCommand)
+                    .cronExpression(cronCommand)
+                    .coffeeEntity(coffeeEntity)
+                    .date(coffeeEntity.getCoffeeStates().getDate()).build();
+            scheduleService.setTaskDefinition(taskDefinition);
             taskSchedulingService.scheduleATask(coffeeEntity.getId().toString(), scheduleService, cronCommand);
         } else {
+            TaskDefinition taskDefinition = TaskDefinition.builder()
+                    .actionType(actionCommand)
+                    .cronExpression(cronCommand)
+                    .coffeeEntity(coffeeEntity)
+                    .date(coffeeEntity.getCoffeeStates().getDate()).build();
+            turnOffScheduleService.setTaskDefinition(taskDefinition);
             //doing this to get 2 different IDs, otherwise our event would get overwritten
             taskSchedulingService.scheduleATask(coffeeEntity.getDevice().getUid(), turnOffScheduleService, cronCommand);
         }

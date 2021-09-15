@@ -75,7 +75,6 @@ public class CoffeeService {
             String oneTimeCronTurnOff = cronService.convertDateToCron(coffeeEntity.getCoffeeStates().getDate().plus(1, ChronoUnit.HOURS));
             setCoffeeTimer(coffeeEntity, oneTimeCronTurnOff, "turnCoffeeOff");
         }
-        throw new EntityNotFoundException("Seems like we couldnt find your Device...");
     }
 
     public void setCoffeeTimer(CoffeeEntity coffeeEntity, String cronCommand, String actionCommand) {

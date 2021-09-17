@@ -7,12 +7,12 @@ import de.neuefische.CapStone.backend.model.CoffeeStates;
 import de.neuefische.CapStone.backend.model.Device;
 import de.neuefische.CapStone.backend.model.UserEntity;
 import de.neuefische.CapStone.backend.service.CoffeeService;
+import de.neuefische.CapStone.backend.service.OpenHabService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
@@ -25,10 +25,12 @@ import static org.springframework.util.StringUtils.hasText;
 @RequestMapping("/coffee")
 public class CoffeeController {
     private final CoffeeService coffeeService;
+    private final OpenHabService openHabService;
 
     @Autowired
-    public CoffeeController(CoffeeService coffeeService) {
+    public CoffeeController(CoffeeService coffeeService, OpenHabService openHabService) {
         this.coffeeService = coffeeService;
+        this.openHabService = openHabService;
     }
 
     @GetMapping("/getMyCoffee")
@@ -39,29 +41,59 @@ public class CoffeeController {
     }
 
 
-
     @PostMapping("/add")
     public ResponseEntity<CoffeeDevice> addCoffeeDevice(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
-        if(!hasText(coffeeDevice.getDeviceName())){
-            throw new IllegalArgumentException("DeviceName can´t be blank");
-        }
-        if(!hasText(coffeeDevice.getUid())){
-            throw new IllegalArgumentException("UID can´t be blank");
-        }
-        if(!hasText(coffeeDevice.getItemName())){
-            throw new IllegalArgumentException("ItemName can't be blank!");
-        }
-        if(coffeeDevice.getDate()==null){
-            throw new IllegalArgumentException("Date can't be blank!");
-        }
+        checkInput(coffeeDevice);
         CoffeeEntity coffeeEntity = map(coffeeDevice, authUser);
         CoffeeEntity newCoffeeEntity = coffeeService.create(coffeeEntity);
         CoffeeDevice createdCoffeeDevice = map(newCoffeeEntity);
         return ok(createdCoffeeDevice);
     }
+
+    @PutMapping("/newschedule")
+    public ResponseEntity<CoffeeDevice> addNewCoffeeSchedule(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
+        checkInput(coffeeDevice);
+        CoffeeEntity coffeeEntity = map(coffeeDevice, authUser);
+        CoffeeEntity newCoffeeEntity = coffeeService.addNewSchedule(coffeeEntity);
+        return ok(map(newCoffeeEntity));
+    }
+
+    @PostMapping("/turnOn")
+    public ResponseEntity<CoffeeDevice> turnOnCoffeeMachine(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
+        checkInput(coffeeDevice);
+        CoffeeEntity coffeeEntity = map(coffeeDevice, authUser);
+        CoffeeEntity fullCoffeeEntity = coffeeService.findCoffeeMachine(coffeeEntity);
+        openHabService.turnCoffeeMachineOn(fullCoffeeEntity);
+        return ok(coffeeDevice);
+    }
+
+    @PostMapping("/turnOff")
+    public ResponseEntity<CoffeeDevice> turnOFFCoffeeMachine(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
+        checkInput(coffeeDevice);
+        CoffeeEntity coffeeEntity = map(coffeeDevice, authUser);
+        CoffeeEntity fullCoffeeEntity = coffeeService.findCoffeeMachine(coffeeEntity);
+        openHabService.turnCoffeeMachineOFF(fullCoffeeEntity);
+        return ok(coffeeDevice);
+    }
+
+    private void checkInput(CoffeeDevice coffeeDevice) {
+        if (!hasText(coffeeDevice.getDeviceName())) {
+            throw new IllegalArgumentException("DeviceName can´t be blank");
+        }
+        if (!hasText(coffeeDevice.getUid())) {
+            throw new IllegalArgumentException("UID can´t be blank");
+        }
+        if (!hasText(coffeeDevice.getItemName())) {
+            throw new IllegalArgumentException("ItemName can't be blank!");
+        }
+        if (coffeeDevice.getDate() == null) {
+            throw new IllegalArgumentException("Date can't be blank!");
+        }
+    }
+
     private List<CoffeeDevice> map(List<CoffeeEntity> coffeeEntityList) {
-        List<CoffeeDevice> coffeeDeviceList= new LinkedList<>();
-        for(CoffeeEntity coffeeEntity : coffeeEntityList) {
+        List<CoffeeDevice> coffeeDeviceList = new LinkedList<>();
+        for (CoffeeEntity coffeeEntity : coffeeEntityList) {
             CoffeeDevice coffeeDevice = map(coffeeEntity);
             coffeeDeviceList.add(coffeeDevice);
         }

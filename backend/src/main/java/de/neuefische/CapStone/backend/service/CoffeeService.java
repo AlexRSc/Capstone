@@ -55,6 +55,27 @@ public class CoffeeService {
         }
         return coffeeEntity;
     }
+    public CoffeeEntity addNewSchedule(CoffeeEntity coffeeEntity) {
+        Optional<CoffeeEntity> coffeeEntityOptional = coffeeRepository.findByDevice_Uid(coffeeEntity.getDevice().getUid());
+        if(coffeeEntityOptional.isEmpty()){
+            throw new EntityNotFoundException("We couldnt find your Coffee Machine!");
+        }
+        coffeeEntityOptional.get().getCoffeeStates().setDailyAction(coffeeEntity.getCoffeeStates().isDailyAction());
+        coffeeEntityOptional.get().getCoffeeStates().setOnOff(true);
+        coffeeEntityOptional.get().getCoffeeStates().setDate(coffeeEntity.getCoffeeStates().getDate());
+        manageCoffeeTurnOn(coffeeEntityOptional.get());
+        manageCoffeeTurnOff(coffeeEntityOptional.get());
+        return coffeeRepository.save(coffeeEntityOptional.get());
+
+    }
+
+    public CoffeeEntity findCoffeeMachine(CoffeeEntity coffeeEntity) {
+        Optional<CoffeeEntity> coffeeEntityOptional = coffeeRepository.findByDevice_Uid(coffeeEntity.getDevice().getUid());
+        if(coffeeEntityOptional.isEmpty()) {
+            throw new EntityNotFoundException("We couldnt find your coffee device!");
+        }
+        return coffeeEntityOptional.get();
+    }
 
     public void manageCoffeeTurnOn(CoffeeEntity coffeeEntity) {
         if (coffeeEntity.getCoffeeStates().isDailyAction()) {
@@ -102,4 +123,7 @@ public class CoffeeService {
     public List<CoffeeEntity> getCoffeeList(String userName) {
         return coffeeRepository.findAllByDevice_UserName(userName);
     }
+
+
+
 }

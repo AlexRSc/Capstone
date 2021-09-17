@@ -55,6 +55,27 @@ public class CoffeeService {
         }
         return coffeeEntity;
     }
+    public CoffeeEntity addNewSchedule(CoffeeEntity coffeeEntity) {
+        Optional<CoffeeEntity> coffeeEntityOptional = coffeeRepository.findByDevice_Uid(coffeeEntity.getDevice().getUid());
+        if(coffeeEntityOptional.isEmpty()){
+            throw new EntityNotFoundException("We couldnt find your Coffee Machine!");
+        }
+        coffeeEntityOptional.get().getCoffeeStates().setDailyAction(coffeeEntity.getCoffeeStates().isDailyAction());
+        coffeeEntityOptional.get().getCoffeeStates().setOnOff(true);
+        coffeeEntityOptional.get().getCoffeeStates().setDate(coffeeEntity.getCoffeeStates().getDate());
+        manageCoffeeTurnOn(coffeeEntityOptional.get());
+        manageCoffeeTurnOff(coffeeEntityOptional.get());
+        return coffeeRepository.save(coffeeEntityOptional.get());
+
+    }
+
+    public CoffeeEntity findCoffeeMachine(CoffeeEntity coffeeEntity) {
+        Optional<CoffeeEntity> coffeeEntityOptional = coffeeRepository.findByDevice_Uid(coffeeEntity.getDevice().getUid());
+        if(coffeeEntityOptional.isEmpty()) {
+            throw new EntityNotFoundException("We couldnt find your coffee device!");
+        }
+        return coffeeEntityOptional.get();
+    }
 
     public void manageCoffeeTurnOn(CoffeeEntity coffeeEntity) {
         if (coffeeEntity.getCoffeeStates().isDailyAction()) {
@@ -75,19 +96,25 @@ public class CoffeeService {
             String oneTimeCronTurnOff = cronService.convertDateToCron(coffeeEntity.getCoffeeStates().getDate().plus(1, ChronoUnit.HOURS));
             setCoffeeTimer(coffeeEntity, oneTimeCronTurnOff, "turnCoffeeOff");
         }
-        throw new EntityNotFoundException("Seems like we couldnt find your Device...");
     }
 
     public void setCoffeeTimer(CoffeeEntity coffeeEntity, String cronCommand, String actionCommand) {
-        TaskDefinition taskDefinition = TaskDefinition.builder()
-                .actionType(actionCommand)
-                .cronExpression(cronCommand)
-                .coffeeEntity(coffeeEntity)
-                .date(coffeeEntity.getCoffeeStates().getDate()).build();
-        scheduleService.setTaskDefinition(taskDefinition);
+
         if (actionCommand.equals("turnCoffeeOn")) {
+            TaskDefinition taskDefinition = TaskDefinition.builder()
+                    .actionType(actionCommand)
+                    .cronExpression(cronCommand)
+                    .coffeeEntity(coffeeEntity)
+                    .date(coffeeEntity.getCoffeeStates().getDate()).build();
+            scheduleService.setTaskDefinition(taskDefinition);
             taskSchedulingService.scheduleATask(coffeeEntity.getId().toString(), scheduleService, cronCommand);
         } else {
+            TaskDefinition taskDefinition = TaskDefinition.builder()
+                    .actionType(actionCommand)
+                    .cronExpression(cronCommand)
+                    .coffeeEntity(coffeeEntity)
+                    .date(coffeeEntity.getCoffeeStates().getDate()).build();
+            turnOffScheduleService.setTaskDefinition(taskDefinition);
             //doing this to get 2 different IDs, otherwise our event would get overwritten
             taskSchedulingService.scheduleATask(coffeeEntity.getDevice().getUid(), turnOffScheduleService, cronCommand);
         }
@@ -96,4 +123,7 @@ public class CoffeeService {
     public List<CoffeeEntity> getCoffeeList(String userName) {
         return coffeeRepository.findAllByDevice_UserName(userName);
     }
+
+
+
 }

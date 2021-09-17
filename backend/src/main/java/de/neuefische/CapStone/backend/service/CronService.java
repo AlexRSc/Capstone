@@ -32,9 +32,9 @@ public class CronService {
     //this method is not active yet, it will translate the date into cron-formate, while days being daily, and not just once
     //this method needs to get tested
     public String convertToDailyCron(Instant date) {
-        LocalDateTime ldt = LocalDateTime.ofInstant(date, ZoneId.systemDefault());
 
-        String formatTimeStr= ldt.getSecond() + " " +ldt.getMinute() + " " + ldt.getHour() +" * * *";
+        String formatTimeStr= date.atZone(ZoneId.systemDefault()).getSecond() + " " + date.atZone(ZoneId.systemDefault()).getMinute()
+                + " " + date.atZone(ZoneId.systemDefault()).getHour() +" * * *";
         return formatTimeStr;
     }
 }

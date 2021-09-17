@@ -17,17 +17,17 @@ export default function OnOffDevice({onOff, token}) {
         itemName: onOff.itemName}
 
     const toggleChecked = () => {
+        setOpen(false)
         if (checked === false) {
             turnOnOffOn(token, onOffData).catch( error =>
                 setError(error)
-            )
+            ).finally(() => setOpen(true))
         } else {
             turnOnOffOff(token, onOffData).catch( error =>
                 setError(error)
-            )
+            ).finally( () => setOpen(true))
         }
         setChecked((prev) => !prev)
-        setOpen(true)
     }
 
     const handleClose = (event, reason) => {

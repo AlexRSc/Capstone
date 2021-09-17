@@ -31,10 +31,10 @@ export default function LightsPage() {
     }
 
     useEffect(() => {
+        setOpen(false)
         setError()
         getMyLights(token).then(setLights)
-            .catch(setError)
-        setOpen(true)
+            .catch(setError).finally(() => setOpen(true))
     }, [token])
 
     return (

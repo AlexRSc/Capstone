@@ -25,18 +25,24 @@ export default function SingleLightComponent({light, token}) {
     const handleOpen = () => {
         setOpen(true)
     }
+
+    const emptyOpen = () => {
+        setOpen(false)
+    }
+
     const toggleChecked = () => {
+        setOpen(false)
+        setError()
         if (checked === false) {
             turnLightOn(token, lightsData).catch( error =>
                 setError(error)
-            )
+            ).finally(() =>setOpen(true))
         } else {
             turnLightOff(token, lightsData).catch( error =>
                 setError(error)
-            )
+            ).finally(() =>setOpen(true))
         }
         setChecked((prev) => !prev)
-        setOpen(true)
     }
 
     const handleClose = (event, reason) => {
@@ -52,7 +58,7 @@ export default function SingleLightComponent({light, token}) {
                               labelPlacement="top" checked={checked} onChange={toggleChecked}
                               value={light}
             />
-            <LightsSlider light={light} token={token} handleError={handleError} handleOpen={handleOpen}/>
+            <LightsSlider light={light} token={token} handleError={handleError} handleOpen={handleOpen} emptyOpen={emptyOpen}/>
             {!error &&<Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success">
                     {lightsData.deviceName} worked successfully!

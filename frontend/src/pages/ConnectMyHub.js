@@ -33,14 +33,14 @@ export default function ConnectMyHub() {
 
     const handleSubmit = event => {
         event.preventDefault()
+        setOpen(false)
         setError()
         setLoading(true)
         connectHub(token, credentials).then(hub => setRedirect(hub.hubEmail))
             .catch(error => {
                 setError(error)
                 setLoading(false)
-            })
-        setOpen(true)
+            }).finally(()=>setOpen(true))
     }
 
     const handleClose = (event, reason) => {

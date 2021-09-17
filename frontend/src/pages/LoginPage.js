@@ -38,13 +38,13 @@ export default function LoginPage() {
 
     const handleSubmit = event => {
         event.preventDefault()
+        setOpen(false)
         setLoading(true)
         setError()
         login(credentials).catch(error => {
             setError(error)
             setLoading(false)
-        })
-        setOpen(true)
+        }).finally(() => setOpen(true))
     }
     const handleClear = () => {
         setCredentials({

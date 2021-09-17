@@ -23,10 +23,10 @@ export default function OnOffPage() {
     const [open, setOpen] = useState()
 
     useEffect(() => {
+        setOpen(false)
         setError()
         getMyOnOff(token).then(setOnOffs)
-            .catch(setError)
-        setOpen(true)
+            .catch(setError).finally(()=>setOpen(true))
     }, [token])
 
     const handleClose = (event, reason) => {
@@ -48,7 +48,7 @@ export default function OnOffPage() {
                 <OnOffWrapper>
                 {onOffs&&onOffs.map(onOff => {
                     return(
-                <OnOffDevice onOff={onOff} token={token}/>)
+                <OnOffDevice key={onOff.uid} onOff={onOff} token={token}/>)
                 })}
                 </OnOffWrapper>
                 <Link to="/home"><Button color="primary" variant="contained">Back</Button></Link>

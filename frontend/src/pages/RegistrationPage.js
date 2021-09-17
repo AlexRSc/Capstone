@@ -40,14 +40,14 @@ export default function RegistrationPage() {
 
     const handleSubmit = event => {
         event.preventDefault()
+        setOpen(false)
         setLoading(true)
         setError()
         registerUser(credentials).then(registeredUser => setRegisteredUser(registeredUser))
             .catch(error => {
                 setError(error)
                 setLoading(false)
-            })
-        setOpen(true)
+            }).finally(()=>setOpen(true))
     }
     const handleClear = () => {
         setCredentials({

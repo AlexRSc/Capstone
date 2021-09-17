@@ -1,6 +1,6 @@
 import {makeStyles} from "@material-ui/core/styles";
 import {
-    Paper,
+    Paper, Snackbar,
     Table,
     TableBody,
     TableCell,
@@ -19,6 +19,7 @@ import {useAuth} from "../auth/AuthProvider";
 import {useEffect, useState} from "react";
 import {getMyCoffees} from "../services/coffee-api-service";
 import CoffeeSingleTableCell from "../components/CoffeeSingleTableCell";
+import {Alert} from "@material-ui/lab";
 
 
 const useStyles = makeStyles(()=> ({
@@ -30,13 +31,20 @@ const useStyles = makeStyles(()=> ({
 export default function CoffeePage() {
     const classes = useStyles();
     const {token} = useAuth()
+    const [error, setError]=useState()
     const [coffees, setCoffees] = useState([])
     const [open, setOpen] = useState(false)
 
+    const handleClose = (event, reason) => {
+        if (reason=== 'clickaway') {
+            return;
+        }
+        setOpen(false);
+    }
+
     useEffect(() => {
         getMyCoffees(token).then(setCoffees)
-            .catch()
-        setOpen(true)
+            .catch(setError).finally(()=>setOpen(true))
     }, [token])
 
     return (
@@ -65,6 +73,11 @@ export default function CoffeePage() {
                 </TableContainer>
                 <Link to="/home"><Button color="primary" variant="contained">Back</Button></Link>
             </Wrapper>
+            {error &&<Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error">
+                    An error fetching your lights happened!
+                </Alert>
+            </Snackbar>}
             <Footer/>
         </PageLayout>
     )

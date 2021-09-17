@@ -23,10 +23,10 @@ export default function OnOffPage() {
     const [open, setOpen] = useState()
 
     useEffect(() => {
+        setOpen(false)
         setError()
         getMyOnOff(token).then(setOnOffs)
-            .catch(setError)
-        setOpen(true)
+            .catch(setError).finally(()=>setOpen(true))
     }, [token])
 
     const handleClose = (event, reason) => {

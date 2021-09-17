@@ -44,7 +44,7 @@ export default function CoffeeComponentOption({coffee, token}) {
         setError()
         setOpen(false)
         setNewCoffeeEvent(token, credentials).catch(error=> setError(error))
-        setOpen(true)
+            .finally(() => setOpen(true))
     }
 
     const openIt = Boolean(anchorEl)
@@ -54,11 +54,12 @@ export default function CoffeeComponentOption({coffee, token}) {
         setOpen(false)
         if (checked === false) {
             turnCoffeeOn(token, coffee).catch(error=> setError(error))
+                .finally(() => setOpen(true))
         } else {
             turnCoffeeOff(token, coffee).catch(error=>setError(error))
+                .finally(() => setOpen(true))
         }
         setChecked((prev) => !prev)
-        setOpen(true)
     }
 
     return (

@@ -7,7 +7,7 @@ export default function LightsDevice({lights, token}) {
         <Wrapper>
             {lights&&lights.map(light => {
                 return (
-                        <SingleLightComponent light={light} token={token} />
+                        <SingleLightComponent key={light.uid} light={light} token={token} />
                 )
             })}
         </Wrapper>

@@ -54,7 +54,7 @@ public class OpenHabService {
         String httpHeaders = createHeaders(coffeeEntity.getHubEntity().getHubEmail(), coffeeEntity.getHubEntity().getHubPassword());
         OpenHabOnOffDto openHabOnOffDto = OpenHabOnOffDto.builder()
                 .itemName(coffeeEntity.getDevice().getItemName())
-                .onOff("ON").build();
+                .onOff("OFF").build();
         openHabClient.turnDeviceOff(httpHeaders, openHabOnOffDto);
     }
 

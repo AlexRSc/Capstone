@@ -125,5 +125,7 @@ public class CoffeeService {
     }
 
 
-
+    public List<CoffeeEntity> getAllCoffees() {
+        return coffeeRepository.findAll();
+    }
 }

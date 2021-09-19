@@ -26,14 +26,14 @@ public class TaskSchedulingService {
     }
 
     public void scheduleATask(String jobId, Runnable tasklet, String cronExpression) {
-        log.info("Scheduling task with job id: " + jobId + "and cron expression "+ cronExpression);
+        log.info("Scheduling task with job id: " + jobId + "and cron expression " + cronExpression);
         ScheduledFuture<?> scheduledTask = taskScheduler.schedule(tasklet, new CronTrigger(cronExpression, TimeZone.getTimeZone(TimeZone.getDefault().getID())));
         jobsMap.put(jobId, scheduledTask);
     }
 
     public void removeScheduledTask(String jobID) {
         ScheduledFuture<?> scheduledTask = jobsMap.get(jobID);
-        if(scheduledTask!=null) {
+        if (scheduledTask != null) {
             scheduledTask.cancel(true);
             jobsMap.put(jobID, null);
         }

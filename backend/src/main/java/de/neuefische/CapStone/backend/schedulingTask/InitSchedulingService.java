@@ -37,7 +37,37 @@ public class InitSchedulingService {
                     coffeeService.manageCoffeeTurnOn(coffeeEntity);
                     coffeeService.manageCoffeeTurnOff(coffeeEntity);
                 } else {
-                    log.info("Device event date already happened for :" + coffeeEntity.getDevice().getDeviceName());
+                    if (coffeeEntity.getCoffeeStates().isDailyAction()) {
+                        log.info("turning on :" + coffeeEntity.getDevice().getDeviceName());
+                        coffeeService.manageCoffeeTurnOn(coffeeEntity);
+                        coffeeService.manageCoffeeTurnOff(coffeeEntity);
+                    } else {
+                        log.info("Device event date already happened for :" + coffeeEntity.getDevice().getDeviceName());
+                    }
+                }
+            }
+        }
+    }
+
+    //Scheduled works in ms, which means 300000 is 5 min
+    @Async
+    @Scheduled(initialDelay = 60000, fixedDelay = 300000)
+    public void updatingStates() {
+        List<CoffeeEntity> coffeeEntityList = coffeeService.getAllCoffees();
+        if (coffeeEntityList.isEmpty()) {
+            log.info("Coffee DB still empty!");
+        } else {
+            for (CoffeeEntity coffeeEntity : coffeeEntityList) {
+                if (Instant.now().isAfter(coffeeEntity.getCoffeeStates().getDate())&&(!coffeeEntity.getCoffeeStates().isDailyAction())) {
+                    if(coffeeEntity.getCoffeeStates().isEventActive()) {
+                        log.info("setting to inactive :" + coffeeEntity.getDevice().getDeviceName());
+                        coffeeService.setCoffeeDeviceToInactive(coffeeEntity);
+                    }
+                    else {
+                        log.info("This device was already inactive: " +coffeeEntity.getDevice().getDeviceName());
+                    }
+                } else {
+                    log.info("This device is programed to be daily: " + coffeeEntity.getDevice().getDeviceName());
                 }
             }
         }

@@ -76,6 +76,33 @@ public class CoffeeController {
         return ok(coffeeDevice);
     }
 
+    @PutMapping("/deactive")
+    public ResponseEntity<CoffeeDevice> deactivateCoffeeEvent(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
+        checkInput(coffeeDevice);
+        if(!coffeeDevice.isEventActive()) {
+            throw new IllegalArgumentException("Device is already inactive!");
+        }
+        CoffeeEntity coffeeEntity = coffeeService.deactivateCoffeeEvent(map(coffeeDevice, authUser));
+        return ok(map(coffeeEntity));
+    }
+
+    @PutMapping("/activate")
+    public ResponseEntity<CoffeeDevice> activateCoffeeEvent(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
+        checkInput(coffeeDevice);
+        if(coffeeDevice.isEventActive()) {
+            throw new IllegalArgumentException("Device is already active!");
+        }
+        CoffeeEntity coffeeEntity = coffeeService.activateCoffeeEvent(map(coffeeDevice,authUser));
+        return ok(map(coffeeEntity));
+    }
+
+    @DeleteMapping("/delete")
+    public ResponseEntity<CoffeeDevice> deleteCoffeeDevice(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
+        checkInput(coffeeDevice);
+        CoffeeEntity coffeeEntity = coffeeService.deleteCoffeeDevice(map(coffeeDevice,authUser));
+        return ok(map(coffeeEntity));
+    }
+
     private void checkInput(CoffeeDevice coffeeDevice) {
         if (!hasText(coffeeDevice.getDeviceName())) {
             throw new IllegalArgumentException("DeviceName can´t be blank");
@@ -107,7 +134,8 @@ public class CoffeeController {
                 .deviceName(newCoffeeEntity.getDevice().getDeviceName())
                 .uid(newCoffeeEntity.getDevice().getUid())
                 .onOff(newCoffeeEntity.getCoffeeStates().isOnOff())
-                .dailyAction(newCoffeeEntity.getCoffeeStates().isDailyAction()).build();
+                .dailyAction(newCoffeeEntity.getCoffeeStates().isDailyAction())
+                .eventActive(newCoffeeEntity.getCoffeeStates().isEventActive()).build();
     }
 
 

@@ -45,6 +45,7 @@ public class CoffeeService {
         }
         HubEntity hubEntity = hubEntityOptional.get();
         coffeeEntity.setHubEntity(hubEntity);
+        coffeeEntity.getCoffeeStates().setEventActive(true);
         coffeeRepository.saveAndFlush(coffeeEntity);
         Optional<CoffeeEntity> createdCoffeeEntityOptional = coffeeRepository.findByDevice_Uid(coffeeEntity.getDevice().getUid());
         if (createdCoffeeEntityOptional.isPresent()) {
@@ -61,12 +62,59 @@ public class CoffeeService {
             throw new EntityNotFoundException("We couldnt find your Coffee Machine!");
         }
         coffeeEntityOptional.get().getCoffeeStates().setDailyAction(coffeeEntity.getCoffeeStates().isDailyAction());
-        coffeeEntityOptional.get().getCoffeeStates().setOnOff(true);
         coffeeEntityOptional.get().getCoffeeStates().setDate(coffeeEntity.getCoffeeStates().getDate());
+        coffeeEntityOptional.get().getCoffeeStates().setEventActive(true);
         manageCoffeeTurnOn(coffeeEntityOptional.get());
         manageCoffeeTurnOff(coffeeEntityOptional.get());
         return coffeeRepository.save(coffeeEntityOptional.get());
 
+    }
+
+    public CoffeeEntity deactivateCoffeeEvent(CoffeeEntity coffeeEntity) {
+        Optional<CoffeeEntity> coffeeEntityOptional = coffeeRepository.findByDevice_Uid(coffeeEntity.getDevice().getUid());
+        if(coffeeEntityOptional.isEmpty()){
+            throw new EntityNotFoundException("Coffee Device wasn't found!");
+        }
+        CoffeeEntity deactivatedCoffeeEntity = coffeeEntityOptional.get();
+        deactivatedCoffeeEntity.getCoffeeStates().setEventActive(false);
+        coffeeRepository.save(deactivatedCoffeeEntity);
+        //ID of turnOnJob is the Coffee Machine ID
+        taskSchedulingService.removeScheduledTask(deactivatedCoffeeEntity.getId().toString());
+        //Id of turnOffJob is the Coffee Machine UID (should also be unique)
+        taskSchedulingService.removeScheduledTask(deactivatedCoffeeEntity.getDevice().getUid());
+        return deactivatedCoffeeEntity;
+    }
+
+    public CoffeeEntity activateCoffeeEvent(CoffeeEntity coffeeEntity) {
+        Optional<CoffeeEntity> coffeeEntityOptional = coffeeRepository.findByDevice_Uid(coffeeEntity.getDevice().getUid());
+        if(coffeeEntityOptional.isEmpty()){
+            throw new EntityNotFoundException("Coffee Device wasn't found!");
+        }
+        CoffeeEntity activatedCoffeeEntity = coffeeEntityOptional.get();
+        activatedCoffeeEntity.getCoffeeStates().setEventActive(true);
+        coffeeRepository.save(activatedCoffeeEntity);
+        manageCoffeeTurnOn(activatedCoffeeEntity);
+        manageCoffeeTurnOff(activatedCoffeeEntity);
+        return activatedCoffeeEntity;
+    }
+
+    public CoffeeEntity deleteCoffeeDevice(CoffeeEntity coffeeEntity) {
+        Optional<CoffeeEntity> coffeeEntityOptional = coffeeRepository.findByDevice_Uid(coffeeEntity.getDevice().getUid());
+        if(coffeeEntityOptional.isEmpty()){
+            throw new EntityNotFoundException("Coffee Device wasn't found!");
+        }
+        coffeeRepository.delete(coffeeEntityOptional.get());
+        return coffeeEntityOptional.get();
+    }
+
+    public void setCoffeeDeviceToInactive(CoffeeEntity coffeeEntity) {
+        Optional<CoffeeEntity> coffeeEntityOptional = coffeeRepository.findByDevice_Uid(coffeeEntity.getDevice().getUid());
+        if(coffeeEntityOptional.isEmpty()){
+            throw new EntityNotFoundException("Coffee Device wasn't found!");
+        }
+        CoffeeEntity deactivatedCoffeeEntity=coffeeEntityOptional.get();
+        deactivatedCoffeeEntity.getCoffeeStates().setEventActive(false);
+        coffeeRepository.save(deactivatedCoffeeEntity);
     }
 
     public CoffeeEntity findCoffeeMachine(CoffeeEntity coffeeEntity) {
@@ -86,6 +134,7 @@ public class CoffeeService {
             setCoffeeTimer(coffeeEntity, oneTimeCronTurnOn, "turnCoffeeOn");
         }
     }
+
 
     //this activates as soon as the timer for on goes Off within ScheduleService
     public void manageCoffeeTurnOff(CoffeeEntity coffeeEntity) {
@@ -125,5 +174,8 @@ public class CoffeeService {
     }
 
 
+    public List<CoffeeEntity> getAllCoffees() {
+        return coffeeRepository.findAll();
+    }
 
 }

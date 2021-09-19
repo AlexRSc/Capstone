@@ -20,4 +20,5 @@ public class CoffeeDevice {
     private String itemName;
     private boolean onOff;
     private boolean dailyAction;
+    private boolean eventActive;
 }

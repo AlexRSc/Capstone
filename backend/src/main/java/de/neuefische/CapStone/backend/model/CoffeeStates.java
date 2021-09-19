@@ -24,4 +24,7 @@ public class CoffeeStates {
     @Column(name="daily_action")
     boolean dailyAction;
 
+    @Column(name="event_active")
+    boolean eventActive;
+
 }

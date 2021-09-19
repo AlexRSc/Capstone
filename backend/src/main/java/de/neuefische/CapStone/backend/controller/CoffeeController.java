@@ -62,7 +62,7 @@ public class CoffeeController {
     public ResponseEntity<CoffeeDevice> turnOnCoffeeMachine(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
         checkInput(coffeeDevice);
         CoffeeEntity coffeeEntity = map(coffeeDevice, authUser);
-        CoffeeEntity fullCoffeeEntity = coffeeService.findCoffeeMachine(coffeeEntity);
+        CoffeeEntity fullCoffeeEntity = coffeeService.changeOnOffToOn(coffeeEntity);
         openHabService.turnCoffeeMachineOn(fullCoffeeEntity);
         return ok(coffeeDevice);
     }
@@ -71,7 +71,7 @@ public class CoffeeController {
     public ResponseEntity<CoffeeDevice> turnOFFCoffeeMachine(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
         checkInput(coffeeDevice);
         CoffeeEntity coffeeEntity = map(coffeeDevice, authUser);
-        CoffeeEntity fullCoffeeEntity = coffeeService.findCoffeeMachine(coffeeEntity);
+        CoffeeEntity fullCoffeeEntity = coffeeService.changeOnOffToOFF(coffeeEntity);
         openHabService.turnCoffeeMachineOFF(fullCoffeeEntity);
         return ok(coffeeDevice);
     }

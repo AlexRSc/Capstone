@@ -178,4 +178,15 @@ public class CoffeeService {
         return coffeeRepository.findAll();
     }
 
+    public CoffeeEntity changeOnOffToOn(CoffeeEntity coffeeEntity) {
+        CoffeeEntity foundCoffeeEntity = findCoffeeMachine(coffeeEntity);
+        foundCoffeeEntity.getCoffeeStates().setOnOff(true);
+        return coffeeRepository.save(foundCoffeeEntity);
+    }
+
+    public CoffeeEntity changeOnOffToOFF(CoffeeEntity coffeeEntity) {
+        CoffeeEntity foundCoffeeEntity = findCoffeeMachine(coffeeEntity);
+        foundCoffeeEntity.getCoffeeStates().setOnOff(false);
+        return coffeeRepository.save(foundCoffeeEntity);
+    }
 }

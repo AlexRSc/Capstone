@@ -9,6 +9,7 @@ import de.neuefische.CapStone.backend.repo.OnOffRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 @Service
@@ -51,5 +52,18 @@ public class OnOffService {
 
     public List<OnOffDeviceEntity> getMyOnOffDevices(String userName) {
         return onOffRepository.findAllByDevice_UserName(userName);
+    }
+
+    public OnOffDeviceEntity findLightByUid(String uid) {
+        Optional<OnOffDeviceEntity> onOffDeviceEntityOptional = onOffRepository.findByDevice_Uid(uid);
+        if(onOffDeviceEntityOptional.isEmpty()) {
+            throw new EntityNotFoundException("OnOffDevice with uid "+uid+" not found");
+        }
+        return onOffDeviceEntityOptional.get();
+    }
+
+    public OnOffDeviceEntity deleteLightsDevice(OnOffDeviceEntity onOffDeviceEntity) {
+        onOffRepository.delete(onOffDeviceEntity);
+        return onOffDeviceEntity;
     }
 }

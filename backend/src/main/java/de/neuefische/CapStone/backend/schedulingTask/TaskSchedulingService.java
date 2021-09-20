@@ -33,6 +33,7 @@ public class TaskSchedulingService {
 
     public void removeScheduledTask(String jobID) {
         ScheduledFuture<?> scheduledTask = jobsMap.get(jobID);
+        log.info("Canceling Event with ID:" + jobID);
         if (scheduledTask != null) {
             scheduledTask.cancel(true);
             jobsMap.put(jobID, null);

@@ -1,9 +1,10 @@
 import {FormControlLabel, Snackbar, Switch} from "@material-ui/core";
 import {useState} from "react";
-import {turnLightOff, turnLightOn} from "../services/lights-api-service";
+import {deleteLightsDevice, turnLightOff, turnLightOn} from "../services/lights-api-service";
 import styled from "styled-components";
 import LightsSlider from "./LightsSlider";
 import MuiAlert from "@material-ui/lab/Alert";
+import DeleteDevice from "./DeleteDevice";
 
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
@@ -52,6 +53,12 @@ export default function SingleLightComponent({light, token}) {
         setOpen(false);
     }
 
+    const handleDelete = () => {
+        setOpen(false)
+        deleteLightsDevice(token, light.uid).catch(error => setError(error))
+            .finally(() => setOpen(true))
+    }
+
     return(
         <Wrapper>
             <FormControlLabel control={<Switch color="primary"/>} label={light.deviceName}
@@ -59,6 +66,7 @@ export default function SingleLightComponent({light, token}) {
                               value={light}
             />
             <LightsSlider light={light} token={token} handleError={handleError} handleOpen={handleOpen} emptyOpen={emptyOpen}/>
+            <DeleteDevice handleDelete={handleDelete} />
             {!error &&<Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
                 <Alert onClose={handleClose} severity="success">
                     {lightsData.deviceName} worked successfully!
@@ -79,4 +87,5 @@ const Wrapper = styled.div`
   margin-top: 20px;
   display: inline-flex;
   flex-direction: row;
+  flex-wrap:wrap;
   align-items: center;`

@@ -1,5 +1,6 @@
 package de.neuefische.CapStone.backend.controller;
 
+import de.neuefische.CapStone.backend.api.CoffeeDevice;
 import de.neuefische.CapStone.backend.api.LightDevice;
 import de.neuefische.CapStone.backend.api.LightsDeviceAPIDto;
 import de.neuefische.CapStone.backend.model.*;
@@ -84,12 +85,19 @@ public class LightsController {
 
     }
 
-    @PostMapping("/brightness")
+    @PutMapping("/brightness")
     public ResponseEntity<OpenHabLightsBrightnessDto> changeLightsDeviceBrightness(@AuthenticationPrincipal UserEntity authUser,
                                                                                    @RequestBody LightDevice lightDevice) {
         LightsDeviceEntity lightsDeviceEntity = lightsService.find(lightDevice);
         String brightness = lightDevice.getBrightness();
         return openHabService.changeBrightness(lightsDeviceEntity, brightness);
+    }
+
+    @DeleteMapping("/delete/{uid}")
+    public ResponseEntity<LightDevice> deleteLightsDevice(@PathVariable String uid) {
+        LightsDeviceEntity lightsDeviceEntity = lightsService.findLightByUid(uid);
+        LightsDeviceEntity deleteLightsDeviceEntity = lightsService.deleteLightsDevice(lightsDeviceEntity);
+        return ok(map(deleteLightsDeviceEntity));
     }
 
     private List<LightsDeviceAPIDto> map(List<LightsDeviceEntity> lightsDeviceEntityList) {

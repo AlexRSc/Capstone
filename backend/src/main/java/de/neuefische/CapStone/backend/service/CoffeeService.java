@@ -34,6 +34,14 @@ public class CoffeeService {
         this.turnOffScheduleService = turnOffScheduleService;
     }
 
+    public CoffeeEntity findCoffeeByUid(String uid) {
+        Optional<CoffeeEntity> coffeeEntityOptional = coffeeRepository.findByDevice_Uid(uid);
+        if(coffeeEntityOptional.isEmpty()) {
+            throw new EntityNotFoundException("Device couldnt be found!");
+        }
+        return coffeeEntityOptional.get();
+    }
+
     public CoffeeEntity create(CoffeeEntity coffeeEntity) {
         Optional<HubEntity> hubEntityOptional = hubRepository.findHubEntityByUserName(coffeeEntity.getDevice().getUserName());
         if (hubEntityOptional.isEmpty()) {
@@ -77,7 +85,7 @@ public class CoffeeService {
         }
         CoffeeEntity deactivatedCoffeeEntity = coffeeEntityOptional.get();
         deactivatedCoffeeEntity.getCoffeeStates().setEventActive(false);
-        coffeeRepository.save(deactivatedCoffeeEntity);
+        coffeeRepository.saveAndFlush(deactivatedCoffeeEntity);
         //ID of turnOnJob is the Coffee Machine ID
         taskSchedulingService.removeScheduledTask(deactivatedCoffeeEntity.getId().toString());
         //Id of turnOffJob is the Coffee Machine UID (should also be unique)
@@ -92,7 +100,7 @@ public class CoffeeService {
         }
         CoffeeEntity activatedCoffeeEntity = coffeeEntityOptional.get();
         activatedCoffeeEntity.getCoffeeStates().setEventActive(true);
-        coffeeRepository.save(activatedCoffeeEntity);
+        coffeeRepository.saveAndFlush(activatedCoffeeEntity);
         manageCoffeeTurnOn(activatedCoffeeEntity);
         manageCoffeeTurnOff(activatedCoffeeEntity);
         return activatedCoffeeEntity;
@@ -178,4 +186,15 @@ public class CoffeeService {
         return coffeeRepository.findAll();
     }
 
+    public CoffeeEntity changeOnOffToOn(CoffeeEntity coffeeEntity) {
+        CoffeeEntity foundCoffeeEntity = findCoffeeMachine(coffeeEntity);
+        foundCoffeeEntity.getCoffeeStates().setOnOff(true);
+        return coffeeRepository.save(foundCoffeeEntity);
+    }
+
+    public CoffeeEntity changeOnOffToOFF(CoffeeEntity coffeeEntity) {
+        CoffeeEntity foundCoffeeEntity = findCoffeeMachine(coffeeEntity);
+        foundCoffeeEntity.getCoffeeStates().setOnOff(false);
+        return coffeeRepository.save(foundCoffeeEntity);
+    }
 }

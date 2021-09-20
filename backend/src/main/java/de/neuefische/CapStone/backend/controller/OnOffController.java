@@ -1,4 +1,5 @@
 package de.neuefische.CapStone.backend.controller;
+import de.neuefische.CapStone.backend.api.LightDevice;
 import de.neuefische.CapStone.backend.api.OnOffDevice;
 import de.neuefische.CapStone.backend.model.*;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabOnOffDto;
@@ -66,8 +67,7 @@ public class OnOffController {
 
 
     @PostMapping("/turnon")
-    public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOn(@AuthenticationPrincipal UserEntity authUser,
-                                                          @RequestBody OnOffDevice onOffDevice) {
+    public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOn(@RequestBody OnOffDevice onOffDevice) {
 
         OnOffDeviceEntity onOffDeviceEntity = onOffService.find(onOffDevice);
         return openHabService.turnOnOnOffDevice(onOffDeviceEntity);
@@ -75,11 +75,17 @@ public class OnOffController {
     }
 
     @PostMapping("/turnoff")
-    public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOff(@AuthenticationPrincipal UserEntity authUser,
-                                                               @RequestBody OnOffDevice onOffDevice) {
+    public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOff(@RequestBody OnOffDevice onOffDevice) {
 
         OnOffDeviceEntity onOffDeviceEntity = onOffService.find(onOffDevice);
         return openHabService.turnOFFOnOffDevice(onOffDeviceEntity);
+    }
+
+    @DeleteMapping("/delete/{uid}")
+    public ResponseEntity<OnOffDevice> deleteOnOffDevice(@PathVariable String uid) {
+        OnOffDeviceEntity onOffDeviceEntity = onOffService.findLightByUid(uid);
+        OnOffDeviceEntity deleteOnOffDeviceEntity = onOffService.deleteLightsDevice(onOffDeviceEntity);
+        return ok(map(deleteOnOffDeviceEntity));
     }
 
 

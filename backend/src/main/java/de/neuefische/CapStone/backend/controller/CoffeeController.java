@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.springframework.http.ResponseEntity.ok;
 
@@ -62,7 +63,7 @@ public class CoffeeController {
     public ResponseEntity<CoffeeDevice> turnOnCoffeeMachine(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
         checkInput(coffeeDevice);
         CoffeeEntity coffeeEntity = map(coffeeDevice, authUser);
-        CoffeeEntity fullCoffeeEntity = coffeeService.findCoffeeMachine(coffeeEntity);
+        CoffeeEntity fullCoffeeEntity = coffeeService.changeOnOffToOn(coffeeEntity);
         openHabService.turnCoffeeMachineOn(fullCoffeeEntity);
         return ok(coffeeDevice);
     }
@@ -71,17 +72,14 @@ public class CoffeeController {
     public ResponseEntity<CoffeeDevice> turnOFFCoffeeMachine(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
         checkInput(coffeeDevice);
         CoffeeEntity coffeeEntity = map(coffeeDevice, authUser);
-        CoffeeEntity fullCoffeeEntity = coffeeService.findCoffeeMachine(coffeeEntity);
+        CoffeeEntity fullCoffeeEntity = coffeeService.changeOnOffToOFF(coffeeEntity);
         openHabService.turnCoffeeMachineOFF(fullCoffeeEntity);
         return ok(coffeeDevice);
     }
 
-    @PutMapping("/deactive")
+    @PutMapping("/deactivate")
     public ResponseEntity<CoffeeDevice> deactivateCoffeeEvent(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
         checkInput(coffeeDevice);
-        if(!coffeeDevice.isEventActive()) {
-            throw new IllegalArgumentException("Device is already inactive!");
-        }
         CoffeeEntity coffeeEntity = coffeeService.deactivateCoffeeEvent(map(coffeeDevice, authUser));
         return ok(map(coffeeEntity));
     }
@@ -89,18 +87,15 @@ public class CoffeeController {
     @PutMapping("/activate")
     public ResponseEntity<CoffeeDevice> activateCoffeeEvent(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
         checkInput(coffeeDevice);
-        if(coffeeDevice.isEventActive()) {
-            throw new IllegalArgumentException("Device is already active!");
-        }
         CoffeeEntity coffeeEntity = coffeeService.activateCoffeeEvent(map(coffeeDevice,authUser));
         return ok(map(coffeeEntity));
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<CoffeeDevice> deleteCoffeeDevice(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
-        checkInput(coffeeDevice);
-        CoffeeEntity coffeeEntity = coffeeService.deleteCoffeeDevice(map(coffeeDevice,authUser));
-        return ok(map(coffeeEntity));
+    @DeleteMapping("/delete/{uid}")
+    public ResponseEntity<CoffeeDevice> deleteCoffeeDevice(@PathVariable String uid) {
+        CoffeeEntity coffeeEntity = coffeeService.findCoffeeByUid(uid);
+        CoffeeEntity deletedCoffeeEntity = coffeeService.deleteCoffeeDevice(coffeeEntity);
+        return ok(map(deletedCoffeeEntity));
     }
 
     private void checkInput(CoffeeDevice coffeeDevice) {

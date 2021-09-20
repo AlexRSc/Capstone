@@ -21,3 +21,7 @@ export const turnOnOffOff = (token, onOff) =>
 export const addOnOff = (token, credentials) =>
     axios.post('api/ProfBeluga/onoff/add', credentials, headers(token))
         .then(response => response.data)
+
+export const deleteOnOffDevice = (token, uid) =>
+    axios.delete(`api/ProfBeluga/onoff/delete/${uid}`,  headers(token))
+        .then(response => response.data)

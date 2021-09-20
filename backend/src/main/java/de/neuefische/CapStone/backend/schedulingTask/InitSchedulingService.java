@@ -32,12 +32,12 @@ public class InitSchedulingService {
             log.info("Coffee DB still empty!");
         } else {
             for (CoffeeEntity coffeeEntity : coffeeEntityList) {
-                if (coffeeEntity.getCoffeeStates().getDate().isAfter(Instant.now())) {
+                if (coffeeEntity.getCoffeeStates().getDate().isAfter(Instant.now())&&coffeeEntity.getCoffeeStates().isEventActive()) {
                     log.info("turning on :" + coffeeEntity.getDevice().getDeviceName());
                     coffeeService.manageCoffeeTurnOn(coffeeEntity);
                     coffeeService.manageCoffeeTurnOff(coffeeEntity);
                 } else {
-                    if (coffeeEntity.getCoffeeStates().isDailyAction()) {
+                    if (coffeeEntity.getCoffeeStates().isDailyAction()&&coffeeEntity.getCoffeeStates().isEventActive()) {
                         log.info("turning on :" + coffeeEntity.getDevice().getDeviceName());
                         coffeeService.manageCoffeeTurnOn(coffeeEntity);
                         coffeeService.manageCoffeeTurnOff(coffeeEntity);

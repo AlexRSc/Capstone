@@ -25,3 +25,15 @@ export const turnCoffeeOff = (token, coffee) =>
 export const setNewCoffeeEvent = (token, coffee) =>
     axios.put('api/ProfBeluga/coffee/newschedule', coffee, headers(token))
         .then(response => response.data)
+
+export const activateCoffeeEvent = (token, coffee) =>
+    axios.put('api/ProfBeluga/coffee/activate', coffee, headers(token))
+        .then(response => response.data)
+
+export const deactivateCoffeeEvent = (token, coffee) =>
+    axios.put('api/ProfBeluga/coffee/deactivate', coffee, headers(token))
+        .then(response => response.data)
+
+export const deleteCoffeeDevice = (token, uid) =>
+    axios.delete(`api/ProfBeluga/coffee/delete/${uid}`,  headers(token))
+        .then(response => response.data)

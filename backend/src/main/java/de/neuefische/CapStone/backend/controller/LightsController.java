@@ -85,7 +85,7 @@ public class LightsController {
 
     }
 
-    @PostMapping("/brightness")
+    @PutMapping("/brightness")
     public ResponseEntity<OpenHabLightsBrightnessDto> changeLightsDeviceBrightness(@AuthenticationPrincipal UserEntity authUser,
                                                                                    @RequestBody LightDevice lightDevice) {
         LightsDeviceEntity lightsDeviceEntity = lightsService.find(lightDevice);

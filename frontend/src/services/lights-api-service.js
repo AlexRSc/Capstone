@@ -23,5 +23,9 @@ export const turnLightOff = (token, light) =>
         .then(response => response.data)
 
 export const setBrightness = (token, brightness) =>
-    axios.post('api/ProfBeluga/lights/brightness',brightness , headers(token))
+    axios.put('api/ProfBeluga/lights/brightness',brightness , headers(token))
+        .then(response => response.data)
+
+export const deleteLightsDevice = (token, uid) =>
+    axios.delete(`api/ProfBeluga/lights/delete/${uid}`,  headers(token))
         .then(response => response.data)

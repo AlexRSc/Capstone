@@ -31,6 +31,9 @@ public class HubEntity {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch =FetchType.EAGER, mappedBy = "id")
     private final Set<OnOffDeviceEntity> onOffDeviceEntities = new HashSet<>();
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, mappedBy = "id")
+    private final Set<AlarmEntity> alarmEntities = new HashSet<>();
+
     @Id
     @GeneratedValue
     @Column(name="id", nullable = false)

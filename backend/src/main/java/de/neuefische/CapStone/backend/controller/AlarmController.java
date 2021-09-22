@@ -83,34 +83,38 @@ public class AlarmController {
     }
 
 
-    @PutMapping("/activateEvent/{uid}")
-    public ResponseEntity<Alarm> activateEvent(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm,
-                                               @PathVariable String uid) {
-        return null;
+    @PutMapping("/activateEvent")
+    public ResponseEntity<AlarmEvent> activateEvent(@RequestBody AlarmEvent alarmEvent) {
+        AlarmEventEntity alarmEventEntity = alarmEventService.activateAlarmEvent(map(alarmEvent));
+        return ok(map(alarmEventEntity));
     }
 
-    @PutMapping("/cancelEvent/{uid}")
-    public ResponseEntity<Alarm> cancelAlarmDeviceEvent(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm,
-                                                        @PathVariable String uid) {
-        return null;
+    @PutMapping("/cancelEvent")
+    public ResponseEntity<AlarmEvent> cancelAlarmDeviceEvent(@RequestBody AlarmEvent alarmEvent) {
+        AlarmEventEntity alarmEventEntity = alarmEventService.deactivateAlarmEvent(map(alarmEvent));
+        return ok(map(alarmEventEntity));
     }
 
     @PutMapping("/setVolume/{uid}")
-    public ResponseEntity<Alarm> setAlarmDeviceVolume(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm,
-                                                      @PathVariable String uid) {
-        return null;
+    public ResponseEntity<Alarm> setAlarmDeviceVolume(@PathVariable String uid, @RequestBody String volume) {
+        AlarmEntity alarmEntity = alarmService.findAlarmEntity(uid);
+        AlarmEntity newAlarmEntity = alarmService.setAlarmEntityVolume(alarmEntity, volume);
+        return ok(map(newAlarmEntity));
+
     }
 
-    @PutMapping("/turnOn/{uid}")
-    public ResponseEntity<Alarm> turnAlarmDeviceOn(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm,
-                                                   @PathVariable String uid) {
-        return null;
+    @PutMapping("/turnOn")
+    public ResponseEntity<Alarm> turnAlarmDeviceOn(@RequestBody Alarm alarm) {
+        AlarmEntity alarmEntity = alarmService.findAlarmEntity(alarm.getUid());
+        AlarmEntity turnedOnAlarmEntity = alarmService.turnOnAlarmDevice(alarmEntity);
+        return ok(map(turnedOnAlarmEntity));
     }
 
-    @PutMapping("/turnOff/{uid}")
-    public ResponseEntity<AlarmEvent> turnAlarmDeviceOFF(@AuthenticationPrincipal UserEntity authUser, @RequestBody AlarmEvent alarmEvent,
-                                                         @PathVariable String uid) {
-        return null;
+    @PutMapping("/turnOff")
+    public ResponseEntity<Alarm> turnAlarmDeviceOFF(@RequestBody Alarm alarm) {
+        AlarmEntity alarmEntity = alarmService.findAlarmEntity(alarm.getUid());
+        AlarmEntity turnedOffAlarmEntity = alarmService.turnOffAlarmDevice(alarmEntity);
+        return ok(map(turnedOffAlarmEntity));
     }
 
     private List<Alarm> map(List<AlarmEntity> alarmEntityList) {
@@ -124,6 +128,7 @@ public class AlarmController {
 
     private AlarmEventEntity map(AlarmEvent alarmEvent) {
         return AlarmEventEntity.builder()
+                .id(alarmEvent.getId())
                 .date(alarmEvent.getDate().toInstant())
                 .isDaily(alarmEvent.isDaily())
                 .isEvent(alarmEvent.isEvent())
@@ -132,6 +137,7 @@ public class AlarmController {
 
     private AlarmEvent map(AlarmEventEntity alarmEventEntity) {
         return AlarmEvent.builder()
+                .id(alarmEventEntity.getId())
                 .date(Date.from(alarmEventEntity.getDate()))
                 .isDaily(alarmEventEntity.isDaily())
                 .isEvent(alarmEventEntity.isEvent())

@@ -17,7 +17,7 @@ public class AlarmDevice {
     @Column(name = "user_name")
     private String userName;
 
-    @Column(name = "uid")
+    @Column(name = "uid", unique = true)
     private String uid;
 
     @Column(name = "device_name")

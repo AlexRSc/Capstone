@@ -2,7 +2,9 @@ package de.neuefische.CapStone.backend.controller;
 
 
 import de.neuefische.CapStone.backend.api.Alarm;
+import de.neuefische.CapStone.backend.api.AlarmEvent;
 import de.neuefische.CapStone.backend.model.*;
+import de.neuefische.CapStone.backend.service.AlarmEventService;
 import de.neuefische.CapStone.backend.service.AlarmService;
 import de.neuefische.CapStone.backend.service.HubService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import static org.springframework.http.ResponseEntity.ok;
 import static org.springframework.util.StringUtils.hasText;
@@ -23,19 +27,42 @@ public class AlarmController {
 
     private final HubService hubService;
     private final AlarmService alarmService;
+    private final AlarmEventService alarmEventService;
 
     @Autowired
-    public AlarmController(HubService hubService, AlarmService alarmService) {
+    public AlarmController(HubService hubService, AlarmService alarmService, AlarmEventService alarmEventService) {
         this.hubService = hubService;
         this.alarmService = alarmService;
+        this.alarmEventService = alarmEventService;
+    }
+
+    @GetMapping("/getMyAlarms")
+    public ResponseEntity<List<Alarm>> getMyAlarms(@AuthenticationPrincipal UserEntity authUser) {
+        List<AlarmEntity> alarmEntityList = alarmService.findAllAlarmsByUsername(authUser.getUserName());
+        return ok(map(alarmEntityList));
+    }
+
+
+    @GetMapping("/getMyEvents/{uid}")
+    public ResponseEntity<List<AlarmEvent>> getMyEventsByAlarmDevice(@PathVariable String uid) {
+        AlarmEntity alarmEntity = alarmService.findAlarmEntity(uid);
+        List<AlarmEventEntity> alarmEventEntityList = alarmEventService.findAllAlarmEventsByAlarmDevice(alarmEntity);
+        //sadly I cannot map 2 Lists within 1 file, might need to make another Controller for this? or just outsource maping
+        //one maping file for AlarmDevices, one maping file for AlarmEvents
+        List<AlarmEvent> alarmEventList = new LinkedList<>();
+        for (AlarmEventEntity alarmEventEntityFromList : alarmEventEntityList) {
+            AlarmEvent alarmEventFromList = map(alarmEventEntityFromList);
+            alarmEventList.add(alarmEventFromList);
+        }
+        return ok(alarmEventList);
     }
 
     @PostMapping("/create")
     public ResponseEntity<Alarm> createAlarmDevice(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm) {
-        if(!hasText(alarm.getDeviceName())) {
+        if (!hasText(alarm.getDeviceName())) {
             throw new IllegalArgumentException("DeviceName is blank!");
         }
-        if(!hasText(alarm.getUid())) {
+        if (!hasText(alarm.getUid())) {
             throw new IllegalArgumentException("UId is blank!");
         }
         AlarmEntity alarmEntity = map(alarm, authUser);
@@ -45,29 +72,70 @@ public class AlarmController {
         return ok(createdAlarm);
     }
 
-    @PutMapping("/setEvent")
-    public ResponseEntity<Alarm> setAlarmDeviceEvent(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm) {
+    @PostMapping("/setEvent/{uid}")
+    public ResponseEntity<AlarmEvent> setAlarmDeviceEvent(@AuthenticationPrincipal UserEntity authUser, @RequestBody AlarmEvent alarmEvent,
+                                                          @PathVariable String uid) {
+
+        AlarmEntity alarmEntity = alarmService.findAlarmEntity(uid);
+        AlarmEventEntity alarmEventEntity = alarmEventService.setEvent(map(alarmEvent), alarmEntity);
+        AlarmEvent createdAlarmEvent = map(alarmEventEntity);
+        return ok(createdAlarmEvent);
+    }
+
+
+    @PutMapping("/activateEvent/{uid}")
+    public ResponseEntity<Alarm> activateEvent(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm,
+                                               @PathVariable String uid) {
         return null;
     }
 
-    @PutMapping("/cancelEvent")
-    public ResponseEntity<Alarm> cancelAlarmDeviceEvent(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm) {
+    @PutMapping("/cancelEvent/{uid}")
+    public ResponseEntity<Alarm> cancelAlarmDeviceEvent(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm,
+                                                        @PathVariable String uid) {
         return null;
     }
 
-    @PutMapping("/setVolume")
-    public ResponseEntity<Alarm> setAlarmDeviceVolume(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm) {
+    @PutMapping("/setVolume/{uid}")
+    public ResponseEntity<Alarm> setAlarmDeviceVolume(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm,
+                                                      @PathVariable String uid) {
         return null;
     }
 
-    @PutMapping("/turnOn")
-    public ResponseEntity<Alarm> turnAlarmDeviceOn(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm) {
+    @PutMapping("/turnOn/{uid}")
+    public ResponseEntity<Alarm> turnAlarmDeviceOn(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm,
+                                                   @PathVariable String uid) {
         return null;
     }
 
-    @PutMapping("/turnOff")
-    public ResponseEntity<Alarm> turnAlarmDeviceOFF(@AuthenticationPrincipal UserEntity authUser, @RequestBody Alarm alarm) {
+    @PutMapping("/turnOff/{uid}")
+    public ResponseEntity<AlarmEvent> turnAlarmDeviceOFF(@AuthenticationPrincipal UserEntity authUser, @RequestBody AlarmEvent alarmEvent,
+                                                         @PathVariable String uid) {
         return null;
+    }
+
+    private List<Alarm> map(List<AlarmEntity> alarmEntityList) {
+        List<Alarm> alarmList = new LinkedList<>();
+        for (AlarmEntity alarmEntity : alarmEntityList) {
+            Alarm alarm = map(alarmEntity);
+            alarmList.add(alarm);
+        }
+        return alarmList;
+    }
+
+    private AlarmEventEntity map(AlarmEvent alarmEvent) {
+        return AlarmEventEntity.builder()
+                .date(alarmEvent.getDate().toInstant())
+                .isDaily(alarmEvent.isDaily())
+                .isEvent(alarmEvent.isEvent())
+                .build();
+    }
+
+    private AlarmEvent map(AlarmEventEntity alarmEventEntity) {
+        return AlarmEvent.builder()
+                .date(Date.from(alarmEventEntity.getDate()))
+                .isDaily(alarmEventEntity.isDaily())
+                .isEvent(alarmEventEntity.isEvent())
+                .build();
     }
 
     private Alarm map(AlarmEntity createdAlarmEntity) {

@@ -1,15 +1,14 @@
 package de.neuefische.CapStone.backend.service;
 
-import de.neuefische.CapStone.backend.model.CoffeeEntity;
-import de.neuefische.CapStone.backend.model.Device;
-import de.neuefische.CapStone.backend.model.LightsDeviceEntity;
-import de.neuefische.CapStone.backend.model.OnOffDeviceEntity;
+import de.neuefische.CapStone.backend.model.*;
+import de.neuefische.CapStone.backend.rest.openHab.OpenHabAlarmDto;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabClient;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabLightsBrightnessDto;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabOnOffDto;
 import de.neuefische.CapStone.backend.schedulingTask.TaskSchedulingService;
 import de.neuefische.CapStone.backend.schedulingTask.TurnOffScheduleService;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.aspectj.apache.bcel.classfile.Module;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -121,5 +120,29 @@ public class OpenHabService {
         return "Basic " + new String(encodedAuth);
     }
 
+    public void turnAlarmOn(AlarmEventEntity alarmEventEntity) {
+        String httpHeader = createHeaders(alarmEventEntity.getAlarmEntity().getHubEntity().getHubEmail(),
+                alarmEventEntity.getAlarmEntity().getHubEntity().getHubPassword());
+        OpenHabAlarmDto openHabAlarmDto = OpenHabAlarmDto.builder()
+                .itemName(alarmEventEntity.getAlarmEntity().getAlarmDevice().getMediaItem())
+                .command("PLAY").build();
+        openHabClient.handleCommands(httpHeader, openHabAlarmDto);
+    }
 
+    public void turnAlarmOff(AlarmEventEntity alarmEventEntity) {
+        String httpHeader = createHeaders(alarmEventEntity.getAlarmEntity().getHubEntity().getHubEmail(),
+                alarmEventEntity.getAlarmEntity().getHubEntity().getHubPassword());
+        OpenHabAlarmDto openHabAlarmDto = OpenHabAlarmDto.builder()
+                .itemName(alarmEventEntity.getAlarmEntity().getAlarmDevice().getMediaItem())
+                .command("PAUSE").build();
+        openHabClient.handleCommands(httpHeader, openHabAlarmDto);
+    }
+
+    public void setAlarmVolume(AlarmEntity alarmEntity) {
+        String httpHeader = createHeaders(alarmEntity.getHubEntity().getHubEmail(), alarmEntity.getHubEntity().getHubPassword());
+        OpenHabAlarmDto openHabAlarmDto = OpenHabAlarmDto.builder()
+                .itemName(alarmEntity.getAlarmDevice().getVolumeItem())
+                .command(alarmEntity.getAlarmStates().getVolume()).build();
+        openHabClient.handleCommands(httpHeader, openHabAlarmDto);
+    }
 }

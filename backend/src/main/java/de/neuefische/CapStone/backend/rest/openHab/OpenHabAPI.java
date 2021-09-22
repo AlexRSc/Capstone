@@ -5,8 +5,6 @@ import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import static de.neuefische.CapStone.backend.rest.openHab.OpenHabAPI.ACCESS_PARAM;
 
 public interface OpenHabAPI {
 
@@ -23,4 +21,9 @@ public interface OpenHabAPI {
     @RequestLine(value = "POST /rest/items/{item}")
     @Headers({"Content-Type: text/plain", "Authorization: {"+ACCESS_PARAM+"}"})
     ResponseEntity<OpenHabLightsBrightnessDto> changeBrightness(@Param(ACCESS_PARAM) String httpHeaders, @Param("item") String item, String brightnessLevel);
+
+    @RequestLine(value = "POST /rest/items/{item}")
+    @Headers({"Content-Type: text/plain", "Authorization: {"+ACCESS_PARAM+"}"})
+    ResponseEntity<OpenHabAlarmDto> handleItems(@Param(ACCESS_PARAM) String httpHeaders, @Param("item") String item, String command);
+
 }

@@ -1,6 +1,7 @@
 package de.neuefische.CapStone.backend.service;
 
 import de.neuefische.CapStone.backend.model.AlarmEntity;
+import de.neuefische.CapStone.backend.model.AlarmEventEntity;
 import de.neuefische.CapStone.backend.model.HubEntity;
 import de.neuefische.CapStone.backend.repo.AlarmRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,11 +14,13 @@ import java.util.Optional;
 @Service
 public class AlarmService {
 
-    @Autowired
     private final AlarmRepository alarmRepository;
+    private final OpenHabService openHabService;
 
-    public AlarmService(AlarmRepository alarmRepository) {
+    @Autowired
+    public AlarmService(AlarmRepository alarmRepository, OpenHabService openHabService) {
         this.alarmRepository = alarmRepository;
+        this.openHabService = openHabService;
     }
 
     public AlarmEntity findAlarmEntity(String uid) {
@@ -35,5 +38,27 @@ public class AlarmService {
 
     public List<AlarmEntity> findAllAlarmsByUsername(String userName) {
         return alarmRepository.findAllByAlarmDevice_UserName(userName);
+    }
+
+    public AlarmEntity setAlarmEntityVolume(AlarmEntity alarmEntity, String volume) {
+        alarmEntity.getAlarmStates().setVolume(volume);
+        openHabService.setAlarmVolume(alarmEntity);
+        return alarmRepository.save(alarmEntity);
+    }
+
+    public AlarmEntity turnOnAlarmDevice(AlarmEntity alarmEntity) {
+        alarmEntity.getAlarmStates().setOnOff(true);
+        AlarmEventEntity alarmEventEntity = AlarmEventEntity.builder()
+                        .alarmEntity(alarmEntity).build();
+        openHabService.turnAlarmOn(alarmEventEntity);
+        return alarmRepository.save(alarmEntity);
+    }
+
+    public AlarmEntity turnOffAlarmDevice(AlarmEntity alarmEntity) {
+        alarmEntity.getAlarmStates().setOnOff(false);
+        AlarmEventEntity alarmEventEntity = AlarmEventEntity.builder()
+                .alarmEntity(alarmEntity).build();
+        openHabService.turnAlarmOff(alarmEventEntity);
+        return alarmRepository.save(alarmEntity);
     }
 }

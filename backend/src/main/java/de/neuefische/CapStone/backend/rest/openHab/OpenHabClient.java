@@ -31,4 +31,8 @@ public class OpenHabClient {
     public ResponseEntity<OpenHabLightsBrightnessDto> changeDeviceBrightness(String httpHeaders, OpenHabLightsBrightnessDto openHabLightsBrightnessDto) {
         return openHabAPI.changeBrightness(httpHeaders, openHabLightsBrightnessDto.getItemName(), openHabLightsBrightnessDto.getBrightnessLevel());
     }
+
+    public ResponseEntity<OpenHabAlarmDto> handleCommands(String httpHeaders, OpenHabAlarmDto openHabAlarmDto) {
+        return openHabAPI.handleItems(httpHeaders, openHabAlarmDto.getItemName(), openHabAlarmDto.getCommand());
+    }
 }

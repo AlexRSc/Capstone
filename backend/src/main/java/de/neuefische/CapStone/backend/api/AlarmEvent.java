@@ -14,6 +14,7 @@ import java.util.Date;
 @AllArgsConstructor
 public class AlarmEvent {
 
+    private long id;
     private boolean isEvent;
     private boolean isDaily;
     private Date date;

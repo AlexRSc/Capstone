@@ -1,7 +1,7 @@
 import MuiAlert from "@material-ui/lab/Alert";
 import {useAuth} from "../auth/AuthProvider";
 import {useState} from "react";
-import {Link, Redirect} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
 import PageLayout from "../components/PageLayout";
 import Header from "../components/Header";
 import {ButtonGroup, CircularProgress, Snackbar} from "@material-ui/core";
@@ -30,6 +30,7 @@ export default function AddCoffeePage() {
     const [credentials, setCredentials] = useState(initialState)
     const [redirect, setRedirect] = useState()
     const [open, setOpen] = useState(false)
+    const history = useHistory()
 
     const handleCredentialsChange = event =>
         setCredentials({...credentials, [event.target.name]: event.target.value})
@@ -61,6 +62,10 @@ export default function AddCoffeePage() {
         })
     }
 
+    const handleBack = () => {
+        history.push("/coffee")
+    }
+
     if (redirect) {
         return <Redirect to="/coffee"/>
     }
@@ -88,7 +93,7 @@ export default function AddCoffeePage() {
                         }}/>
                     </TextWrapper>
                     <ButtonGroup>
-                        <Link to="/coffee"><Button color="primary" variant="contained">Back</Button></Link>
+                        <Button color="primary" variant="contained" onClick={() => handleBack()}>Back</Button>
                         <Button color="secondary" onClick={handleClear}>Clear</Button>
                         <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
                     </ButtonGroup>

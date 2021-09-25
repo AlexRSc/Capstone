@@ -1,7 +1,7 @@
 import PageLayout from "../components/PageLayout";
 import Header from "../components/Header";
 import Button from "@material-ui/core/Button";
-import {Link, Redirect} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
 import Footer from "../components/Footer";
 import styled from "styled-components";
 import {useAuth} from "../auth/AuthProvider";
@@ -16,6 +16,7 @@ const initialState = {
     uid: '',
     itemName: ''
 }
+
 function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
@@ -27,12 +28,13 @@ export default function AddOnOffPage() {
     const [credentials, setCredentials] = useState(initialState)
     const [redirect, setRedirect] = useState()
     const [open, setOpen] = useState(false)
+    const history = useHistory()
 
     const handleCredentialsChange = event =>
         setCredentials({...credentials, [event.target.name]: event.target.value})
 
     const handleClose = (event, reason) => {
-        if (reason=== 'clickaway') {
+        if (reason === 'clickaway') {
             return;
         }
         setOpen(false);
@@ -58,6 +60,10 @@ export default function AddOnOffPage() {
         })
     }
 
+    const handleBack = () => {
+        history.push("/onOff")
+    }
+
     if (redirect) {
         return <Redirect to="/onOff"/>
     }
@@ -80,7 +86,7 @@ export default function AddOnOffPage() {
                                    name="itemName" value={credentials.itemName} onChange={handleCredentialsChange}/>
                     </TextWrapper>
                     <ButtonGroup>
-                        <Link to="/onOff"><Button color="primary" variant="contained">Back</Button></Link>
+                        <Button color="primary" variant="contained" onClick={() => handleBack()}>Back</Button>
                         <Button color="secondary" onClick={handleClear}>Clear</Button>
                         <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
                     </ButtonGroup>

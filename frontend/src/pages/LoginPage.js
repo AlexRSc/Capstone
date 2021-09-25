@@ -3,7 +3,7 @@ import PageLayout from "../components/PageLayout";
 import Footer from "../components/Footer";
 import TextField from "@material-ui/core/TextField";
 import {ButtonGroup, CircularProgress, Snackbar} from "@material-ui/core";
-import {Link, Redirect} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import styled from "styled-components"
 import {useAuth} from "../auth/AuthProvider";
@@ -24,6 +24,7 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState()
     const [open, setOpen]=useState(false);
+    const history = useHistory()
 
 
     const handleClose = (event, reason) => {
@@ -44,13 +45,18 @@ export default function LoginPage() {
         login(credentials).catch(error => {
             setError(error)
             setLoading(false)
-        }).finally(() => setOpen(true))
+        })
+        setOpen(true)
     }
     const handleClear = () => {
         setCredentials({
             userName: "",
             password: "",
         })
+    }
+
+    const handleBack = () => {
+        history.push("/")
     }
 
     if(user) {
@@ -67,7 +73,7 @@ export default function LoginPage() {
                 <TextField required id="standard required" label="Password" type="password"
                             name="password" value={credentials.password} onChange={handleCredentialsChange}/>
                 <ButtonGroup>
-                    <Link to="/"><Button color="primary" variant="contained">Back</Button></Link>
+                    <Button color="primary" variant="contained" onClick={() => handleBack()}>Back</Button>
                     <Button color="secondary" onClick={handleClear}>Clear</Button>
                     <Button color="primary" variant="contained" onClick={handleSubmit} >Submit</Button>
                 </ButtonGroup>

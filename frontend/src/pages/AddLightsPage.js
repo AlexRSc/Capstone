@@ -1,7 +1,7 @@
 import PageLayout from "../components/PageLayout";
 import Header from "../components/Header";
 import Button from "@material-ui/core/Button";
-import {Link, Redirect} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
 import Footer from "../components/Footer";
 import styled from "styled-components";
 import {useAuth} from "../auth/AuthProvider";
@@ -28,6 +28,7 @@ export default function AddLightsPage() {
     const [credentials, setCredentials] = useState(initialState)
     const [redirect, setRedirect] = useState()
     const [open, setOpen] = useState(false)
+    const history = useHistory()
 
     const handleCredentialsChange = event =>
         setCredentials({...credentials, [event.target.name]: event.target.value})
@@ -59,6 +60,10 @@ export default function AddLightsPage() {
         })
     }
 
+    const handleBack = () => {
+        history.push("/lights")
+    }
+
     if (redirect) {
         return <Redirect to="/lights"/>
     }
@@ -81,7 +86,7 @@ export default function AddLightsPage() {
                                    name="itemName" value={credentials.itemName} onChange={handleCredentialsChange}/>
                     </TextWrapper>
                     <ButtonGroup>
-                        <Link to="/lights"><Button color="primary" variant="contained">Back</Button></Link>
+                        <Button color="primary" variant="contained" onClick={() => handleBack()}>Back</Button>
                         <Button color="secondary" onClick={handleClear}>Clear</Button>
                         <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
                     </ButtonGroup>

@@ -18,7 +18,7 @@ export default function DeleteDevice({handleDelete}) {
         <div>
         <Button color="secondary" size="small" startIcon={<DeleteForeverIcon />}
         onClick={handleClickOpen}>
-            Delete
+
         </Button>
         <Dialog
             open={open}

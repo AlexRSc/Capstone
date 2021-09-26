@@ -12,6 +12,8 @@ import OnOffPage from "./pages/OnOffPage";
 import AddOnOffPage from "./pages/AddOnOffPage";
 import CoffeePage from "./pages/CoffeePage";
 import AddCoffeePage from "./pages/AddCoffeePage";
+import AlarmPage from "./pages/AlarmPage";
+import AddAlarmPage from "./pages/AddAlarmPage";
 
 
 export default function App() {
@@ -31,6 +33,8 @@ export default function App() {
                     <ProtectedRoute path="/coffee" component={CoffeePage}/>
                     <ProtectedRoute path="/addcoffee" component={AddCoffeePage}/>
                     <ProtectedRoute path="/coffeeOptions" component={AddCoffeePage}/>
+                    <ProtectedRoute path="/alarm" component={AlarmPage}/>
+                    <ProtectedRoute path="/addAlarm" component={AddAlarmPage}/>
                     <Route path="/info"></Route>
                     <Route path="/about-us"></Route>
                 </Switch>

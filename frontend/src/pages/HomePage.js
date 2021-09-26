@@ -35,7 +35,7 @@ export default function HomePage() {
                     </Link>
                     </Icon>
                     <Icon>
-                    <Link to="/lights">
+                    <Link to="/alarm">
                     <div>Alarm</div>
                     <AlarmIcon fontSize="large">Lights</AlarmIcon>
                     </Link>

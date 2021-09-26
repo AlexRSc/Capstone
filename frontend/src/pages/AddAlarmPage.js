@@ -1,4 +1,3 @@
-import MuiAlert from "@material-ui/lab/Alert";
 import {useAuth} from "../auth/AuthProvider";
 import {useState} from "react";
 import {Redirect, useHistory} from "react-router-dom";
@@ -9,13 +8,14 @@ import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Footer from "../components/Footer";
 import styled from "styled-components";
-import {addCoffee} from "../services/coffee-api-service";
+import MuiAlert from "@material-ui/lab/Alert";
+import {createAlarmDevice} from "../services/alarm-api-service";
 
 const initialState = {
     deviceName: '',
     uid: '',
-    itemName: '',
-    date: ''
+    mediaItem: '',
+    volumeItem: '',
 }
 
 
@@ -23,7 +23,7 @@ function Alert(props) {
     return <MuiAlert elevation={6} variant="filled" {...props} />;
 }
 
-export default function AddCoffeePage() {
+export default function AddAlarmPage() {
     const {token} = useAuth()
     const [error, setError] = useState()
     const [loading, setLoading] = useState(false)
@@ -45,33 +45,31 @@ export default function AddCoffeePage() {
     const handleSubmit = event => {
         event.preventDefault()
         setError()
+        setOpen(false)
         setLoading(true)
-        addCoffee(token, credentials).then(coffee => setRedirect(coffee.deviceName))
-            .catch(error => {
-                setError(error)
-                setLoading(false)
-            })
-        setOpen(true)
+        createAlarmDevice(token, credentials).then(setRedirect).catch(setError).finally(() => setOpen(true))
+            .finally(() => setLoading(false))
     }
 
     const handleClear = () => {
         setCredentials({
             deviceName: '',
             uid: '',
-            itemName: '',
+            mediaItem: '',
+            volumeItem: '',
         })
     }
 
     const handleBack = () => {
-        history.push("/coffee")
+        history.push("/alarm")
     }
 
     if (redirect) {
-        return <Redirect to="/coffee"/>
+        return <Redirect to="/alarm"/>
     }
     return (
         <PageLayout>
-            <Header title="Add Coffee"/>
+            <Header title="Add Alarm"/>
             {loading && <CircularProgress/>}
             {!loading && (
                 <Wrapper>
@@ -84,13 +82,11 @@ export default function AddCoffeePage() {
                                    name="deviceName" value={credentials.deviceName} onChange={handleCredentialsChange}/>
                         <TextField required id="standard required" label="UUID"
                                    name="uid" value={credentials.uid} onChange={handleCredentialsChange}/>
-                        <TextField required id="standard required" label="ItemName"
-                                   name="itemName" value={credentials.itemName} onChange={handleCredentialsChange}/>
-                        <TextField id="datetime-local" label="Coffee Time!" type="datetime-local" name="date"
-                                   value={credentials.date}
-                                   onChange={handleCredentialsChange} InputLabelProps={{
-                            shrink: true,
-                        }}/>
+                        <TextField required id="standard required" label="MediaItemName"
+                                   name="mediaItem" value={credentials.mediaItem} onChange={handleCredentialsChange}/>
+                        <TextField required id="standard required" label="VolumeItemName"
+                                   name="volumeItem" value={credentials.volumeItem} onChange={handleCredentialsChange}/>
+
                     </TextWrapper>
                     <ButtonGroup>
                         <Button color="primary" variant="contained" onClick={() => handleBack()}>Back</Button>

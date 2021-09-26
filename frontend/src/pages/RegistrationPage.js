@@ -5,7 +5,7 @@ import TextField from "@material-ui/core/TextField";
 import styled from "styled-components"
 import {ButtonGroup, CircularProgress, Snackbar} from "@material-ui/core";
 import Button from "@material-ui/core/Button";
-import {Link, Redirect} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
 import {useState} from "react";
 import {registerUser} from "../services/user-api-service";
 import MuiAlert from "@material-ui/lab/Alert";
@@ -26,10 +26,11 @@ export default function RegistrationPage() {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState()
     const [registeredUser, setRegisteredUser] = useState()
-    const [open, setOpen]=useState(false);
+    const [open, setOpen] = useState(false);
+    const history = useHistory()
 
     const handleClose = (event, reason) => {
-        if (reason=== 'clickaway') {
+        if (reason === 'clickaway') {
             return;
         }
         setOpen(false);
@@ -47,7 +48,7 @@ export default function RegistrationPage() {
             .catch(error => {
                 setError(error)
                 setLoading(false)
-            }).finally(()=>setOpen(true))
+            }).finally(() => setOpen(true))
     }
     const handleClear = () => {
         setCredentials({
@@ -55,6 +56,10 @@ export default function RegistrationPage() {
             email: "",
             password: "",
         })
+    }
+
+    const handleBack = () => {
+        history.push("/")
     }
 
     if (registeredUser) {
@@ -75,21 +80,21 @@ export default function RegistrationPage() {
                     <TextField required id="standard required" label="Password" type="password"
                                name="password" value={credentials.password} onChange={handleCredentialsChange}/>
                     <ButtonGroup>
-                        <Link to="/"><Button color="primary" variant="contained">Back</Button></Link>
+                        <Button color="primary" variant="contained" onClick={() => handleBack()}>Back</Button>
                         <Button color="secondary" onClick={handleClear}>Clear</Button>
                         <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
                     </ButtonGroup>
-                    {!error &&<Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
-                        <Alert onClose={handleClose} severity="success">
-                            Login SuccessFull!
-                        </Alert>
-                    </Snackbar>}
-                    {error &&<Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
-                        <Alert onClose={handleClose} severity="error">
-                            Wrong credentials!
-                        </Alert>
-                    </Snackbar>}
                 </Wrapper>)}
+            {!error && <Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="success">
+                    Login SuccessFull!
+                </Alert>
+            </Snackbar>}
+            {error && <Snackbar open={open} autoHideDuration={1000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity="error">
+                    Wrong credentials!
+                </Alert>
+            </Snackbar>}
             <Footer/>
         </PageLayout>
     )

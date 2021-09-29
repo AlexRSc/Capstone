@@ -82,12 +82,13 @@ export default function AlarmEventsComponent({alarmEvent, token, alarm, handleEx
     }
 
     const toggleCheck = (event) => {
-        setCredentials({...credentials, [event.target.name]: event.target.value})
+        setCredentials({...credentials, [event.target.name]: !dailyStatus})
         if (event.target.value.toString() === "false") {
             setDailyStatus(true)
         } else {
             setDailyStatus(false)
         }
+        console.log(dailyStatus)
     }
 
 

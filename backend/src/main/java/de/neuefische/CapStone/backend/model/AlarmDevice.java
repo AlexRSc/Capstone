@@ -32,6 +32,5 @@ public class AlarmDevice {
     @Column(name = "shuffle_item")
     private String shuffleItem;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.EAGER, mappedBy = "id")
-    private final Set<AlarmEventEntity> alarmEventEntities = new HashSet<>();
+
 }

@@ -1,6 +1,4 @@
 package de.neuefische.CapStone.backend.controller;
-
-
 import de.neuefische.CapStone.backend.api.Alarm;
 import de.neuefische.CapStone.backend.api.AlarmEvent;
 import de.neuefische.CapStone.backend.model.*;
@@ -73,7 +71,7 @@ public class AlarmController {
     }
 
     @PostMapping("/setEvent/{uid}")
-    public ResponseEntity<AlarmEvent> setAlarmDeviceEvent(@AuthenticationPrincipal UserEntity authUser, @RequestBody AlarmEvent alarmEvent,
+    public ResponseEntity<AlarmEvent> setAlarmDeviceEvent(@RequestBody AlarmEvent alarmEvent,
                                                           @PathVariable String uid) {
 
         AlarmEntity alarmEntity = alarmService.findAlarmEntity(uid);
@@ -96,9 +94,9 @@ public class AlarmController {
     }
 
     @PutMapping("/setVolume/{uid}")
-    public ResponseEntity<Alarm> setAlarmDeviceVolume(@PathVariable String uid, @RequestBody String volume) {
+    public ResponseEntity<Alarm> setAlarmDeviceVolume(@PathVariable String uid, @RequestBody Alarm alarm) {
         AlarmEntity alarmEntity = alarmService.findAlarmEntity(uid);
-        AlarmEntity newAlarmEntity = alarmService.setAlarmEntityVolume(alarmEntity, volume);
+        AlarmEntity newAlarmEntity = alarmService.setAlarmEntityVolume(alarmEntity, alarm.getVolume());
         return ok(map(newAlarmEntity));
 
     }
@@ -115,6 +113,20 @@ public class AlarmController {
         AlarmEntity alarmEntity = alarmService.findAlarmEntity(alarm.getUid());
         AlarmEntity turnedOffAlarmEntity = alarmService.turnOffAlarmDevice(alarmEntity);
         return ok(map(turnedOffAlarmEntity));
+    }
+
+    @DeleteMapping("/deleteAlarmEvent/{id}")
+    public ResponseEntity<AlarmEvent> deleteAlarmEvent(@PathVariable String id) {
+        AlarmEventEntity alarmEventEntity = alarmEventService.findAlarmEventById(id);
+        AlarmEventEntity deletedAlarmEventEntity = alarmEventService.deleteAlarmEvent(alarmEventEntity);
+        return ok(map(deletedAlarmEventEntity));
+    }
+
+    @DeleteMapping("/deleteAlarmDevice/{uid}")
+    public ResponseEntity<Alarm> deleteAlarmEvent(@AuthenticationPrincipal UserEntity authUser, @PathVariable String uid) {
+        AlarmEntity alarmEntity = alarmService.findAlarmEntity(uid);
+        AlarmEntity deletedAlarmEntity = alarmService.deleteAlarmDevice(alarmEntity);
+        return ok(map(deletedAlarmEntity));
     }
 
     private List<Alarm> map(List<AlarmEntity> alarmEntityList) {

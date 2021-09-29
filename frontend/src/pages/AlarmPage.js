@@ -1,5 +1,5 @@
 import PageLayout from "../components/PageLayout";
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import {
     Button,
     Paper,
@@ -33,6 +33,7 @@ export default function AlarmPage() {
     const [error, setError] = useState()
     const [alarmEvents, setAlarmEvents] = useState([])
     const [open, setOpen] = useState(false)
+    const history = useHistory()
 
     const handleExpand = (value) => {
         setOpen(false)
@@ -56,6 +57,10 @@ export default function AlarmPage() {
         getMyAlarms(token).then(setAlarms).catch(setError)
     }
 
+    const handleBack = () => {
+        history.push("/home")
+    }
+
     return (
         <PageLayout>
             <Header title="Alarm"/>
@@ -65,7 +70,7 @@ export default function AlarmPage() {
                     <Link className="Links" to="/addAlarm">Add Alarm Device</Link>
                 </Button>
                 {alarms.map((alarm) => (
-                    <TableContainer component={Paper}>
+                    <TableContainer component={Paper} key={alarm.uid}>
                         <Table className={classes.table} aria-label="simple table">
                             <TableHead>
                                 <TableRow>
@@ -84,7 +89,7 @@ export default function AlarmPage() {
                             </TableHead>
                             <TableBody>
                                 {alarmEvents && alarmEvents.map((alarmEvent) => (
-                                    <TableRow>
+                                    <TableRow key={alarmEvent.id}>
                                         <TableCell align="right">
                                             <TextField id="datetime-local" label="Alarm Time!"
                                                        type="datetime-local" name="date"
@@ -103,7 +108,7 @@ export default function AlarmPage() {
                         </Table>
                     </TableContainer>
                 ))}
-                <Link to="/home"><Button color="primary" variant="contained">Back</Button></Link>
+                <Button color="primary" variant="contained" onClick={() => handleBack()}>Back</Button>
             </Wrapper>
             {!error && <Snackbar open={open} autoHideDuration={1000} onClose={handleCloseMessage}>
                 <Alert onClose={handleCloseMessage} severity="success">

@@ -49,11 +49,10 @@ export default function CoffeeSingleTableCell({coffee, open, token}) {
                     <Typography className={classes.typography}>
                         <TextField id="datetime-local" label="Coffee Time!" type="datetime-local" name="date"
                                    value={date}
-                                    InputLabelProps={{
-                            shrink: true,
-                        }}/>
-                        {coffee.onOff && <div>Active</div>}{!coffee.onOff &&
-                    <div>Inactive</div>}</Typography>
+                                   InputLabelProps={{
+                                       shrink: true,
+                                   }}/>
+                    </Typography>
                 </Popover>
             </TableCell>
             <TableCell align="right">

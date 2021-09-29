@@ -1,7 +1,7 @@
 import PageLayout from "../components/PageLayout";
 import Header from "../components/Header";
 import Button from "@material-ui/core/Button";
-import {Link, Redirect} from "react-router-dom";
+import {Redirect, useHistory} from "react-router-dom";
 import Footer from "../components/Footer";
 import styled from "styled-components";
 import {useAuth} from "../auth/AuthProvider";
@@ -27,6 +27,7 @@ export default function ConnectMyHub() {
     const [credentials, setCredentials] =useState(initialState)
     const [redirect, setRedirect] = useState()
     const [open, setOpen]=useState(false)
+    const history = useHistory()
 
     const handleCredentialsChange = event =>
         setCredentials({...credentials, [event.target.name]: event.target.value})
@@ -57,6 +58,10 @@ export default function ConnectMyHub() {
         })
     }
 
+    const handleBack = () => {
+        history.push("/alarm")
+    }
+
     if(redirect){
         return <Redirect to ="/home"/>
     }
@@ -78,7 +83,7 @@ export default function ConnectMyHub() {
                            name="hubPassword" value={credentials.hubPassword} onChange={handleCredentialsChange} />
                 </TextWrapper>
                 <ButtonGroup>
-                    <Link to ="/home"><Button color="primary" variant="contained">Back</Button></Link>
+                    <Button color="primary" variant="contained" onClick={() => handleBack()}>Back</Button>
                     <Button color="secondary" onClick={handleClear}>Clear</Button>
                     <Button color="primary" variant="contained" onClick={handleSubmit}>Submit</Button>
                 </ButtonGroup>

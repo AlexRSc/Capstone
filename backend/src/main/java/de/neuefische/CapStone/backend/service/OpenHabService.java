@@ -42,6 +42,7 @@ public class OpenHabService {
         lightsService.findAndTurnOnOff(device, onOff);
         onOffService.findAndTurnOnOff(device, onOff);
     }
+
     public void turnCoffeeMachineOn (CoffeeEntity coffeeEntity) {
         String httpHeaders = createHeaders(coffeeEntity.getHubEntity().getHubEmail(), coffeeEntity.getHubEntity().getHubPassword());
         OpenHabOnOffDto openHabOnOffDto = OpenHabOnOffDto.builder()
@@ -112,11 +113,9 @@ public class OpenHabService {
     }
 
     public String createHeaders(String username, String password) {
-
         String auth = username + ":" + password;
         byte[] encodedAuth = Base64.encodeBase64(
                 auth.getBytes(StandardCharsets.US_ASCII));
-
         return "Basic " + new String(encodedAuth);
     }
 

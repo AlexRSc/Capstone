@@ -64,6 +64,7 @@ public class CoffeeService {
         }
         return coffeeEntity;
     }
+
     public CoffeeEntity addNewSchedule(CoffeeEntity coffeeEntity) {
         Optional<CoffeeEntity> coffeeEntityOptional = coffeeRepository.findByDevice_Uid(coffeeEntity.getDevice().getUid());
         if(coffeeEntityOptional.isEmpty()){

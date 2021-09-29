@@ -17,4 +17,6 @@ public class Alarm {
     private String uid;
     private boolean onOff;
     private String volume;
+    private String mediaItem;
+    private String volumeItem;
 }

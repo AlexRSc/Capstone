@@ -66,7 +66,7 @@ export default function CoffeePage() {
                         </TableHead>
                         <TableBody>
                             {coffees.map((coffee) => (
-                                <CoffeeSingleTableCell coffee={coffee} open={open} token={token}/>
+                                <CoffeeSingleTableCell key={coffee.uid} coffee={coffee} open={open} token={token}/>
                             ))}
                         </TableBody>
                     </Table>

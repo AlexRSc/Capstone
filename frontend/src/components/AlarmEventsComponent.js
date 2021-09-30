@@ -88,7 +88,6 @@ export default function AlarmEventsComponent({alarmEvent, token, alarm, handleEx
         } else {
             setDailyStatus(false)
         }
-        console.log(dailyStatus)
     }
 
 
@@ -119,7 +118,7 @@ export default function AlarmEventsComponent({alarmEvent, token, alarm, handleEx
                                onChange={handleCredentialsChange} InputLabelProps={{
                         shrink: true,
                     }}/>
-                    <FormControlLabel control={<Checkbox value={dailyStatus} onChange={toggleCheck} checked={dailyStatus}
+                    <FormControlLabel control={<Checkbox value={dailyStatus} onChange={toggleCheck} checked={alarmEvent.daily}
                                                          name="daily"/>}
                                       label="Daily" labelPlacement="top"/>
 

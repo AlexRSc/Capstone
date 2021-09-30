@@ -12,8 +12,4 @@ public interface AlarmEventRepository extends JpaRepository<AlarmEventEntity, Lo
 
     Optional<AlarmEventEntity> findAlarmEventEntityById(long id);
 
-    void deleteAlarmEventEntitiesByAlarmEntity(AlarmEntity alarmEntity);
-
-    void deleteAllByAlarmEntity(AlarmEntity alarmEntity);
-
 }

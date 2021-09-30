@@ -111,9 +111,9 @@ export default function CoffeeComponentOption({coffee, token}) {
                         shrink: true,
                     }}/>
                     <FormControlLabel control={<Checkbox value={credentials.dailyAction} onChange={handleCheck}
+                                                         checked={credentials.dailyAction}
                                                          name="dailyAction"/>}
                                       label="Daily" labelPlacement="top"/>
-
                 </PopupWrapper>
                 <ButtonWrapper>
                     <FormControlLabel control={<Switch color="primary"/>} label="Event"

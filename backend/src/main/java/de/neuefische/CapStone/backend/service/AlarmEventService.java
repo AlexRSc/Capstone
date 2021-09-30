@@ -91,7 +91,7 @@ public class AlarmEventService {
         if(alarmEventEntity.getId()==null){
             throw new IllegalArgumentException("Id is null!");
         }
-        Optional<AlarmEventEntity> alarmEventEntityOptional = alarmEventRepository.findAlarmEventEntityByAlarmEntity_Id(alarmEventEntity.getId());
+        Optional<AlarmEventEntity> alarmEventEntityOptional = alarmEventRepository.findAlarmEventEntityById(alarmEventEntity.getId());
         if(alarmEventEntityOptional.isEmpty()){
             throw new EntityNotFoundException("alarmEvent wasnt found!");
         }
@@ -108,7 +108,7 @@ public class AlarmEventService {
         if(alarmEvent.getId()==null){
             throw new IllegalArgumentException("Id is null!");
         }
-        Optional<AlarmEventEntity> alarmEventEntityOptional = alarmEventRepository.findAlarmEventEntityByAlarmEntity_Id(alarmEvent.getId());
+        Optional<AlarmEventEntity> alarmEventEntityOptional = alarmEventRepository.findAlarmEventEntityById(alarmEvent.getId());
         if(alarmEventEntityOptional.isEmpty()){
             throw new EntityNotFoundException("alarmEvent wasnt found!");
         }
@@ -117,5 +117,18 @@ public class AlarmEventService {
         taskSchedulingService.removeScheduledTask(alarmEventEntity.getId()+"PLAY");
         taskSchedulingService.removeScheduledTask(alarmEventEntity.getId()+"PAUSE");
         return alarmEventRepository.save(alarmEventEntity);
+    }
+
+    public AlarmEventEntity deleteAlarmEvent(AlarmEventEntity alarmEventEntity) {
+        alarmEventRepository.delete(alarmEventEntity);
+        return alarmEventEntity;
+    }
+
+    public AlarmEventEntity findAlarmEventById(String id) {
+        Optional<AlarmEventEntity> alarmEventEntityOptional = alarmEventRepository.findAlarmEventEntityById(Long.parseLong(id));
+        if(alarmEventEntityOptional.isEmpty()) {
+            throw new EntityNotFoundException("AlarmEventEntity couldn't be found! Id incorrect");
+        }
+        return alarmEventEntityOptional.get();
     }
 }

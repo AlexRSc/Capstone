@@ -17,6 +17,7 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox'
 import VpnKeyIcon from '@material-ui/icons/VpnKey'
 import HomeWorkIcon from '@material-ui/icons/HomeWork'
 import LocalCafeIcon from "@material-ui/icons/LocalCafe";
+import AlarmIcon from "@material-ui/icons/Alarm";
 
 const useStyles = makeStyles({
     list: {
@@ -98,6 +99,12 @@ export default function SwipeableTemporaryDrawer() {
                         <ListItem>
                             <ListItemIcon><LocalCafeIcon/></ListItemIcon>
                             <ListItemText>Coffee</ListItemText>
+                        </ListItem>
+                    </NavLink>
+                    <NavLink to ="/alarm">
+                        <ListItem>
+                            <ListItemIcon><AlarmIcon/></ListItemIcon>
+                            <ListItemText>Alarm</ListItemText>
                         </ListItem>
                     </NavLink>
                 </List>

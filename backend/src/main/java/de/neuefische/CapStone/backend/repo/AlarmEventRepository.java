@@ -10,5 +10,10 @@ import java.util.Optional;
 public interface AlarmEventRepository extends JpaRepository<AlarmEventEntity, Long> {
     List<AlarmEventEntity> findAlarmEventEntitiesByAlarmEntity(AlarmEntity alarmEntity);
 
-    Optional<AlarmEventEntity> findAlarmEventEntityByAlarmEntity_Id(long id);
+    Optional<AlarmEventEntity> findAlarmEventEntityById(long id);
+
+    void deleteAlarmEventEntitiesByAlarmEntity(AlarmEntity alarmEntity);
+
+    void deleteAllByAlarmEntity(AlarmEntity alarmEntity);
+
 }

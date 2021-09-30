@@ -19,6 +19,8 @@ spring:
 server:
   servlet:
     context-path: "/api/${spring.application.name}"
+  error:
+    include-message: always
 
 security:
   jwt:

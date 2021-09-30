@@ -25,6 +25,7 @@ import static org.springframework.util.StringUtils.hasText;
 @RestController
 @RequestMapping("/coffee")
 public class CoffeeController {
+
     private final CoffeeService coffeeService;
     private final OpenHabService openHabService;
 
@@ -87,7 +88,7 @@ public class CoffeeController {
     @PutMapping("/activate")
     public ResponseEntity<CoffeeDevice> activateCoffeeEvent(@AuthenticationPrincipal UserEntity authUser, @RequestBody CoffeeDevice coffeeDevice) {
         checkInput(coffeeDevice);
-        CoffeeEntity coffeeEntity = coffeeService.activateCoffeeEvent(map(coffeeDevice,authUser));
+        CoffeeEntity coffeeEntity = coffeeService.activateCoffeeEvent(map(coffeeDevice, authUser));
         return ok(map(coffeeEntity));
     }
 

@@ -1,5 +1,4 @@
 package de.neuefische.CapStone.backend.controller;
-import de.neuefische.CapStone.backend.api.LightDevice;
 import de.neuefische.CapStone.backend.api.OnOffDevice;
 import de.neuefische.CapStone.backend.model.*;
 import de.neuefische.CapStone.backend.rest.openHab.OpenHabOnOffDto;

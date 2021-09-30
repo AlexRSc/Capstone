@@ -45,8 +45,8 @@ export default function LoginPage() {
         login(credentials).catch(error => {
             setError(error)
             setLoading(false)
+            setOpen(true)
         })
-        setOpen(true)
     }
     const handleClear = () => {
         setCredentials({

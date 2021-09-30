@@ -27,11 +27,8 @@ import static org.springframework.http.ResponseEntity.ok;
 public class AuthController {
 
     public static final String AUTH_CONTROLLER_TAG = "Auth";
-
     private final AuthService authService;
-
     private final AuthenticationManager authenticationManager;
-
     private final JwtService jwtService;
 
     @Autowired

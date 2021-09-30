@@ -29,6 +29,7 @@ export default function CoffeeComponentOption({coffee, token}) {
         setAnchorEl(null);
     }
 
+
     const handleCloseMessage = (event, reason) => {
         if (reason === 'clickaway') {
             return;
@@ -38,12 +39,10 @@ export default function CoffeeComponentOption({coffee, token}) {
 
     const handleCredentialsChange = event => {
         setCredentials({...credentials, [event.target.name]: event.target.value})
-        console.log(credentials)
     }
 
     const handleCheck = event => {
         setCredentials({...credentials, [event.target.name]: !credentials.dailyAction})
-        console.log(credentials)
     }
 
     const handleSubmit = event => {
@@ -139,7 +138,6 @@ export default function CoffeeComponentOption({coffee, token}) {
             </Snackbar>}
         </Wrapper>
     )
-
 }
 
 const Wrapper = styled.div`

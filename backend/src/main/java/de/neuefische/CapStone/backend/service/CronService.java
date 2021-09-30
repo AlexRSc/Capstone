@@ -1,13 +1,8 @@
 package de.neuefische.CapStone.backend.service;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.config.ScheduledTask;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
@@ -29,12 +24,9 @@ public class CronService {
         return formatTimeStr;
     }
 
-    //this method is not active yet, it will translate the date into cron-formate, while days being daily, and not just once
-    //this method needs to get tested
     public String convertToDailyCron(Instant date) {
 
-        String formatTimeStr= date.atZone(ZoneId.systemDefault()).getSecond() + " " + date.atZone(ZoneId.systemDefault()).getMinute()
+        return date.atZone(ZoneId.systemDefault()).getSecond() + " " + date.atZone(ZoneId.systemDefault()).getMinute()
                 + " " + date.atZone(ZoneId.systemDefault()).getHour() +" * * *";
-        return formatTimeStr;
     }
 }

@@ -69,8 +69,7 @@ public class LightsController {
     }
 
     @PostMapping("/turnon")
-    public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOn(@AuthenticationPrincipal UserEntity authUser,
-                                                              @RequestBody LightDevice lightDevice) {
+    public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOn(@RequestBody LightDevice lightDevice) {
 
         LightsDeviceEntity lightsDeviceEntity = lightsService.find(lightDevice);
         return openHabService.turnLightsOn(lightsDeviceEntity);
@@ -78,16 +77,14 @@ public class LightsController {
     }
 
     @PostMapping("/turnoff")
-    public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOff(@AuthenticationPrincipal UserEntity authUser,
-                                                               @RequestBody LightDevice lightDevice) {
+    public ResponseEntity<OpenHabOnOffDto> turnLightsDeviceOff(@RequestBody LightDevice lightDevice) {
         LightsDeviceEntity lightsDeviceEntity = lightsService.find(lightDevice);
         return openHabService.turnLightsOff(lightsDeviceEntity);
 
     }
 
     @PutMapping("/brightness")
-    public ResponseEntity<OpenHabLightsBrightnessDto> changeLightsDeviceBrightness(@AuthenticationPrincipal UserEntity authUser,
-                                                                                   @RequestBody LightDevice lightDevice) {
+    public ResponseEntity<OpenHabLightsBrightnessDto> changeLightsDeviceBrightness(@RequestBody LightDevice lightDevice) {
         LightsDeviceEntity lightsDeviceEntity = lightsService.find(lightDevice);
         String brightness = lightDevice.getBrightness();
         return openHabService.changeBrightness(lightsDeviceEntity, brightness);

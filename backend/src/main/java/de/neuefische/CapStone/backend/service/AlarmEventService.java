@@ -3,6 +3,7 @@ package de.neuefische.CapStone.backend.service;
 import de.neuefische.CapStone.backend.model.AlarmEntity;
 import de.neuefische.CapStone.backend.model.AlarmEventEntity;
 import de.neuefische.CapStone.backend.repo.AlarmEventRepository;
+import de.neuefische.CapStone.backend.repo.AlarmRepository;
 import de.neuefische.CapStone.backend.schedulingTask.AlarmTaskDefinition;
 import de.neuefische.CapStone.backend.schedulingTask.PauseAlarmService;
 import de.neuefische.CapStone.backend.schedulingTask.ScheduleAlarmService;
@@ -22,27 +23,36 @@ public class AlarmEventService {
     private final ScheduleAlarmService scheduleService;
     private final TaskSchedulingService taskSchedulingService;
     private final PauseAlarmService pauseAlarmService;
+    private final AlarmRepository alarmRepository;
 
-    public AlarmEventService(AlarmEventRepository alarmEventRepository, CronService cronService, ScheduleAlarmService scheduleService, TaskSchedulingService taskSchedulingService, PauseAlarmService pauseAlarmService) {
+    public AlarmEventService(AlarmEventRepository alarmEventRepository, CronService cronService, ScheduleAlarmService scheduleService, TaskSchedulingService taskSchedulingService, PauseAlarmService pauseAlarmService, AlarmRepository alarmRepository) {
         this.alarmEventRepository = alarmEventRepository;
         this.cronService = cronService;
         this.scheduleService = scheduleService;
         this.taskSchedulingService = taskSchedulingService;
         this.pauseAlarmService = pauseAlarmService;
+        this.alarmRepository = alarmRepository;
     }
 
     public AlarmEventEntity setEvent(AlarmEventEntity alarmEventEntity, AlarmEntity alarmEntity) {
         alarmEventEntity.setAlarmEntity(alarmEntity);
-        AlarmEventEntity newAlarmEventEntity = alarmEventRepository.saveAndFlush(alarmEventEntity);
+        alarmEventEntity.setEvent(true);
+        //AlarmEventEntity newAlarmEventEntity = alarmEventRepository.saveAndFlush(alarmEventEntity);
+        alarmEntity.setEvent(alarmEventEntity);
+        alarmRepository.save(alarmEntity);
         if(!alarmEventEntity.isEvent()){
             return alarmEventEntity;
         }
-        manageEventStart(newAlarmEventEntity);
-        manageEventStop(newAlarmEventEntity);
+        manageEventStart(alarmEventEntity);
+        manageEventStop(alarmEventEntity);
         return alarmEventEntity;
     }
 
-    private void manageEventStart(AlarmEventEntity alarmEventEntity) {
+    public List<AlarmEventEntity> getAllEvents() {
+        return alarmEventRepository.findAll();
+    }
+
+    public void manageEventStart(AlarmEventEntity alarmEventEntity) {
         if(alarmEventEntity.isDaily()) {
             String dailyCronStart = cronService.convertToDailyCron(alarmEventEntity.getDate());
             setAlarmTimer(alarmEventEntity, dailyCronStart, "turnOnAlarm");
@@ -52,7 +62,7 @@ public class AlarmEventService {
         }
     }
 
-    private void manageEventStop(AlarmEventEntity alarmEventEntity) {
+    public void manageEventStop(AlarmEventEntity alarmEventEntity) {
         if(alarmEventEntity.isDaily()) {
             String dailyCronStart = cronService.convertToDailyCron(alarmEventEntity.getDate().plus(5, ChronoUnit.MINUTES));
             setAlarmTimer(alarmEventEntity, dailyCronStart, "turnOffAlarm");

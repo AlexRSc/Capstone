@@ -59,7 +59,7 @@ export default function ConnectMyHub() {
     }
 
     const handleBack = () => {
-        history.push("/alarm")
+        history.push("/home")
     }
 
     if(redirect){
